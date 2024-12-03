@@ -1,12 +1,15 @@
 {
   "name": "live-print-client",
   "version": "0.0.0",
+  "main": "electron/main.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "electron:serve": "concurrently \"ng serve\" \"wait-on http://localhost:4200 && electron .\"",
+    "electron:build": "ng build --base-href ./ && electron-builder"
   },
   "private": true,
   "dependencies": {
@@ -20,8 +23,12 @@
     "@angular/platform-browser": "^19.0.0",
     "@angular/platform-browser-dynamic": "^19.0.0",
     "@angular/router": "^19.0.0",
+    "@electron/remote": "^2.1.2",
+    "concurrently": "^9.1.0",
+    "electron": "^33.2.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "wait-on": "^8.0.1",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
@@ -29,6 +36,7 @@
     "@angular/cli": "^19.0.2",
     "@angular/compiler-cli": "^19.0.0",
     "@types/jasmine": "~5.1.0",
+    "electron-builder": "^25.1.8",
     "jasmine-core": "~5.4.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
