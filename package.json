@@ -2,6 +2,7 @@
   "name": "live-print-client",
   "version": "0.0.0",
   "main": "electron/main.js",
+  "type": "module",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -26,6 +27,7 @@
     "@electron/remote": "^2.1.2",
     "concurrently": "^9.1.0",
     "electron": "^33.2.1",
+    "electron-store": "^10.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "wait-on": "^8.0.1",
