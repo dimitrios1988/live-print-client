@@ -23,6 +23,9 @@ export class HeaderComponent {
   }
 
   displaySettingsDialog() {
-    this.dialog.open(SettingsDialogComponent);
+    this.dialog.open(SettingsDialogComponent, {
+      minWidth: '600px',
+      minHeight: '400px',
+    });
   }
 }
