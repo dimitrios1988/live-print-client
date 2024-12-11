@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { SettingsService } from './header/settings-dialog/settings.service';
 
 @Component({
   selector: 'app-root',
@@ -8,5 +9,7 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  title = 'live-print-client';
+  constructor(settingsService: SettingsService) {
+    settingsService.getSettings();
+  }
 }
