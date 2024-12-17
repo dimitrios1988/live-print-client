@@ -1,0 +1,15 @@
+<mat-toolbar color="secondary">
+  <form [formGroup]="userOptionsForm" class="user-options-form">
+    @for (option of options; track option) {
+    <mat-button-toggle-group
+      multiple
+      [formControlName]="option.formControlName"
+      (change)="this.onSelectionChange()"
+    >
+      <mat-button-toggle [value]="option.value">{{
+        option.label
+      }}</mat-button-toggle>
+    </mat-button-toggle-group>
+    }
+  </form></mat-toolbar
+>
