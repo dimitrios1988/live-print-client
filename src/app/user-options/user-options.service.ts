@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UserOptions } from './user-options.interface';
+import { UserOptions } from './interfaces/user-options.interface';
 
 @Injectable({
   providedIn: 'root',

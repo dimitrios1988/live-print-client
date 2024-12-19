@@ -1,2 +1,18 @@
 <app-user-options></app-user-options>
-This is the print ui
+<mat-sidenav-container class="example-container" style="min-height: 200px">
+  <mat-sidenav #sidenav mode="side" [(opened)]="sidemenuOpen">
+    <app-events></app-events>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div>
+      <button
+        mat-icon-button
+        (click)="sidemenuOpen = !sidemenuOpen"
+        color="primary"
+      >
+        <mat-icon>{{ sidemenuOpen ? "close" : "menu" }}</mat-icon>
+      </button>
+    </div>
+    <div>test</div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

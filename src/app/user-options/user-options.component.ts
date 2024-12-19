@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { UserOptions } from './user-options.interface';
+import { UserOptions } from './interfaces/user-options.interface';
 import { UserOptionsService } from './user-options.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
