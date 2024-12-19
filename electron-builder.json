@@ -1,7 +1,7 @@
 {
   "build": {
-    "appId": "com.yourname.yourapp",
-    "productName": "YourAppName",
+    "appId": "gr.segas.liveprintclient",
+    "productName": "Live Print Client",
     "files": ["dist/", "electron/"],
     "directories": {
       "output": "dist/electron-build"
