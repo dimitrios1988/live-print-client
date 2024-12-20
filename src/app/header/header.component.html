@@ -1,11 +1,16 @@
-<mat-toolbar class="liveprint-toolbar"
-  ><span class="spacer"></span>
-  <button
-    mat-icon-button
-    class="example-icon"
-    aria-label="Settings"
-    (click)="onSettingsClicked()"
-  >
-    <mat-icon fontIcon="settings"></mat-icon>
+<mat-toolbar class="liveprint-toolbar">
+  <span class="spacer"></span>
+  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="More options">
+    <mat-icon>more_vert</mat-icon>
   </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="onSettingsClicked()">
+      <mat-icon>settings</mat-icon>
+      <span>Ρυθμίσεις</span>
+    </button>
+    <button mat-menu-item (click)="onLogoutClicked()">
+      <mat-icon>logout</mat-icon>
+      <span>Αποσύνδεση</span>
+    </button>
+  </mat-menu>
 </mat-toolbar>
