@@ -23,6 +23,10 @@ export class UserOptionsService {
     localStorage.setItem('user-options', JSON.stringify(userOptions));
   }
   private getDefaultUserOptions(): UserOptions {
-    return { printNumbers: [true], printTickets: [true] } as UserOptions;
+    return {
+      printNumbers: [true],
+      printTickets: [true],
+      continuousPrint: [true],
+    } as UserOptions;
   }
 }

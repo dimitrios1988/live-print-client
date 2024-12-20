@@ -31,14 +31,27 @@ export class UserOptionsComponent {
       label: 'Εκτύπωση Ετικέτας',
       formControlName: 'printTickets',
     },
+    {
+      value: true,
+      label: 'Συνεχής Εκτύπωση',
+      formControlName: 'continuousPrint',
+    },
   ];
   constructor(private userOptionsService: UserOptionsService, fb: FormBuilder) {
     this.userOptions = userOptionsService.getUserOptions();
     this.userOptionsForm = fb.group({
       printNumbers: [],
       printTickets: [],
+      continuousPrint: [],
     });
-    this.userOptionsForm.setValue(this.userOptions);
+
+    for (const key in this.userOptions) {
+      if (this.userOptions.hasOwnProperty(key)) {
+        this.userOptionsForm.patchValue({
+          [key]: this.userOptions[key as keyof UserOptions],
+        });
+      }
+    }
   }
 
   onSelectionChange() {
