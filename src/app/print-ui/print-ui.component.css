@@ -4,6 +4,10 @@
   flex-grow: 1;
 }
 
+mat-sidenav {
+  padding: 10px;
+}
+
 mat-sidenav-container {
   flex-grow: 1;
 }
