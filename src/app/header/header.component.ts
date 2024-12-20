@@ -2,12 +2,12 @@ import { Component, inject } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { SettingsDialogComponent } from './settings-dialog/settings-dialog.component';
 
 @Component({
   selector: 'app-header',
-  imports: [MatToolbarModule, MatIconModule, MatButtonModule, MatDialogModule],
+  imports: [MatToolbarModule, MatIconModule, MatButtonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
