@@ -1,13 +1,18 @@
 import { HttpInterceptorFn } from '@angular/common/http';
+import { LoginService } from './login/login.service';
+import { inject } from '@angular/core';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJyMyBhcHBsaWNhdGlvbiIsInN1YiI6ImRpbWl0cmlvczE5ODgiLCJleHAiOjE3MzUwMzI2MDEsImlhdCI6MTczNDQyNzgwMSwiYWRtaW4iOnRydWUsImxvZ2luSWQiOjEsIm5vQXV0aCI6ZmFsc2V9.-wFynv3wN_1bTZ6N83tr3Kh1MjDkLM8x8uExPMlUKkA';
+  const loginService = inject(LoginService);
+  if (loginService.isAuthenticated()) {
+    const token = loginService.getToken();
 
-  const clonedRequest = req.clone({
-    setHeaders: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  return next(clonedRequest);
+    const clonedRequest = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return next(clonedRequest);
+  }
+  return next(req);
 };

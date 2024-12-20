@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 export class LoginService {
   private apiAddress: string = '';
   private _token = signal<string>('');
+  private token = computed(() => this._token());
   public isAuthenticated = computed(() => this._token() !== '');
 
   constructor(
@@ -40,5 +41,9 @@ export class LoginService {
     this._token.set('');
     localStorage.removeItem('auth');
     this.router.navigate(['/login']);
+  }
+
+  getToken() {
+    return this.token();
   }
 }
