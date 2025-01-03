@@ -49,3 +49,37 @@ ipcMain.handle("get-settings", async () => {
 ipcMain.handle("save-settings", async (event, settings) => {
   return appStore.set("settings", settings);
 });
+
+ipcMain.on("print-html", async (event, { htmlContent, printerName }) => {
+  const result = await printHTMLContent(htmlContent, printerName, true);
+  event.sender.send("print-status", result);
+});
+
+async function printHTMLContent(htmlContent, printerName, landscape) {
+  return new Promise((resolve, reject) => {
+    const printWindow = new BrowserWindow({ show: false });
+
+    printWindow.loadURL(
+      `data:text/html;charset=utf-8,${encodeURIComponent(htmlContent)}`
+    );
+
+    printWindow.webContents.on("did-finish-load", () => {
+      printWindow.webContents.print(
+        {
+          silent: true,
+          printBackground: true,
+          deviceName: printerName,
+          landscape,
+        },
+        (success, errorType) => {
+          printWindow.close();
+          if (success) {
+            resolve({ success: true, message: "Print successful" });
+          } else {
+            reject({ success: false, message: `Print failed: ${errorType}` });
+          }
+        }
+      );
+    });
+  });
+}

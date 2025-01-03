@@ -11,4 +11,10 @@ contextBridge.exposeInMainWorld("electronAPI", {
   getPrinters: () => ipcRenderer.invoke("get-printers"),
   getSettings: () => ipcRenderer.invoke("get-settings"),
   saveSettings: (settings) => ipcRenderer.invoke("save-settings", settings),
+  printHTML: (htmlContent, printerName, landscape) => {
+    ipcRenderer.send("print-html", { htmlContent, printerName, landscape });
+  },
+  onPrintStatus: (callback) => {
+    ipcRenderer.on("print-status", (_event, result) => callback(result));
+  },
 });

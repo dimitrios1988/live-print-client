@@ -25,6 +25,7 @@
     "@angular/platform-browser-dynamic": "^19.0.4",
     "@angular/router": "^19.0.4",
     "@electron/remote": "^2.1.2",
+    "angularx-qrcode": "^19.0.0",
     "concurrently": "^9.1.0",
     "electron": "^33.2.1",
     "electron-store": "^10.0.0",

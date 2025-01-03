@@ -14,4 +14,8 @@ mat-sidenav-container {
 
 mat-sidenav-content {
   background-color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
 }

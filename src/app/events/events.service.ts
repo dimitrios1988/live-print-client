@@ -6,9 +6,10 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { SettingsService } from '../header/settings-dialog/settings.service';
 import { IEvent } from './interfaces/event.interface';
+import { IReiEvent } from './interfaces/rei-event.interface';
 import { LoginService } from '../login/login.service';
 @Injectable({
   providedIn: 'root',
@@ -39,10 +40,14 @@ export class EventsService {
 
   getEvents(): void {
     this.httpClient
-      .get<IEvent[]>(`${this.apiAddress}/api/${this.appName}/events/v1`)
+      .get<IReiEvent[]>(`${this.apiAddress}/api/${this.appName}/events/v1`)
       .subscribe({
         next: (response) => {
-          this._events.set(response);
+          this._events.set(
+            response.map((e) => {
+              return e['0(event)'];
+            })
+          );
         },
       });
   }
