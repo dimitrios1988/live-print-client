@@ -8,6 +8,7 @@ import { IRunner } from './interfaces/runner.interface';
 import { IGetRunnerIdCmd } from './interfaces/get-runner-id.cmd';
 import { SetRunnerPrintedCmd } from './interfaces/set-runner-printed.cmd';
 import { SetRunnerPrintedResp } from './interfaces/set-runner-printed.resp';
+import { IGetGroupResponse } from './interfaces/get-group.resp';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,7 @@ export class RunnerService {
     });
   }
 
-  getRunnerIdByBib(
+  private getRunnerIdByBib(
     bib: number,
     eventids: number[]
   ): Observable<IGetRunnerIdResponse> {
@@ -53,7 +54,7 @@ export class RunnerService {
     );
   }
 
-  getRunnerById(id: number): Observable<IGetRunnerResponse[]> {
+  private getRunnerById(id: number): Observable<IGetRunnerResponse[]> {
     return this.httpClient.get<IGetRunnerResponse[]>(
       `${this.apiAddress}/api/${this.appName}/runners/v1/${id}?limit=1`
     );
@@ -82,28 +83,39 @@ export class RunnerService {
                     club: getRunnerResponse[0]['0(runner)'].club,
                     fathers_name:
                       getRunnerResponse[0]['0(runner)'].fathers_name,
-                    first_name_greek:
-                      getRunnerResponse[0]['0(runner)'].first_name_greek,
-                    first_name_latin:
-                      getRunnerResponse[0]['0(runner)'].first_name_latin,
+                    first_name:
+                      getRunnerResponse[0]['0(runner)'].first_name_greek !==
+                        null &&
+                      getRunnerResponse[0]['0(runner)'].first_name_greek !== ''
+                        ? getRunnerResponse[0]['0(runner)'].first_name_greek
+                        : getRunnerResponse[0]['0(runner)'].first_name_latin,
                     id: getRunnerResponse[0]['0(runner)'].id,
                     is_printed: getRunnerResponse[0]['0(runner)'].is_printed,
-                    last_name_greek:
-                      getRunnerResponse[0]['0(runner)'].last_name_greek,
-                    last_name_latin:
-                      getRunnerResponse[0]['0(runner)'].last_name_latin,
-                    event: getRunnerResponse[0]['1(event)'].name_for_printing,
+                    last_name:
+                      getRunnerResponse[0]['0(runner)'].last_name_greek !==
+                        null &&
+                      getRunnerResponse[0]['0(runner)'].last_name_greek !== ''
+                        ? getRunnerResponse[0]['0(runner)'].last_name_greek
+                        : getRunnerResponse[0]['0(runner)'].last_name_latin,
+                    event_name:
+                      getRunnerResponse[0]['1(event)'].name_for_printing,
+                    event_id: getRunnerResponse[0]['1(event)'].id,
                     allow_reprinting:
                       getRunnerResponse[0]['1(event)'].allow_reprinting,
-                    tshirt_size: getRunnerResponse[0]['4(tshirt_size)'].size,
+                    tshirt_size: getRunnerResponse[0]['0(runner)'].tshirt_size,
                     gender:
                       getRunnerResponse[0]['2(runner_gender)'].printed_text,
                     block: getRunnerResponse[0]['0(runner)'].block,
                     nationality: getRunnerResponse[0]['0(runner)'].nationality,
-                    group: getRunnerResponse[0]['5(group)'].name,
-                    printed_at: new Date(
-                      getRunnerResponse[0]['6(print_log)'].printed_at * 1000
-                    ),
+                    group_name: getRunnerResponse[0]['5(group)'].name,
+                    group_id: getRunnerResponse[0]['5(group)'].id,
+                    printed_at: getRunnerResponse[0]['6(print_log)']?.printed_at
+                      ? new Date(
+                          getRunnerResponse[0]['6(print_log)'].printed_at * 1000
+                        )
+                      : null,
+                    registration_level:
+                      getRunnerResponse[0]['0(runner)'].registration_level,
                   };
                   return runner;
                 })
@@ -122,6 +134,69 @@ export class RunnerService {
         error: (err) => observer.error(err),
       });
     });
+  }
+
+  getGroupRunners(groupId: number, eventIds: number[]): Observable<IRunner[]> {
+    return this.httpClient
+      .get<IGetGroupResponse[]>(
+        `${this.apiAddress}/api/${this.appName}/group/v1/${groupId}`
+      )
+      .pipe(
+        map((response: IGetGroupResponse[]) => {
+          return response.filter((runner: IGetGroupResponse) => {
+            return eventIds.includes(runner['2(event)'].id);
+          });
+        }),
+        map((response: IGetGroupResponse[]) => {
+          const data = response.map<IRunner>((runner: IGetGroupResponse) => ({
+            bib: runner['1(runner)'].bib,
+            birthdate: new Date(runner['1(runner)'].birthdate * 1000),
+            chip_2_go_qr_data: runner['1(runner)'].chip_2_go_qr_data,
+            club: runner['1(runner)'].club,
+            fathers_name: runner['1(runner)'].fathers_name,
+            first_name:
+              runner['1(runner)'].first_name_greek !== null &&
+              runner['1(runner)'].first_name_greek !== ''
+                ? runner['1(runner)'].first_name_greek
+                : runner['1(runner)'].first_name_latin,
+            id: runner['1(runner)'].id,
+            is_printed: runner['1(runner)'].is_printed,
+            last_name:
+              runner['1(runner)'].last_name_greek !== null &&
+              runner['1(runner)'].last_name_greek !== ''
+                ? runner['1(runner)'].last_name_greek
+                : runner['1(runner)'].last_name_latin,
+            event_name: runner['2(event)'].name_for_printing,
+            event_id: runner['2(event)'].id,
+            allow_reprinting: runner['2(event)'].allow_reprinting,
+            tshirt_size: runner['1(runner)'].tshirt_size,
+            gender: runner['3(runner_gender)'].printed_text,
+            block: runner['1(runner)'].block,
+            nationality: runner['1(runner)'].nationality,
+            group_name: runner['0(group)'].name,
+            group_id: runner['0(group)'].id,
+            printed_at: runner['5(print_log)'].printed_at
+              ? new Date(runner['5(print_log)'].printed_at * 1000)
+              : null,
+            registration_level: runner['1(runner)'].registration_level,
+          }));
+          const uniqueData = data.reduce((acc: IRunner[], current: IRunner) => {
+            const existing = acc.find((item) => item.id === current.id);
+            if (
+              !existing ||
+              (current.printed_at &&
+                existing.printed_at &&
+                current.printed_at > existing.printed_at)
+            ) {
+              return acc
+                .filter((item) => item.id !== current.id)
+                .concat(current);
+            }
+            return acc;
+          }, []);
+          return uniqueData;
+        })
+      );
   }
 
   setRunnerAsPrinted(runnerId: number): Observable<SetRunnerPrintedResp> {

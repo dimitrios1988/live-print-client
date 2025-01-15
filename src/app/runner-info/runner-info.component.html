@@ -13,7 +13,7 @@
     <mat-divider [vertical]="true"></mat-divider>
     <div>
       <strong class="runner-info-header-title">Αγώνας</strong>
-      <span>{{ runner.event }}</span>
+      <span>{{ runner.event_name }}</span>
     </div>
   </div>
   <div class="runner-info-content">
@@ -28,16 +28,13 @@
     </div>
     <mat-divider [vertical]="true"></mat-divider>
     <div class="runner-info-content-data">
-      <span
-        >{{ runner.first_name_greek ?? runner.first_name_latin }}
-        {{ runner.last_name_greek ?? runner.last_name_latin }}</span
-      >
+      <span>{{ runner.first_name }} {{ runner.last_name }}</span>
       <span>{{ runner.fathers_name }}</span>
       <span>{{ runner.birthdate | date : "yyyy" }}</span>
       <span>{{ runner.gender }}</span>
       <span>{{ runner.nationality }}</span>
       <span>{{ runner.club }}</span>
-      <span>{{ runner.group }}</span>
+      <span>{{ runner.group_name }}</span>
     </div>
     <qrcode
       style="display: none"

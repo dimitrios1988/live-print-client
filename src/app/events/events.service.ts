@@ -9,7 +9,7 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { SettingsService } from '../header/settings-dialog/settings.service';
 import { IEvent } from './interfaces/event.interface';
-import { IReiEvent } from './interfaces/rei-event.interface';
+import { IGetEventResponse } from './interfaces/get-event.resp';
 import { LoginService } from '../login/login.service';
 @Injectable({
   providedIn: 'root',
@@ -40,7 +40,9 @@ export class EventsService {
 
   getEvents(): void {
     this.httpClient
-      .get<IReiEvent[]>(`${this.apiAddress}/api/${this.appName}/events/v1`)
+      .get<IGetEventResponse[]>(
+        `${this.apiAddress}/api/${this.appName}/events/v1`
+      )
       .subscribe({
         next: (response) => {
           this._events.set(

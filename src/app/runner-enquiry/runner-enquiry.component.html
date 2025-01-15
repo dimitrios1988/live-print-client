@@ -38,6 +38,17 @@
         <mat-icon>print</mat-icon>
         Εκτύπωση
       </button>
+      <button
+        mat-flat-button
+        color="primary"
+        type="button"
+        style="margin-bottom: 20px"
+        [disabled]="!hasNextRunnerToPrint()"
+        (click)="loadNextRunner()"
+      >
+        <mat-icon>arrow_forward</mat-icon>
+        Επόμενος
+      </button>
     </div>
   </form>
 </section>

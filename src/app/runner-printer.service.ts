@@ -18,7 +18,7 @@ export class RunnerPrinterService {
     private http: HttpClient
   ) {}
 
-  loadRunnerForPrint(runner: IRunner) {
+  loadRunnerForPrint(runner: IRunner | null) {
     this._runnerForPrint.set(runner);
   }
 
@@ -38,10 +38,34 @@ export class RunnerPrinterService {
   }> {
     const selectedPrinter = this.settingsService.settings()?.numberPrinter;
     const variables = {
-      title: 'Dynamic Print Example',
-      description:
-        'This is a dynamic description loaded from an external file.',
+      bib: this.runnerForPrint()?.bib?.toString() ?? '',
+      full_name: `${this.runnerForPrint()?.first_name.toString()} ${this.runnerForPrint()?.last_name.toString()}`,
+      block: this.runnerForPrint()?.block
+        ? `Block ${this.runnerForPrint()?.block?.toString()}`
+        : '',
+      club: this.runnerForPrint()?.club
+        ? `Σύλλογος: ${this.runnerForPrint()?.club?.toString()}`
+        : '',
+      gender: this.runnerForPrint()?.gender
+        ? `Φύλο:<br>${this.runnerForPrint()?.gender?.toString()}`
+        : '',
+      tshirt_indicator: 'X',
+      tshirt_size: '',
+      qr: this.runnerForPrint()?.chip_2_go_qr_base64?.toString() ?? '',
+      registration_level: this.runnerForPrint()?.registration_level
+        ? `Level: ${this.runnerForPrint()?.registration_level?.toString()}`
+        : '',
     };
+    if (
+      this.runnerForPrint()?.tshirt_size !== null &&
+      this.runnerForPrint()?.tshirt_size !== undefined &&
+      this.runnerForPrint()?.tshirt_size !== ''
+    ) {
+      variables.tshirt_size = `T-Shirt Size:<br>${
+        this.runnerForPrint()?.tshirt_size
+      }`;
+      variables.tshirt_indicator = '';
+    }
     const htmlContent = await this.loadHTMLTemplate(
       'assets/templates/runner-number.template.html',
       variables

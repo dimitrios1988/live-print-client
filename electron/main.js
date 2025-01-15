@@ -70,6 +70,7 @@ async function printHTMLContent(htmlContent, printerName, landscape) {
           printBackground: true,
           deviceName: printerName,
           landscape,
+          margins: { marginType: "none" },
         },
         (success, errorType) => {
           printWindow.close();
@@ -80,6 +81,24 @@ async function printHTMLContent(htmlContent, printerName, landscape) {
           }
         }
       );
+    });
+
+    printWindow.webContents.on(
+      "did-fail-load",
+      (event, errorCode, errorDescription) => {
+        printWindow.close();
+        reject({
+          success: false,
+          message: `Failed to load content: ${errorDescription}`,
+        });
+      }
+    );
+
+    printWindow.on("closed", () => {
+      resolve({
+        success: false,
+        message: "Print window was closed prematurely",
+      });
     });
   });
 }

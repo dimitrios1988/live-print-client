@@ -1,4 +1,4 @@
-export interface IReiEvent {
+export interface IGetEventResponse {
   '0(event)': _event;
 }
 

@@ -28,7 +28,6 @@ export class RunnerInfoComponent {
       this.chip2GoQrElement.nativeElement.querySelector('canvas');
     if (qrCanvas) {
       const base64Image = qrCanvas.toDataURL('image/png');
-      console.log('QR code base64:', base64Image);
       return base64Image;
     } else {
       throw new Error('QR code canvas not found.');

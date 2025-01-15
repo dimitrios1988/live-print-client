@@ -10,6 +10,7 @@ import {
 } from '@angular/material/dialog';
 import { RunnerPrinterService } from '../../runner-printer.service';
 import { IRunner } from '../interfaces/runner.interface';
+import { CommonModule, DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-multiple-printing-dialog',
@@ -20,13 +21,17 @@ import { IRunner } from '../interfaces/runner.interface';
     MatDialogContent,
     MatDialogTitle,
     MatButtonModule,
+    CommonModule,
   ],
+  providers: [DatePipe],
   templateUrl: './multiple-printing-dialog.component.html',
   styleUrl: './multiple-printing-dialog.component.css',
 })
 export class MultiplePrintingDialogComponent {
   public runnerForPrint: IRunner | null = null;
-  readonly dialogRef = inject(MatDialogRef<MultiplePrintingDialogComponent>);
+  private readonly dialogRef = inject(
+    MatDialogRef<MultiplePrintingDialogComponent>
+  );
   constructor(private runnerPrinterService: RunnerPrinterService) {
     this.runnerForPrint = this.runnerPrinterService.runnerForPrint();
   }
