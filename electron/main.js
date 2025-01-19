@@ -8,8 +8,8 @@ let mainWindow;
 const appStore = new store();
 function createMainWindow() {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1280,
+    height: 846,
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
