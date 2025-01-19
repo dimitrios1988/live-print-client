@@ -6,6 +6,7 @@
       <mat-form-field>
         <mat-label>Εκτυπωτής Αριθμού</mat-label>
         <mat-select formControlName="numberPrinter">
+          <mat-option [value]="null">Επιλέξτε Εκτυπωτή</mat-option>
           @for (printer of printers | async; track printer) {
           <mat-option [value]="printer.name">{{
             printer.displayName
@@ -16,6 +17,7 @@
       <mat-form-field>
         <mat-label>Ετικετογράφος</mat-label>
         <mat-select formControlName="ticketPrinter">
+          <mat-option [value]="null">Επιλέξτε Ετικετογράφο</mat-option>
           @for (printer of printers | async; track printer) {
           <mat-option [value]="printer.name">{{
             printer.displayName

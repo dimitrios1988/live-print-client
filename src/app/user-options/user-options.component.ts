@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { UserOptions } from './interfaces/user-options.interface';
 import { UserOptionsService } from './user-options.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { SettingsService } from '../header/settings-dialog/settings.service';
 
 @Component({
   selector: 'app-user-options',
@@ -37,7 +38,11 @@ export class UserOptionsComponent {
       formControlName: 'continuousPrint',
     },
   ];
-  constructor(private userOptionsService: UserOptionsService, fb: FormBuilder) {
+  constructor(
+    private userOptionsService: UserOptionsService,
+    fb: FormBuilder,
+    private settingsService: SettingsService
+  ) {
     this.userOptions = userOptionsService.getUserOptions();
     this.userOptionsForm = fb.group({
       printNumbers: [],
@@ -52,9 +57,33 @@ export class UserOptionsComponent {
         });
       }
     }
+    effect(() => {
+      if (this.settingsService.settings()?.ticketPrinter === null) {
+        this.userOptionsForm.controls['printTickets'].setValue(false);
+        this.userOptionsForm.controls['printTickets'].disable();
+      } else {
+        this.userOptionsForm.controls['printTickets'].enable();
+      }
+      if (this.settingsService.settings()?.numberPrinter === null) {
+        this.userOptionsForm.controls['printNumbers'].setValue(false);
+        this.userOptionsForm.controls['printNumbers'].disable();
+      } else {
+        this.userOptionsForm.controls['printNumbers'].enable();
+      }
+      this.onSelectionChange();
+    });
   }
 
   onSelectionChange() {
+    if (
+      this.userOptionsForm.controls['printTickets'].value == false &&
+      this.userOptionsForm.controls['printNumbers'].value == false
+    ) {
+      this.userOptionsForm.controls['continuousPrint'].setValue(false);
+      this.userOptionsForm.controls['continuousPrint'].disable();
+    } else {
+      this.userOptionsForm.controls['continuousPrint'].enable();
+    }
     this.userOptions = this.userOptionsForm.value;
     this.userOptionsService.setUserOptions(this.userOptions);
   }
