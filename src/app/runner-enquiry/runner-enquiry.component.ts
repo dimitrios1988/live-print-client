@@ -134,14 +134,6 @@ export class RunnerEnquiryComponent {
         this.raceNumberInput.nativeElement.select();
       }
     }
-    if (this.userOptionsService.getUserOptions().continuousPrint[0] === true) {
-      this.loadNextRunner();
-    } else {
-      if (this.raceNumberInput) {
-        this.raceNumberInput.nativeElement.focus();
-        this.raceNumberInput.nativeElement.select();
-      }
-    }
   }
 
   public loadNextRunner() {
@@ -190,6 +182,18 @@ export class RunnerEnquiryComponent {
           results.forEach((result) => {
             if (!result.success) {
               console.error(result.message);
+            } else {
+              if (
+                this.userOptionsService.getUserOptions().continuousPrint[0] ===
+                true
+              ) {
+                this.loadNextRunner();
+              } else {
+                if (this.raceNumberInput) {
+                  this.raceNumberInput.nativeElement.focus();
+                  this.raceNumberInput.nativeElement.select();
+                }
+              }
             }
           });
         })
