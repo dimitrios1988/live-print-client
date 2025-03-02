@@ -20,4 +20,5 @@ export interface IRunner {
   group_id: number | null;
   printed_at: Date | null;
   registration_level: string | null;
+  has_tshirt: boolean;
 }

@@ -75,20 +75,23 @@ export class RunnerService {
                 map((getRunnerResponse: IGetRunnerResponse[]) => {
                   const runner: IRunner = {
                     bib: getRunnerResponse[0]['0(runner)'].bib,
-                    birthdate: new Date(
-                      getRunnerResponse[0]['0(runner)'].birthdate * 1000
-                    ),
+                    birthdate: getRunnerResponse[0]['0(runner)'].birthdate
+                      ? new Date(
+                          getRunnerResponse[0]['0(runner)'].birthdate * 1000
+                        )
+                      : null,
                     chip_2_go_qr_data:
-                      getRunnerResponse[0]['0(runner)'].chip_2_go_qr_data,
-                    club: getRunnerResponse[0]['0(runner)'].club,
+                      getRunnerResponse[0]['0(runner)'].chip_2_go_qr_data || '',
+                    club: getRunnerResponse[0]['0(runner)'].club || '',
                     fathers_name:
-                      getRunnerResponse[0]['0(runner)'].fathers_name,
+                      getRunnerResponse[0]['0(runner)'].fathers_name || '',
                     first_name:
                       getRunnerResponse[0]['0(runner)'].first_name_greek !==
                         null &&
                       getRunnerResponse[0]['0(runner)'].first_name_greek !== ''
                         ? getRunnerResponse[0]['0(runner)'].first_name_greek
-                        : getRunnerResponse[0]['0(runner)'].first_name_latin,
+                        : getRunnerResponse[0]['0(runner)'].first_name_latin ||
+                          '',
                     id: getRunnerResponse[0]['0(runner)'].id,
                     is_printed: getRunnerResponse[0]['0(runner)'].is_printed,
                     last_name:
@@ -96,18 +99,23 @@ export class RunnerService {
                         null &&
                       getRunnerResponse[0]['0(runner)'].last_name_greek !== ''
                         ? getRunnerResponse[0]['0(runner)'].last_name_greek
-                        : getRunnerResponse[0]['0(runner)'].last_name_latin,
+                        : getRunnerResponse[0]['0(runner)'].last_name_latin ||
+                          '',
                     event_name:
-                      getRunnerResponse[0]['1(event)'].name_for_printing,
+                      getRunnerResponse[0]['1(event)'].printed_text || '',
                     event_id: getRunnerResponse[0]['1(event)'].id,
                     allow_reprinting:
                       getRunnerResponse[0]['1(event)'].allow_reprinting,
-                    tshirt_size: getRunnerResponse[0]['0(runner)'].tshirt_size,
+                    tshirt_size:
+                      getRunnerResponse[0]['7(t_shirt_size)'].printed_text ||
+                      '',
                     gender:
-                      getRunnerResponse[0]['2(runner_gender)'].printed_text,
+                      getRunnerResponse[0]['2(gender)'].printed_text || '',
                     block: getRunnerResponse[0]['0(runner)'].block,
-                    nationality: getRunnerResponse[0]['0(runner)'].nationality,
-                    group_name: getRunnerResponse[0]['5(group)'].name,
+                    nationality:
+                      getRunnerResponse[0]['10(nationality)'].printed_text ||
+                      '',
+                    group_name: getRunnerResponse[0]['5(group)'].name || '',
                     group_id: getRunnerResponse[0]['5(group)'].id,
                     printed_at: getRunnerResponse[0]['6(print_log)']?.printed_at
                       ? new Date(
@@ -115,7 +123,10 @@ export class RunnerService {
                         )
                       : null,
                     registration_level:
-                      getRunnerResponse[0]['0(runner)'].registration_level,
+                      getRunnerResponse[0]['9(registration_level)']
+                        .printed_text || '',
+                    has_tshirt:
+                      getRunnerResponse[0]['9(registration_level)'].has_tshirt,
                   };
                   return runner;
                 })
@@ -150,35 +161,38 @@ export class RunnerService {
         map((response: IGetGroupResponse[]) => {
           const data = response.map<IRunner>((runner: IGetGroupResponse) => ({
             bib: runner['1(runner)'].bib,
-            birthdate: new Date(runner['1(runner)'].birthdate * 1000),
+            birthdate: runner['1(runner)'].birthdate
+              ? new Date(runner['1(runner)'].birthdate * 1000)
+              : null,
             chip_2_go_qr_data: runner['1(runner)'].chip_2_go_qr_data,
             club: runner['1(runner)'].club,
-            fathers_name: runner['1(runner)'].fathers_name,
+            fathers_name: runner['1(runner)'].fathers_name || '',
             first_name:
               runner['1(runner)'].first_name_greek !== null &&
               runner['1(runner)'].first_name_greek !== ''
                 ? runner['1(runner)'].first_name_greek
-                : runner['1(runner)'].first_name_latin,
+                : runner['1(runner)'].first_name_latin || '',
             id: runner['1(runner)'].id,
             is_printed: runner['1(runner)'].is_printed,
             last_name:
               runner['1(runner)'].last_name_greek !== null &&
               runner['1(runner)'].last_name_greek !== ''
                 ? runner['1(runner)'].last_name_greek
-                : runner['1(runner)'].last_name_latin,
-            event_name: runner['2(event)'].name_for_printing,
+                : runner['1(runner)'].last_name_latin || '',
+            event_name: runner['2(event)'].printed_text || '',
             event_id: runner['2(event)'].id,
             allow_reprinting: runner['2(event)'].allow_reprinting,
-            tshirt_size: runner['1(runner)'].tshirt_size,
-            gender: runner['3(runner_gender)'].printed_text,
+            tshirt_size: runner['6(t_shirt_size)'].printed_text,
+            gender: runner['3(gender)'].printed_text || '',
             block: runner['1(runner)'].block,
-            nationality: runner['1(runner)'].nationality,
+            nationality: runner['9(nationality)'].printed_text,
             group_name: runner['0(group)'].name,
             group_id: runner['0(group)'].id,
             printed_at: runner['5(print_log)'].printed_at
               ? new Date(runner['5(print_log)'].printed_at * 1000)
               : null,
-            registration_level: runner['1(runner)'].registration_level,
+            registration_level: runner['8(registration_level)'].printed_text,
+            has_tshirt: runner['8(registration_level)'].has_tshirt,
           }));
           const uniqueData = data.reduce((acc: IRunner[], current: IRunner) => {
             const existing = acc.find((item) => item.id === current.id);

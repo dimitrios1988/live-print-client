@@ -64,6 +64,8 @@ export class RunnerPrinterService {
       variables.tshirt_size = `T-Shirt Size:<br>${
         this.runnerForPrint()?.tshirt_size
       }`;
+    }
+    if (this._runnerForPrint()?.has_tshirt === true) {
       variables.tshirt_indicator = '';
     }
     const htmlContent = await this.loadHTMLTemplate(
