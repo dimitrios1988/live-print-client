@@ -127,6 +127,8 @@ export class RunnerService {
                         .printed_text || '',
                     has_tshirt:
                       getRunnerResponse[0]['9(registration_level)'].has_tshirt,
+                    receives_as_a_group:
+                      getRunnerResponse[0]['0(runner)'].receives_as_a_group,
                   };
                   return runner;
                 })
@@ -193,6 +195,7 @@ export class RunnerService {
               : null,
             registration_level: runner['8(registration_level)'].printed_text,
             has_tshirt: runner['8(registration_level)'].has_tshirt,
+            receives_as_a_group: runner['1(runner)'].receives_as_a_group,
           }));
           const uniqueData = data.reduce((acc: IRunner[], current: IRunner) => {
             const existing = acc.find((item) => item.id === current.id);

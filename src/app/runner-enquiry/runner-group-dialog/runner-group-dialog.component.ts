@@ -13,6 +13,7 @@ import { MatTableModule } from '@angular/material/table';
 import { IRunner } from '../interfaces/runner.interface';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-runner-group-dialog',
   imports: [
@@ -25,6 +26,7 @@ import { FormsModule } from '@angular/forms';
     MatTableModule,
     MatCheckboxModule,
     FormsModule,
+    MatIconModule,
   ],
   templateUrl: './runner-group-dialog.component.html',
   styleUrl: './runner-group-dialog.component.css',
@@ -40,6 +42,7 @@ export class RunnerGroupDialogComponent {
     'first_name',
     'nationality',
     'gender',
+    'is_printed',
   ];
 
   constructor() {
@@ -48,7 +51,11 @@ export class RunnerGroupDialogComponent {
         return r1.bib - r2.bib;
       })
       .map<any>((runner: IRunner) => {
-        return { ...runner, selected: true };
+        if (runner.is_printed === true) {
+          return { ...runner, selected: false };
+        } else {
+          return { ...runner, selected: true };
+        }
       })
       .reduce((groups, runner) => {
         const group = groups[runner.event_id] || [];

@@ -21,4 +21,5 @@ export interface IRunner {
   printed_at: Date | null;
   registration_level: string | null;
   has_tshirt: boolean;
+  receives_as_a_group: boolean;
 }

@@ -14,7 +14,7 @@ import {
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
+import { MatButton, MatButtonModule } from '@angular/material/button';
 import { IEvent } from '../events/interfaces/event.interface';
 import { RunnerService } from './runner.service';
 import { EventsService } from '../events/events.service';
@@ -48,6 +48,7 @@ export class RunnerEnquiryComponent {
   private readonly multiplePrintingDialog: MatDialog;
   private readonly groupDialog: MatDialog;
   @ViewChild('raceNumber') raceNumberInput: ElementRef | undefined;
+  @ViewChild('printButton') printButton: MatButton | undefined;
 
   constructor(
     private fb: FormBuilder,
@@ -158,11 +159,11 @@ export class RunnerEnquiryComponent {
                 .subscribe({
                   next: (response) => {
                     console.log('Runner set as printed:', response);
-                    const runner = this.runnerPrinterService.runnerForPrint();
+                    /* const runner = this.runnerPrinterService.runnerForPrint();
                     if (runner != null) {
                       runner.is_printed = true;
                       this.runnerPrinterService.updateRunnerForPrint(runner);
-                    }
+                    } */
                   },
                 });
             }
@@ -183,11 +184,17 @@ export class RunnerEnquiryComponent {
             if (!result.success) {
               console.error(result.message);
             } else {
+              const runner = this.runnerPrinterService.runnerForPrint();
+              if (runner != null) {
+                runner.is_printed = true;
+                this.runnerPrinterService.updateRunnerForPrint(runner);
+              }
               if (
                 this.userOptionsService.getUserOptions().continuousPrint[0] ===
                 true
               ) {
                 this.loadNextRunner();
+                this.printButton?._elementRef.nativeElement.focus();
               } else {
                 if (this.raceNumberInput) {
                   this.raceNumberInput.nativeElement.focus();
@@ -211,14 +218,14 @@ export class RunnerEnquiryComponent {
 
   private displayMultiplePrintingDialog() {
     return this.multiplePrintingDialog.open(MultiplePrintingDialogComponent, {
-      minWidth: '600px',
+      minWidth: '1200px',
       minHeight: '400px',
     });
   }
 
   private displayGroupDialog(data: IRunner[]) {
     return this.groupDialog.open(RunnerGroupDialogComponent, {
-      minWidth: '600px',
+      minWidth: '800px',
       minHeight: '400px',
       data,
     });

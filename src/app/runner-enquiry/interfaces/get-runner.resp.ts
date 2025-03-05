@@ -60,4 +60,5 @@ interface _0runner {
   chip_2_go_qr_data: string;
   block: number | null;
   club: string | null;
+  receives_as_a_group: boolean;
 }

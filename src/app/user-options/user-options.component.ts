@@ -58,13 +58,19 @@ export class UserOptionsComponent {
       }
     }
     effect(() => {
-      if (this.settingsService.settings()?.ticketPrinter === null) {
+      if (
+        this.settingsService.settings()?.ticketPrinter === null ||
+        this.settingsService.settings()?.ticketPrinter === ''
+      ) {
         this.userOptionsForm.controls['printTickets'].setValue(false);
         this.userOptionsForm.controls['printTickets'].disable();
       } else {
         this.userOptionsForm.controls['printTickets'].enable();
       }
-      if (this.settingsService.settings()?.numberPrinter === null) {
+      if (
+        this.settingsService.settings()?.numberPrinter === null ||
+        this.settingsService.settings()?.numberPrinter === ''
+      ) {
         this.userOptionsForm.controls['printNumbers'].setValue(false);
         this.userOptionsForm.controls['printNumbers'].disable();
       } else {

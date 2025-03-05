@@ -1,7 +1,7 @@
 @if (runnerPrintStatus == 'Ok') {
-<div>Ready to print</div>
+<div class="ready">Έτοιμο Για Εκτύπωση</div>
 } @else if (runnerPrintStatus == 'AlreadyPrinted') {
-<div>Runner already printed</div>
+<div class="printed">Ο Δρομέας Έχει Εκτυπωθεί</div>
 }@else if (runnerPrintStatus =='NotFound') {
-<div>Runner Not Found</div>
+<div class="not-found">Δε βρέθηκε Δρομέας</div>
 }

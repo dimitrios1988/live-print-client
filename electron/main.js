@@ -18,9 +18,17 @@ function createMainWindow() {
     },
   });
   Menu.setApplicationMenu(null);
-  mainWindow.loadURL(`http://localhost:4200`); // Load Angular's development server
+  if (process.env.NODE_ENV === "development") {
+    // Load Angular dev server (only for `npm run electron:serve`)
+    mainWindow.loadURL(`http://localhost:4200`);
+    mainWindow.webContents.openDevTools();
+  } else {
+    // Load the built Angular app (for packaged app)
+    mainWindow.loadFile(
+      path.join(__dirname, "../dist/live-print-client/browser/index.html")
+    );
+  }
   mainWindow.on("closed", () => (mainWindow = null));
-  mainWindow.webContents.openDevTools();
 }
 
 app.on("ready", createMainWindow);

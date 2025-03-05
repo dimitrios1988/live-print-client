@@ -44,7 +44,7 @@ export class RunnerPrinterService {
         ? `Block ${this.runnerForPrint()?.block?.toString()}`
         : '',
       club: this.runnerForPrint()?.club
-        ? `Σύλλογος: ${this.runnerForPrint()?.club?.toString()}`
+        ? `Σύλλογος:<br>${this.runnerForPrint()?.club?.toString()}`
         : '',
       gender: this.runnerForPrint()?.gender
         ? `Φύλο:<br>${this.runnerForPrint()?.gender?.toString()}`
@@ -53,13 +53,14 @@ export class RunnerPrinterService {
       tshirt_size: '',
       qr: this.runnerForPrint()?.chip_2_go_qr_base64?.toString() ?? '',
       registration_level: this.runnerForPrint()?.registration_level
-        ? `Level: ${this.runnerForPrint()?.registration_level?.toString()}`
+        ? `Επίπεδο Εγγραφής:<br>${this.runnerForPrint()?.registration_level?.toString()}`
         : '',
     };
     if (
       this.runnerForPrint()?.tshirt_size !== null &&
       this.runnerForPrint()?.tshirt_size !== undefined &&
-      this.runnerForPrint()?.tshirt_size !== ''
+      this.runnerForPrint()?.tshirt_size !== '' &&
+      this._runnerForPrint()?.has_tshirt === true
     ) {
       variables.tshirt_size = `T-Shirt Size:<br>${
         this.runnerForPrint()?.tshirt_size
@@ -67,6 +68,9 @@ export class RunnerPrinterService {
     }
     if (this._runnerForPrint()?.has_tshirt === true) {
       variables.tshirt_indicator = '';
+    }
+    if (this._runnerForPrint()?.receives_as_a_group === true) {
+      variables.tshirt_indicator = 'X';
     }
     const htmlContent = await this.loadHTMLTemplate(
       'assets/templates/runner-number.template.html',

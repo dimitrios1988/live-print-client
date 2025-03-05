@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "main": "electron/main.js",
   "type": "module",
+  "author": "Dimitrios Chondrokoukis",
+  "description": "This is the client app for SEGAS Live Print System",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -10,7 +12,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "electron:serve": "concurrently \"ng serve\" \"wait-on http://localhost:4200 && electron .\"",
-    "electron:build": "ng build --base-href ./ && electron-builder"
+    "electron:build": "ng build --base-href ./ && electron-builder --config electron-builder.json"
   },
   "private": true,
   "dependencies": {
@@ -27,7 +29,6 @@
     "@electron/remote": "^2.1.2",
     "angularx-qrcode": "^19.0.0",
     "concurrently": "^9.1.0",
-    "electron": "^33.2.1",
     "electron-store": "^10.0.0",
     "rxjs": "~7.8.1",
     "tslib": "^2.8.1",
@@ -46,6 +47,7 @@
     "karma-coverage": "~2.2.1",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.6.3"
+    "typescript": "~5.6.3",
+    "electron": "^33.2.1"
   }
 }
