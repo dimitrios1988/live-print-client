@@ -44,7 +44,7 @@ export class RunnerPrinterService {
         ? `Block ${this.runnerForPrint()?.block?.toString()}`
         : '',
       club: this.runnerForPrint()?.club
-        ? `Σύλλογος:<br>${this.runnerForPrint()?.club?.toString()}`
+        ? `Σύλλογος: ${this.runnerForPrint()?.club?.toString()}`
         : '',
       gender: this.runnerForPrint()?.gender
         ? `Φύλο:<br>${this.runnerForPrint()?.gender?.toString()}`
@@ -53,7 +53,7 @@ export class RunnerPrinterService {
       tshirt_size: '',
       qr: this.runnerForPrint()?.chip_2_go_qr_base64?.toString() ?? '',
       registration_level: this.runnerForPrint()?.registration_level
-        ? `Επίπεδο Εγγραφής:<br>${this.runnerForPrint()?.registration_level?.toString()}`
+        ? `Επίπεδο:<br>${this.runnerForPrint()?.registration_level?.toString()}`
         : '',
     };
     if (
