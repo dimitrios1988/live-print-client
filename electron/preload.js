@@ -14,6 +14,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
   printHTML: (htmlContent, printerName, landscape) => {
     ipcRenderer.send("print-html", { htmlContent, printerName, landscape });
   },
+  printBinary: (content, printerName) => {
+    ipcRenderer.send("print-binary", { content, printerName });
+  },
   onPrintStatus: (callback) => {
     ipcRenderer.on("print-status", (_event, result) => callback(result));
   },

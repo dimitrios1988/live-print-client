@@ -84,14 +84,10 @@ export class RunnerPrinterService {
     message: string;
   }> {
     const selectedPrinter = this.settingsService.settings()?.ticketPrinter;
-    const variables = {
-      bib: this.runnerForPrint()?.bib?.toString() || '',
-    };
-    const htmlContent = await this.loadHTMLTemplate(
-      'assets/templates/runner-ticket.template.html',
-      variables
+    return this.printerService.printBinary(
+      this.runnerForPrint()?.bib?.toString() || '',
+      selectedPrinter
     );
-    return this.printerService.printHTML(htmlContent, selectedPrinter, true);
   }
 
   private async loadHTMLTemplate(
