@@ -138,7 +138,10 @@ export class RunnerService {
                   observer.next(runnerResponse);
                   observer.complete();
                 },
-                error: (err) => observer.error(err),
+                error: (err) => {
+                  observer.next(undefined);
+                  //observer.error(err);
+                },
               });
           } else {
             observer.error('Runner ID not found');
