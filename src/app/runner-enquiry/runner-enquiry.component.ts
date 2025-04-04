@@ -159,11 +159,6 @@ export class RunnerEnquiryComponent {
                 .subscribe({
                   next: (response) => {
                     console.log('Runner set as printed:', response);
-                    /* const runner = this.runnerPrinterService.runnerForPrint();
-                    if (runner != null) {
-                      runner.is_printed = true;
-                      this.runnerPrinterService.updateRunnerForPrint(runner);
-                    } */
                   },
                 });
             }
@@ -201,29 +196,6 @@ export class RunnerEnquiryComponent {
               }
             }
           }
-          /* results.forEach((result) => {
-            if (!result.success) {
-              console.error(result.message);
-            } else {
-              const runner = this.runnerPrinterService.runnerForPrint();
-              if (runner != null) {
-                runner.is_printed = true;
-                this.runnerPrinterService.updateRunnerForPrint(runner);
-              }
-              if (
-                this.userOptionsService.getUserOptions().continuousPrint[0] ===
-                true
-              ) {
-                this.loadNextRunner();
-                this.printButton?._elementRef.nativeElement.focus();
-              } else {
-                if (this.raceNumberInput) {
-                  this.raceNumberInput.nativeElement.focus();
-                  this.raceNumberInput.nativeElement.select();
-                }
-              }
-            } 
-          });*/
         })
         .catch((error) => {
           console.error('An error occurred during printing:', error);
