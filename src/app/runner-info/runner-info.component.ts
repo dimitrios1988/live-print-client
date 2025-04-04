@@ -25,7 +25,10 @@ export class RunnerInfoComponent {
 
   getChip2GoQrBase64(): string {
     const qrCanvas =
-      this.chip2GoQrElement.nativeElement.querySelector('canvas');
+      this.chip2GoQrElement.nativeElement.querySelectorAll('canvas')[
+        this.chip2GoQrElement.nativeElement.querySelectorAll('canvas').length -
+          1
+      ];
     if (qrCanvas) {
       const base64Image = qrCanvas.toDataURL('image/png');
       return base64Image;
