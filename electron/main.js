@@ -63,17 +63,25 @@ ipcMain.handle("save-settings", async (event, settings) => {
   return appStore.set("settings", settings);
 });
 
-ipcMain.on("print-html", async (event, { htmlContent, printerName }) => {
-  const result = await printHTMLContent(htmlContent, printerName, true);
-  event.sender.send("print-status", result);
-});
+ipcMain.on(
+  "print-html",
+  async (event, { htmlContent, printerName, duplex }) => {
+    const result = await printHTMLContent(
+      htmlContent,
+      printerName,
+      true,
+      duplex
+    );
+    event.sender.send("print-status", result);
+  }
+);
 
 ipcMain.on("print-binary", async (event, { content, printerName }) => {
   const result = await printBinaryContent(content, printerName);
   event.sender.send("print-status", result);
 });
 
-async function printHTMLContent(htmlContent, printerName, landscape) {
+async function printHTMLContent(htmlContent, printerName, landscape, duplex) {
   return new Promise((resolve, reject) => {
     const printWindow = new BrowserWindow({ show: false });
 
@@ -82,23 +90,47 @@ async function printHTMLContent(htmlContent, printerName, landscape) {
     );
 
     printWindow.webContents.on("did-finish-load", () => {
-      printWindow.webContents.print(
-        {
-          silent: true,
-          printBackground: true,
-          deviceName: printerName,
-          landscape,
-          margins: { marginType: "none" },
-        },
-        (success, errorType) => {
-          printWindow.close();
-          if (success) {
-            resolve({ success: true, message: "Print successful" });
-          } else {
-            reject({ success: false, message: `Print failed: ${errorType}` });
+      if (duplex == false) {
+        printWindow.webContents.print(
+          {
+            silent: true,
+            printBackground: true,
+            deviceName: printerName,
+            landscape,
+            pageSize: "A4",
+            margins: { marginType: "none" },
+          },
+          (success, errorType) => {
+            printWindow.close();
+            if (success) {
+              resolve({ success: true, message: "Print successful" });
+            } else {
+              reject({ success: false, message: `Print failed: ${errorType}` });
+            }
           }
-        }
-      );
+        );
+      } else {
+        printWindow.webContents.print(
+          {
+            silent: true,
+            printBackground: true,
+            deviceName: printerName,
+            duplexMode: "shortEdge",
+            duplex: true,
+            landscape,
+            pageSize: "A4",
+            margins: { marginType: "none" },
+          },
+          (success, errorType) => {
+            printWindow.close();
+            if (success) {
+              resolve({ success: true, message: "Print successful" });
+            } else {
+              reject({ success: false, message: `Print failed: ${errorType}` });
+            }
+          }
+        );
+      }
     });
 
     printWindow.webContents.on(

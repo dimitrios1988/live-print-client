@@ -1,5 +1,5 @@
 {
-  "appId": "gr.segas.liveprintclient",
+  "appId": "gr.zefksisconsulting.liveprintclient",
   "productName": "Live Print Client",
   "files": ["dist/", "electron/"],
   "directories": {

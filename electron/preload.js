@@ -11,8 +11,13 @@ contextBridge.exposeInMainWorld("electronAPI", {
   getPrinters: () => ipcRenderer.invoke("get-printers"),
   getSettings: () => ipcRenderer.invoke("get-settings"),
   saveSettings: (settings) => ipcRenderer.invoke("save-settings", settings),
-  printHTML: (htmlContent, printerName, landscape) => {
-    ipcRenderer.send("print-html", { htmlContent, printerName, landscape });
+  printHTML: (htmlContent, printerName, landscape, duplex) => {
+    ipcRenderer.send("print-html", {
+      htmlContent,
+      printerName,
+      landscape,
+      duplex,
+    });
   },
   printBinary: (content, printerName) => {
     ipcRenderer.send("print-binary", { content, printerName });

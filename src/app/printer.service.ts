@@ -13,7 +13,8 @@ export class PrinterService {
   printHTML(
     htmlContent: string,
     printerName: string,
-    landscape: boolean
+    landscape: boolean,
+    duplex: boolean
   ): Promise<{ success: boolean; message: string }> {
     return new Promise((resolve, reject) => {
       if (!(window as any).electronAPI) {
@@ -33,7 +34,7 @@ export class PrinterService {
         }
       );
 
-      electronAPI.printHTML(htmlContent, printerName, landscape);
+      electronAPI.printHTML(htmlContent, printerName, landscape, duplex);
     });
   }
 
