@@ -4,15 +4,15 @@
   flex-grow: 1;
 }
 
-mat-sidenav {
+mat-drawer {
   padding: 10px;
 }
 
-mat-sidenav-container {
+mat-drawer-container {
   flex-grow: 1;
 }
 
-mat-sidenav-content {
+mat-drawer-content {
   background-color: white;
   display: flex;
   flex-direction: column;
