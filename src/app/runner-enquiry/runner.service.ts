@@ -139,7 +139,7 @@ export class RunnerService {
                   observer.complete();
                 },
                 error: (err) => {
-                  observer.next(undefined);
+                  //observer.next(undefined);
                   //observer.error(err);
                 },
               });
