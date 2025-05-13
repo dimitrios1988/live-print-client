@@ -1,11 +1,4 @@
-import {
-  Component,
-  computed,
-  ElementRef,
-  inject,
-  Input,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -51,14 +44,14 @@ export class RunnerEnquiryComponent {
   @ViewChild('printButton') printButton: MatButton | undefined;
 
   constructor(
-    private fb: FormBuilder,
     private runnerService: RunnerService,
     private eventService: EventsService,
     public runnerPrinterService: RunnerPrinterService,
     private userOptionsService: UserOptionsService,
     private appService: AppService
   ) {
-    this.enquryForm = this.fb.group({
+    const fb = inject(FormBuilder);
+    this.enquryForm = fb.group({
       raceNumber: ['', Validators.required],
     });
     this.multiplePrintingDialog = inject(MatDialog);
