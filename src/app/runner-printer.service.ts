@@ -86,7 +86,7 @@ export class RunnerPrinterService {
     let htmlContent = '';
     if (variables.backside_background_url === '') {
       htmlContent = await this.loadSingleSidedHTMLTemplate(
-        'assets/templates/front-runner-number.template_new.html',
+        'assets/templates/front-runner-number.template.html',
         variables
       );
       return this.printerService.printHTML(
@@ -97,7 +97,7 @@ export class RunnerPrinterService {
       );
     } else {
       htmlContent = await this.loadDoubleSidedHTMLTemplate(
-        'assets/templates/front-runner-number.template_new.html',
+        'assets/templates/front-runner-number.template.html',
         'assets/templates/back-runner-number.template.html',
         variables
       );
