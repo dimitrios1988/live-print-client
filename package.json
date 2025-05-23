@@ -1,6 +1,6 @@
 {
   "name": "live-print-client",
-  "version": "0.0.0",
+  "version": "2025.05.23",
   "main": "electron/main.js",
   "type": "module",
   "author": "Dimitrios Chondrokoukis",
