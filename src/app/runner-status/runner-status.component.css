@@ -1,0 +1,17 @@
+div {
+  text-align: center;
+  font-size: xx-large;
+  font-weight: 500;
+}
+
+div.ready {
+  color: green;
+}
+
+div.printed {
+  color: orange;
+}
+
+div.not-found {
+  color: red;
+}

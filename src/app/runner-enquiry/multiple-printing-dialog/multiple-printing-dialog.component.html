@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>Επανεκτύπωση Αριθμού</h2>
+<mat-dialog-content class="mat-typography">
+  <p>
+    Ο αριθμός αυτός έχει εκτυπωθεί ήδη στις
+    <strong>{{
+      runnerForPrint?.printed_at | date : "hh:mma dd/MM/yyyy" | lowercase
+    }}</strong
+    >. Είστε σίγουργοι ότι θέλετε να τον εκτυπώσετε ξανά;
+  </p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close (click)="onNoClick()">Όχι</button>
+  <button mat-button mat-dialog-close (click)="onYesClick()" cdkFocusInitial>
+    Ναι
+  </button>
+</mat-dialog-actions>

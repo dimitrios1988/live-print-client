@@ -1,0 +1,55 @@
+<section>
+  <form [formGroup]="enquryForm" (ngSubmit)="onSubmit()">
+    <div class="field-container">
+      <mat-form-field appearance="fill">
+        <mat-label>Race Number:</mat-label>
+        <input
+          matInput
+          formControlName="raceNumber"
+          autocomplete="off"
+          type="text"
+          required
+          #raceNumber
+        />
+      </mat-form-field>
+      <button
+        mat-flat-button
+        color="primary"
+        type="search"
+        style="margin-bottom: 20px"
+        [disabled]="enquryForm.invalid"
+      >
+        <mat-icon>search</mat-icon>
+        Εύρεση
+      </button>
+      <button
+        mat-flat-button
+        color="primary"
+        type="button"
+        style="margin-bottom: 20px"
+        [disabled]="
+          runnerPrinterService.runnerForPrint() === null ||
+          runnerPrinterService.runnerForPrint() === undefined ||
+          (runnerPrinterService.runnerForPrint()?.allow_reprinting === false &&
+            runnerPrinterService.runnerForPrint()?.is_printed === true)
+        "
+        (click)="onPrint()"
+      >
+        <mat-icon>print</mat-icon>
+        Εκτύπωση
+      </button>
+      <button
+        mat-flat-button
+        color="primary"
+        type="button"
+        style="margin-bottom: 20px"
+        [disabled]="!hasNextRunnerToPrint()"
+        (click)="loadNextRunner()"
+        #printButton
+      >
+        <mat-icon>arrow_forward</mat-icon>
+        Επόμενος
+      </button>
+    </div>
+  </form>
+</section>

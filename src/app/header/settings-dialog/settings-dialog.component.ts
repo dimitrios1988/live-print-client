@@ -65,8 +65,6 @@ export class SettingsDialogComponent {
         }
       );
     });
-
-    settingsService.getSettings();
   }
 
   saveSettings() {

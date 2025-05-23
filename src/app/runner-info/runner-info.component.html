@@ -1,0 +1,49 @@
+@if (runner!==null && runner!==undefined) {
+<div class="runner-info-container">
+  <div class="runner-info-header">
+    <div>
+      <strong class="runner-info-header-title">Block</strong>
+      <span>{{ runner.block }}</span>
+    </div>
+    <mat-divider [vertical]="true"></mat-divider>
+    <div>
+      <strong class="runner-info-header-title">Bib</strong>
+      <span>{{ runner.bib }}</span>
+    </div>
+    <mat-divider [vertical]="true"></mat-divider>
+    <div>
+      <strong class="runner-info-header-title">Αγώνας</strong>
+      <span>{{ runner.event_name }}</span>
+    </div>
+  </div>
+  <div class="runner-info-content">
+    <div class="runner-info-content-header">
+      <strong>Όνομα</strong>
+      <strong>Όνομα Πατρός</strong>
+      <strong>Έτος Γέννησης</strong>
+      <strong>Φύλο</strong>
+      <strong>Εθνικότητα</strong>
+      <strong>Σύλλογος</strong>
+      <strong>Ομάδα</strong>
+    </div>
+    <mat-divider [vertical]="true"></mat-divider>
+    <div class="runner-info-content-data">
+      <span>{{ runner.first_name }} {{ runner.last_name }}</span>
+      <span>{{ runner.fathers_name }}</span>
+      <span>{{ runner.birthdate | date : "yyyy" }}</span>
+      <span>{{ runner.gender }}</span>
+      <span>{{ runner.nationality }}</span>
+      <span>{{ runner.club }}</span>
+      <span>{{ runner.group_name }}</span>
+    </div>
+    <qrcode
+      style="display: none"
+      #chip2goqrcode
+      [qrdata]="runner.chip_2_go_qr_data"
+      [width]="500"
+      [errorCorrectionLevel]="'M'"
+      (qrCodeURL)="qrChanged()"
+    ></qrcode>
+  </div>
+</div>
+}

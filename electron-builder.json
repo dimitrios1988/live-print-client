@@ -1,22 +1,24 @@
 {
-  "build": {
-    "appId": "com.yourname.yourapp",
-    "productName": "YourAppName",
-    "files": ["dist/", "electron/"],
-    "directories": {
-      "output": "dist/electron-build"
-    },
-    "win": {
-      "target": "nsis",
-      "icon": "src/assets/icons/icon.ico"
-    },
-    "mac": {
-      "target": "dmg",
-      "icon": "src/assets/icons/icon.icns"
-    },
-    "linux": {
-      "target": "AppImage",
-      "icon": "src/assets/icons"
+  "appId": "gr.zefksisconsulting.liveprintclient",
+  "productName": "Live Print Client",
+  "files": ["dist/", "electron/"],
+  "directories": {
+    "output": "dist/electron-build"
+  },
+  "win": {
+    "target": "portable",
+    "icon": "src/assets/icons/icon.ico",
+    "signtoolOptions": {
+      "signingHashAlgorithms": ["sha256"],
+      "sign": false
     }
+  },
+  "mac": {
+    "target": "dmg",
+    "icon": "src/assets/icons/icon.icns"
+  },
+  "linux": {
+    "target": "AppImage",
+    "icon": "src/assets/icons"
   }
 }

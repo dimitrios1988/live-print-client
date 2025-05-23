@@ -1,0 +1,21 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+mat-drawer {
+  padding: 10px;
+}
+
+mat-drawer-container {
+  flex-grow: 1;
+}
+
+mat-drawer-content {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+}

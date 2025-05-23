@@ -29,7 +29,10 @@
       "args": ["."],
       "outputCapture": "std",
       "console": "integratedTerminal",
-      "protocol": "inspector"
+      "protocol": "inspector",
+      "env": {
+        "NODE_ENV": "development"
+      }
     },
     {
       "name": "Electron: Renderer",

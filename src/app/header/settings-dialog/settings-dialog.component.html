@@ -6,6 +6,7 @@
       <mat-form-field>
         <mat-label>Εκτυπωτής Αριθμού</mat-label>
         <mat-select formControlName="numberPrinter">
+          <mat-option [value]="null">Επιλέξτε Εκτυπωτή</mat-option>
           @for (printer of printers | async; track printer) {
           <mat-option [value]="printer.name">{{
             printer.displayName
@@ -16,6 +17,7 @@
       <mat-form-field>
         <mat-label>Ετικετογράφος</mat-label>
         <mat-select formControlName="ticketPrinter">
+          <mat-option [value]="null">Επιλέξτε Ετικετογράφο</mat-option>
           @for (printer of printers | async; track printer) {
           <mat-option [value]="printer.name">{{
             printer.displayName
@@ -34,7 +36,9 @@
           type="text"
           formControlName="apiAddress"
         />
-        <mat-hint align="start">π.χ. https://liveprint.segas.gr</mat-hint>
+        <mat-hint align="start"
+          >π.χ. https://remoteliveprint1.segas.gr</mat-hint
+        >
       </mat-form-field>
       <mat-form-field>
         <mat-label>Όνομα Εφαρμογής</mat-label>
@@ -45,10 +49,11 @@
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button mat-dialog-close cdkFocusInitial>Κλείσιμο</button>
+  <button mat-flat-button mat-dialog-close cdkFocusInitial>Κλείσιμο</button>
   <button
-    mat-button
+    mat-flat-button
     mat-dialog-close
+    color="primary"
     (click)="saveSettings()"
     [disabled]="!settingsForm.valid"
   >

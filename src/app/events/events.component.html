@@ -1,0 +1,13 @@
+<div class="header-container">
+  <h3>Αγώνες</h3>
+  <button mat-icon-button (click)="refreshEvents()">
+    <mat-icon>refresh</mat-icon>
+  </button>
+</div>
+<mat-selection-list (selectionChange)="onSelectionChange($event)">
+  @for (event of events; track event) {
+  <mat-list-option [value]="event" [selected]="canBeSelected(event)">{{
+    event.name
+  }}</mat-list-option>
+  }
+</mat-selection-list>

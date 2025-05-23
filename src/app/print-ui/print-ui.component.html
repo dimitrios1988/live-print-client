@@ -1,1 +1,20 @@
-This is the print ui
+<app-user-options></app-user-options>
+<mat-drawer-container [hasBackdrop]="true">
+  <mat-drawer #sidenav mode="side" [(opened)]="sidemenuOpen">
+    <app-events
+      (selectedOptionsChange)="updateSelectedEvents($event)"
+    ></app-events>
+  </mat-drawer>
+  <mat-drawer-content>
+    <button
+      mat-icon-button
+      (click)="sidemenuOpen = !sidemenuOpen"
+      color="primary"
+    >
+      <mat-icon>{{ sidemenuOpen ? "close" : "menu" }}</mat-icon>
+    </button>
+    <app-runner-enquiry [events]="selectedEvents"></app-runner-enquiry>
+    <app-runner-status></app-runner-status>
+    <app-runner-info></app-runner-info>
+  </mat-drawer-content>
+</mat-drawer-container>
