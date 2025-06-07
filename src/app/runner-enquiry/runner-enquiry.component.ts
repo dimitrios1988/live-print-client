@@ -99,7 +99,7 @@ export class RunnerEnquiryComponent {
           });
       }
     } else if (this.events?.length === 0) {
-      this.appService.displayMessage('Επιλέξτε Αγώνα', 3500);
+      this.appService.displayMessage('Επιλέξτε Αγώνα', 5000);
     }
   }
 
@@ -204,7 +204,7 @@ export class RunnerEnquiryComponent {
 
   private displayMultiplePrintingDialog() {
     return this.multiplePrintingDialog.open(MultiplePrintingDialogComponent, {
-      minWidth: '1200px',
+      minWidth: '800px',
       minHeight: '400px',
     });
   }

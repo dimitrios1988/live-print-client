@@ -1,4 +1,12 @@
 <h2 mat-dialog-title>Ρυθμίσεις</h2>
+<button
+          mat-icon-button
+          id="registration-icon"
+          aria-label="Settings"
+          type="button" (click)="openRegistrationDialog()"
+        >
+          <mat-icon fontIcon="vpn_key"></mat-icon>
+        </button>
 <mat-dialog-content>
   <form [formGroup]="settingsForm" class="settings-form">
     <div class="settings-section">
