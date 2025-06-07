@@ -11,7 +11,7 @@ export class LicenseService {
   isVerified = false;
 
   constructor() {
-    fetch('/assets/config.json')
+    fetch('assets/config.json')
       .then((res) => res.json())
       .then((cfg) => (this.publicKeyHex = cfg.publicKeyHex));
     ed25519.etc.sha512Sync = sha512;
