@@ -1,19 +1,17 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import * as ed25519 from '@noble/ed25519';
 import { sha512 } from '@noble/hashes/sha2';
 import { ILicense } from './license.interface';
+import { AppService } from '../app.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LicenseService {
-  publicKeyHex = '';
   isVerified = false;
+  licenseeInfo: { licenseUser: string; licenseExpiryDate: Date } | null = null;
 
-  constructor() {
-    fetch('assets/config.json')
-      .then((res) => res.json())
-      .then((cfg) => (this.publicKeyHex = cfg.publicKeyHex));
+  constructor(private appService: AppService) {
     ed25519.etc.sha512Sync = sha512;
   }
 
@@ -22,6 +20,7 @@ export class LicenseService {
     licenseKey: string,
     prettyPrint = false
   ): Promise<string | ILicense> {
+    this.appService.getAppConfig().publicKeyHex || '';
     const base64Payload = fileContent
       .replace(/^-----BEGIN LICENSE FILE-----\n/, '')
       .replace(/\n/g, '')
@@ -32,6 +31,7 @@ export class LicenseService {
 
     if (licenseData.alg !== 'aes-256-gcm+ed25519') {
       this.isVerified = false;
+      this.licenseeInfo = null;
       throw new Error('Unsupported algorithm!');
     }
 
@@ -43,6 +43,7 @@ export class LicenseService {
 
     if (!isValid) {
       this.isVerified = false;
+      this.licenseeInfo = null;
       throw new Error('Invalid license file!');
     }
 
@@ -76,6 +77,7 @@ export class LicenseService {
       decrypted = new TextDecoder().decode(plaintextBuffer);
     } catch (err) {
       this.isVerified = false;
+      this.licenseeInfo = null;
       throw new Error('Failed to decrypt license file');
     }
 
@@ -107,21 +109,32 @@ export class LicenseService {
         ) {
           console.warn('License has expired.');
           this.isVerified = false;
+          this.licenseeInfo = null;
           throw new Error('License has expired.');
         } else {
           this.isVerified = true;
+          this.licenseeInfo = {
+            licenseUser: decryptedContent.data.attributes.name,
+            licenseExpiryDate: new Date(decryptedContent.meta.expiry || ''),
+          };
           return decryptedContent; // License is valid
         }
       } else {
         console.warn('No license file content found in local storage.');
         this.isVerified = false;
+        this.licenseeInfo = null;
         throw new Error('No license file content found in local storage.');
       }
     } else {
       console.warn('No license key found in local storage.');
       this.isVerified = false;
+      this.licenseeInfo = null;
       throw new Error('No license file content found in local storage.');
     }
+  }
+
+  private get publicKeyHex(): string {
+    return this.appService.getAppConfig()?.publicKeyHex || '';
   }
 
   /**

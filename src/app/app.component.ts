@@ -1,10 +1,15 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  effect,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AppService } from './app.service';
 import { LicenseService } from './license-registration/license.service';
 import { MatDialog } from '@angular/material/dialog';
-import { LicenseRegistrationComponent } from './license-registration/license-registration.component';
 
 @Component({
   selector: 'app-root',
@@ -15,11 +20,8 @@ import { LicenseRegistrationComponent } from './license-registration/license-reg
 export class AppComponent implements OnInit {
   showProgressBar: boolean = false;
   readonly licenseDialog: MatDialog;
-
-  constructor(
-    private appService: AppService,
-    private licenseService: LicenseService
-  ) {
+  private licenseService: LicenseService = inject(LicenseService);
+  constructor(private appService: AppService) {
     this.licenseDialog = inject(MatDialog);
     effect(() => {
       this.showProgressBar = appService.progressBarActive();
@@ -35,7 +37,7 @@ export class AppComponent implements OnInit {
         })
         .catch((error) => {
           this.appService.displayMessage(
-            'License verification failed. Please register your license.',
+            'Η επαλήθευση της άδειας απέτυχε. Παρακαλώ δηλώστε το προϊόν για να μπορέσετε να το χρησιμοποιήσετε.',
             5000
           );
           console.error('License verification failed:', error);

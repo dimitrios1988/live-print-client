@@ -40,7 +40,7 @@ import { ILicense } from './license.interface';
   templateUrl: './license-registration.component.html',
   styleUrl: './license-registration.component.css',
 })
-export class LicenseRegistrationComponent implements OnInit {
+export class LicenseRegistrationComponent {
   licenseForm: FormGroup;
   isVerified = false;
   licenseUser: string | null = null;
@@ -62,9 +62,7 @@ export class LicenseRegistrationComponent implements OnInit {
       ),
     });
     this.isVerified = this.licenseService.isVerified;
-  }
-  ngOnInit(): void {
-    // this.verifyLicense();
+    this.verifyLicense();
   }
 
   registerLicense() {
@@ -87,7 +85,7 @@ export class LicenseRegistrationComponent implements OnInit {
     this.licenseExpiryDate = null;
     localStorage.removeItem('licenseKey');
     localStorage.removeItem('licenseFileContent');
-    this.appService.displayMessage('License unregistered successfully.', 5000);
+    this.appService.displayMessage('Η άδεια αφαιρέθηκε.', 5000);
   }
 
   verifyLicense() {
@@ -97,24 +95,33 @@ export class LicenseRegistrationComponent implements OnInit {
         .then((decryptedLicense: ILicense) => {
           console.log('License verified successfully.');
           this.isVerified = this.licenseService.isVerified;
+          this.licenseUser =
+            this.licenseService.licenseeInfo?.licenseUser || null;
+          this.licenseExpiryDate =
+            this.licenseService.licenseeInfo?.licenseExpiryDate || null;
           this.appService.displayMessage(
-            'License verified successfully.',
+            'Η άδεια επαληθεύτηκε με επιτυχία.',
             5000
           );
-          this.licenseUser = decryptedLicense.data.attributes.name;
-          this.licenseExpiryDate = new Date(decryptedLicense.meta.expiry || '');
         })
         .catch((error) => {
           this.appService.displayMessage(
-            'License verification failed. Please register your license.',
+            'Η επαλήθευση της άδειας απέτυχε. Παρακαλώ δηλώστε το προϊόν για να μπορέσετε να το χρησιμοποιήσετε.',
             5000
           );
           this.isVerified = this.licenseService.isVerified;
+          this.licenseUser =
+            this.licenseService.licenseeInfo?.licenseUser || null;
+          this.licenseExpiryDate =
+            this.licenseService.licenseeInfo?.licenseExpiryDate || null;
           console.error('License verification failed:', error);
         });
     } catch (e: any) {
       console.error(e);
       this.isVerified = this.licenseService.isVerified;
+      this.licenseUser = this.licenseService.licenseeInfo?.licenseUser || null;
+      this.licenseExpiryDate =
+        this.licenseService.licenseeInfo?.licenseExpiryDate || null;
       this.appService.displayMessage(e, 5000);
     }
   }
