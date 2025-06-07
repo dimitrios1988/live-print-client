@@ -1,5 +1,6 @@
-import { Component, effect } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import {
+  MatDialog,
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
@@ -19,6 +20,8 @@ import {
 } from '@angular/forms';
 import { SettingsService } from './settings.service';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { LicenseRegistrationComponent } from '../../license-registration/license-registration.component';
 @Component({
   selector: 'app-settings-dialog',
   imports: [
@@ -33,11 +36,14 @@ import { CommonModule } from '@angular/common';
     ReactiveFormsModule,
     MatInputModule,
     CommonModule,
+    MatIconModule,
   ],
   templateUrl: './settings-dialog.component.html',
   styleUrl: './settings-dialog.component.css',
 })
 export class SettingsDialogComponent {
+  private readonly dialog: MatDialog;
+
   printers: Promise<any[]>;
   settingsForm: FormGroup;
 
@@ -46,6 +52,7 @@ export class SettingsDialogComponent {
     private settingsService: SettingsService,
     fb: FormBuilder
   ) {
+    this.dialog = inject(MatDialog);
     this.printers = printerService.getSystemPrinters();
 
     this.settingsForm = fb.group({
@@ -69,5 +76,12 @@ export class SettingsDialogComponent {
 
   saveSettings() {
     this.settingsService.saveSettings(this.settingsForm.value);
+  }
+
+  openRegistrationDialog() {
+    this.dialog.open(LicenseRegistrationComponent, {
+      minWidth: '600px',
+      minHeight: '400px',
+    });
   }
 }

@@ -14,9 +14,9 @@ export const unauthorizedInterceptor: HttpInterceptorFn = (req, next) => {
       if (error.status === 401) {
         // Call the logout function
         loginService.logout();
-        appService.displayMessage('Λανθασμένο username/password', 3500);
+        appService.displayMessage('Λανθασμένο username/password', 5000);
       } else {
-        appService.displayMessage('Αδυναμία Σύνδεσης', 3500);
+        appService.displayMessage('Αδυναμία Σύνδεσης', 5000);
       }
       appService.showProgressBar(false);
       return throwError(() => error);
