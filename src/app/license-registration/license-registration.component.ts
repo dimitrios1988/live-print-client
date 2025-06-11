@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -62,7 +62,9 @@ export class LicenseRegistrationComponent {
       ),
     });
     this.isVerified = this.licenseService.isVerified;
-    this.verifyLicense();
+    this.licenseUser = this.licenseService.licenseeInfo?.licenseUser || null;
+    this.licenseExpiryDate =
+      this.licenseService.licenseeInfo?.licenseExpiryDate || null;
   }
 
   registerLicense() {

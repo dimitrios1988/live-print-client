@@ -1,6 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import config from '../assets/config.json'; // Adjust path as needed
+import config from '../assets/config.json';
 
 @Injectable({
   providedIn: 'root',

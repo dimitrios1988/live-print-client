@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import * as ed25519 from '@noble/ed25519';
 import { sha512 } from '@noble/hashes/sha2';
 import { ILicense } from './license.interface';
