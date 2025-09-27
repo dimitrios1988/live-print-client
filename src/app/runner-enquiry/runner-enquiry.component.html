@@ -26,12 +26,12 @@
         mat-flat-button
         color="primary"
         type="button"
-        style="margin-bottom: 20px"
         [disabled]="
           runnerPrinterService.runnerForPrint() === null ||
           runnerPrinterService.runnerForPrint() === undefined ||
           (runnerPrinterService.runnerForPrint()?.allow_reprinting === false &&
-            runnerPrinterService.runnerForPrint()?.is_printed === true)
+            runnerPrinterService.runnerForPrint()?.is_printed === true) ||
+          printingTimeout
         "
         (click)="onPrint()"
       >
@@ -42,7 +42,6 @@
         mat-flat-button
         color="primary"
         type="button"
-        style="margin-bottom: 20px"
         [disabled]="!hasNextRunnerToPrint()"
         (click)="loadNextRunner()"
         #printButton

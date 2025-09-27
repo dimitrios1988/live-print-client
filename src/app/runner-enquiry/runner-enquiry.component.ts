@@ -42,6 +42,7 @@ export class RunnerEnquiryComponent {
   private readonly groupDialog: MatDialog;
   @ViewChild('raceNumber') raceNumberInput: ElementRef | undefined;
   @ViewChild('printButton') printButton: MatButton | undefined;
+  printingTimeout = false;
 
   constructor(
     private runnerService: RunnerService,
@@ -104,6 +105,10 @@ export class RunnerEnquiryComponent {
   }
 
   onPrint(): void {
+    this.printingTimeout = true;
+    setTimeout(() => {
+      this.printingTimeout = false;
+    }, 800);
     if (this.runnerPrinterService.runnerForPrint()?.is_printed === true) {
       const dialog = this.displayMultiplePrintingDialog();
       dialog.afterClosed().subscribe((result) => {
