@@ -10,4 +10,5 @@ export interface IEvent {
   bib_frontside_printing: true;
   bib_frontside_template: string | null;
   bib_styling: string | null;
+  has_timing: boolean;
 }

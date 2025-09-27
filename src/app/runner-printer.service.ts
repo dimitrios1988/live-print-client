@@ -54,7 +54,9 @@ export class RunnerPrinterService {
         : '',
       tshirt_indicator: 'X',
       tshirt_size: '',
-      qr: this.runnerForPrint()?.chip_2_go_qr_base64?.toString() ?? '',
+      qr: event?.has_timing
+        ? this.runnerForPrint()?.chip_2_go_qr_base64?.toString() ?? ''
+        : '',
       registration_level: this.runnerForPrint()?.registration_level
         ? `Επίπεδο:<br>${this.runnerForPrint()?.registration_level?.toString()}`
         : '',
