@@ -221,4 +221,11 @@ export class RunnerEnquiryComponent {
       data,
     });
   }
+
+  hasSelectToPrint(): boolean {
+    return (
+      this.userOptionsService.getUserOptions().printNumbers[0] === true ||
+      this.userOptionsService.getUserOptions().printTickets[0] === true
+    );
+  }
 }

@@ -32,6 +32,7 @@
           runnerPrinterService.runnerForPrint() === undefined ||
           (runnerPrinterService.runnerForPrint()?.allow_reprinting === false &&
             runnerPrinterService.runnerForPrint()?.is_printed === true) ||
+          hasSelectToPrint() === false ||
           printingTimeout
         "
         (click)="onPrint()"
