@@ -52,24 +52,34 @@ export class EventsService {
                 name_for_printing: e['0(event)'].printed_text,
                 allow_reprinting: e['0(event)'].allow_reprinting,
                 id: e['0(event)'].id,
-                front_bib_template_url: e['0(event)'].front_bib_template
+                bib_frontside_background_url: e['0(event)']
+                  .bib_frontside_background
                   ? `${this.apiAddress}/data/download/${this.appName}/${
-                      e['0(event)'].front_bib_template?.[0]?.name || ''
+                      e['0(event)'].bib_frontside_background?.[0]?.name || ''
                     }?attribute_id=6b9eef38-f441-4d13-b36f-70bc1ed8ca4e&file_id=${
-                      e['0(event)'].front_bib_template?.[0]?.id || ''
+                      e['0(event)'].bib_frontside_background?.[0]?.id || ''
                     }&version=${
-                      e['0(event)'].front_bib_template?.[0]?.version || ''
+                      e['0(event)'].bib_frontside_background?.[0]?.version || ''
                     }&token=${this.loginService.getToken()}`
                   : null,
-                back_bib_template_url: e['0(event)'].back_bib_template
+                bib_backside_background_url: e['0(event)']
+                  .bib_backside_background
                   ? `${this.apiAddress}/data/download/${this.appName}/${
-                      e['0(event)'].back_bib_template?.[0]?.name
+                      e['0(event)'].bib_backside_background?.[0]?.name
                     }?attribute_id=1d4f01fd-924e-48c2-8f21-5ac00d3e8aca&file_id=${
-                      e['0(event)'].back_bib_template?.[0]?.id || ''
+                      e['0(event)'].bib_backside_background?.[0]?.id || ''
                     }&version=${
-                      e['0(event)'].back_bib_template?.[0]?.version
+                      e['0(event)'].bib_backside_background?.[0]?.version
                     }&token=${this.loginService.getToken()}`
                   : null,
+                bib_backside_printing: e['0(event)'].bib_backside_printing,
+                bib_frontside_printing: e['0(event)'].bib_frontside_printing,
+                bib_backside_template:
+                  e['0(event)'].bib_backside_template || null,
+                bib_frontside_template:
+                  e['0(event)'].bib_frontside_template || null,
+                bib_styling: e['0(event)'].bib_styling || null,
+                has_timing: e['0(event)'].has_timing,
               } as IEvent;
             })
           );

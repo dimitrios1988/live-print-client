@@ -9,15 +9,16 @@
           autocomplete="off"
           type="text"
           required
+          title="Race Number:"
           #raceNumber
         />
       </mat-form-field>
       <button
         mat-flat-button
         color="primary"
-        type="search"
-        style="margin-bottom: 20px"
+        type="button"
         [disabled]="enquryForm.invalid"
+        (click)="onSubmit()"
       >
         <mat-icon>search</mat-icon>
         Εύρεση
@@ -26,12 +27,13 @@
         mat-flat-button
         color="primary"
         type="button"
-        style="margin-bottom: 20px"
         [disabled]="
           runnerPrinterService.runnerForPrint() === null ||
           runnerPrinterService.runnerForPrint() === undefined ||
           (runnerPrinterService.runnerForPrint()?.allow_reprinting === false &&
-            runnerPrinterService.runnerForPrint()?.is_printed === true)
+            runnerPrinterService.runnerForPrint()?.is_printed === true) ||
+          hasSelectToPrint() === false ||
+          printingTimeout
         "
         (click)="onPrint()"
       >
@@ -42,7 +44,6 @@
         mat-flat-button
         color="primary"
         type="button"
-        style="margin-bottom: 20px"
         [disabled]="!hasNextRunnerToPrint()"
         (click)="loadNextRunner()"
         #printButton

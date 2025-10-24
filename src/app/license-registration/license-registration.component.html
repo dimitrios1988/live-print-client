@@ -1,0 +1,58 @@
+<h2 mat-dialog-title>Δήλωση Άδειας</h2>
+<mat-dialog-content>
+  @if(!isVerified){
+  <form [formGroup]="licenseForm" class="license-form">
+    <div class="license-section">
+      <h3>Εγγραφή Άδειας Χρήσης</h3>
+      <mat-form-field class="full-width">
+        <mat-label>Κωδικός</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="licenseKey"
+          placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX"
+        />
+        <mat-error *ngIf="licenseForm.get('licenseKey')?.hasError('required')">
+          Ο κωδικός άδειας είναι υποχρεωτικός.
+        </mat-error>
+      </mat-form-field>
+      <ngx-file-drag-drop
+        formControlName="licenseFile"
+        activeBorderColor="#3F51B5"
+        [multiple]="false"
+        [accept]="'.lic'"
+        [emptyPlaceholder]="
+          'Σύρετε εδώ το αρχείο άδειας ή κάντε κλικ για να επιλέξετε'
+        "
+      >
+      </ngx-file-drag-drop>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="licenseForm.invalid"
+        (click)="registerLicense()"
+      >
+        Εγγραφή
+      </button>
+    </div>
+  </form>
+  } @if(isVerified) {
+  <div class="license-section">
+    <h2>Επιτυχής Εγγραφή Άδειας</h2>
+    <p>Η άδεια χρήσης έχει εγγραφεί με επιτυχία.</p>
+    <p>Όνομα Χρήστη: {{ licenseUser }}</p>
+    <p>
+      Ημερομηνία Λήξης:
+      {{ licenseExpiryDate | date : "hh:mma dd/MM/yyyy" | lowercase }}
+    </p>
+    <button mat-raised-button color="primary" (click)="unregisterLicense()">
+      Απεγγραφή
+    </button>
+  </div>
+  }
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button mat-dialog-close cdkFocusInitial>
+    Κλείσιμο
+  </button></mat-dialog-actions
+>

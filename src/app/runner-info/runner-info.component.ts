@@ -23,7 +23,7 @@ export class RunnerInfoComponent {
     });
   }
 
-  getChip2GoQrBase64(): string {
+  private getChip2GoQrBase64(): string {
     const qrCanvas =
       this.chip2GoQrElement.nativeElement.querySelectorAll('canvas')[
         this.chip2GoQrElement.nativeElement.querySelectorAll('canvas').length -

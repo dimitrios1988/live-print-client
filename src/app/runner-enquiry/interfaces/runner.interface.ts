@@ -1,14 +1,14 @@
 export interface IRunner {
-  bib: number;
+  bib: number | null;
   birthdate: Date | null;
   chip_2_go_qr_data: string;
   chip_2_go_qr_base64?: string;
   club: string | null;
   fathers_name: string | null;
-  first_name: string;
+  first_name: string | null;
   id: number;
   is_printed: boolean;
-  last_name: string;
+  last_name: string | null;
   event_name: string;
   event_id: number;
   allow_reprinting: boolean;

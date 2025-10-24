@@ -42,6 +42,7 @@ export class RunnerEnquiryComponent {
   private readonly groupDialog: MatDialog;
   @ViewChild('raceNumber') raceNumberInput: ElementRef | undefined;
   @ViewChild('printButton') printButton: MatButton | undefined;
+  printingTimeout = false;
 
   constructor(
     private runnerService: RunnerService,
@@ -99,11 +100,15 @@ export class RunnerEnquiryComponent {
           });
       }
     } else if (this.events?.length === 0) {
-      this.appService.displayMessage('Επιλέξτε Αγώνα', 3500);
+      this.appService.displayMessage('Επιλέξτε Αγώνα', 5000);
     }
   }
 
   onPrint(): void {
+    this.printingTimeout = true;
+    setTimeout(() => {
+      this.printingTimeout = false;
+    }, 800);
     if (this.runnerPrinterService.runnerForPrint()?.is_printed === true) {
       const dialog = this.displayMultiplePrintingDialog();
       dialog.afterClosed().subscribe((result) => {
@@ -204,7 +209,7 @@ export class RunnerEnquiryComponent {
 
   private displayMultiplePrintingDialog() {
     return this.multiplePrintingDialog.open(MultiplePrintingDialogComponent, {
-      minWidth: '1200px',
+      minWidth: '800px',
       minHeight: '400px',
     });
   }
@@ -215,5 +220,12 @@ export class RunnerEnquiryComponent {
       minHeight: '400px',
       data,
     });
+  }
+
+  hasSelectToPrint(): boolean {
+    return (
+      this.userOptionsService.getUserOptions().printNumbers[0] === true ||
+      this.userOptionsService.getUserOptions().printTickets[0] === true
+    );
   }
 }

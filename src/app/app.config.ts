@@ -7,6 +7,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './auth.interceptor';
 import { unauthorizedInterceptor } from './unauthorized.interceptor';
 import { httpRequestInterceptor } from './http-request.interceptor';
+import { licenseInterceptor } from './license-registration/license.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,6 +19,7 @@ export const appConfig: ApplicationConfig = {
         authInterceptor,
         unauthorizedInterceptor,
         httpRequestInterceptor,
+        licenseInterceptor,
       ])
     ),
   ],

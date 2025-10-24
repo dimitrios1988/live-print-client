@@ -7,8 +7,14 @@ interface _event {
   printed_text: string;
   allow_reprinting: boolean;
   id: number;
-  front_bib_template?: Bibtemplate[];
-  back_bib_template?: Bibtemplate[];
+  bib_frontside_background?: Bibtemplate[];
+  bib_backside_background?: Bibtemplate[];
+  bib_backside_printing: boolean;
+  bib_backside_template: string | null;
+  bib_frontside_printing: true;
+  bib_frontside_template: string | null;
+  bib_styling: string | null;
+  has_timing: boolean;
 }
 
 interface Bibtemplate {
