@@ -49,7 +49,7 @@ interface _1event {
 
 interface _0runner {
   id: number;
-  bib: number;
+  bib: number | null;
   birthdate: number | null;
   fathers_name: string | null;
   first_name_greek: string | null;

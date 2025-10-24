@@ -32,7 +32,6 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './runner-group-dialog.component.css',
 })
 export class RunnerGroupDialogComponent {
-
   private readonly dialogRef = inject(MatDialogRef<RunnerGroupDialogComponent>);
   public data: IRunner[] = inject(MAT_DIALOG_DATA);
   public runnersGroupedByEventArray: any[] = [];
@@ -49,7 +48,7 @@ export class RunnerGroupDialogComponent {
   constructor() {
     const runnersGroupedByEvent = this.data
       .sort((r1, r2) => {
-        return r1.bib - r2.bib;
+        return (r1.bib ?? 0) - (r2.bib ?? 0);
       })
       .map<any>((runner: IRunner) => {
         if (runner.is_printed === true) {
@@ -138,5 +137,4 @@ export class RunnerGroupDialogComponent {
       return r;
     }).length;
   }
-
 }
