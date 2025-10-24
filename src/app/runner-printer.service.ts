@@ -42,15 +42,17 @@ export class RunnerPrinterService {
     const selectedPrinter = this.settingsService.settings()?.numberPrinter;
     const variables = {
       bib: this.runnerForPrint()?.bib?.toString() ?? '',
-      full_name: `${this.runnerForPrint()?.first_name.toString()} ${this.runnerForPrint()?.last_name.toString()}`,
+      full_name: `${this.runnerForPrint()?.first_name?.toString() ?? ''} ${
+        this.runnerForPrint()?.last_name?.toString() ?? ''
+      }`.trim(),
       block: this.runnerForPrint()?.block
         ? `Block ${this.runnerForPrint()?.block?.toString()}`
         : '',
       club: this.runnerForPrint()?.club
-        ? `Σύλλογος:<br>${this.runnerForPrint()?.club?.toString()}`
+        ? `Σύλλογος:<br>${this.runnerForPrint()?.club?.toString()}`.trim()
         : '',
       gender: this.runnerForPrint()?.gender
-        ? `Φύλο:<br>${this.runnerForPrint()?.gender?.toString()}`
+        ? `Φύλο:<br>${this.runnerForPrint()?.gender?.toString()}`.trim()
         : '',
       tshirt_indicator: 'X',
       tshirt_size: '',
@@ -58,7 +60,7 @@ export class RunnerPrinterService {
         ? this.runnerForPrint()?.chip_2_go_qr_base64?.toString() ?? ''
         : '',
       registration_level: this.runnerForPrint()?.registration_level
-        ? `Επίπεδο:<br>${this.runnerForPrint()?.registration_level?.toString()}`
+        ? `Επίπεδο:<br>${this.runnerForPrint()?.registration_level?.toString()}`.trim()
         : '',
       frontside_background_url: event?.bib_frontside_background_url || '',
       backside_background_url: event?.bib_backside_background_url || '',
