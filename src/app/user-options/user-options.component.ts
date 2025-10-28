@@ -5,7 +5,7 @@ import { UserOptionsService } from './user-options.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { SettingsService } from '../header/settings-dialog/settings.service';
+import { EventsService } from '../events/events.service';
 
 @Component({
   selector: 'app-user-options',
@@ -40,8 +40,8 @@ export class UserOptionsComponent {
   ];
   constructor(
     private userOptionsService: UserOptionsService,
-    fb: FormBuilder,
-    private settingsService: SettingsService
+    private eventsService: EventsService,
+    fb: FormBuilder
   ) {
     this.userOptions = userOptionsService.getUserOptions();
     this.userOptionsForm = fb.group({
@@ -58,29 +58,44 @@ export class UserOptionsComponent {
       }
     }
     effect(() => {
-      if (
-        this.settingsService.settings()?.ticketPrinter === null ||
-        this.settingsService.settings()?.ticketPrinter === ''
-      ) {
-        this.userOptionsForm.controls['printTickets'].setValue(false);
-        this.userOptionsForm.controls['printTickets'].disable();
-      } else {
-        this.userOptionsForm.controls['printTickets'].enable();
-      }
-      if (
-        this.settingsService.settings()?.numberPrinter === null ||
-        this.settingsService.settings()?.numberPrinter === ''
-      ) {
-        this.userOptionsForm.controls['printNumbers'].setValue(false);
-        this.userOptionsForm.controls['printNumbers'].disable();
-      } else {
-        this.userOptionsForm.controls['printNumbers'].enable();
-      }
       this.onSelectionChange();
     });
   }
 
   onSelectionChange() {
+    if (
+      this.eventsService
+        .events()
+        .some(
+          (event) =>
+            event.enabled === true &&
+            event.numberPrinter !== null &&
+            event.numberPrinter !== undefined &&
+            event.numberPrinter.trim() !== ''
+        )
+    ) {
+      this.userOptionsForm.controls['printNumbers'].enable();
+    } else {
+      this.userOptionsForm.controls['printNumbers'].setValue(false);
+      this.userOptionsForm.controls['printNumbers'].disable();
+    }
+
+    if (
+      this.eventsService
+        .events()
+        .some(
+          (event) =>
+            event.enabled === true &&
+            event.ticketPrinter !== null &&
+            event.ticketPrinter !== undefined &&
+            event.ticketPrinter.trim() !== ''
+        )
+    ) {
+      this.userOptionsForm.controls['printTickets'].enable();
+    } else {
+      this.userOptionsForm.controls['printTickets'].setValue(false);
+      this.userOptionsForm.controls['printTickets'].disable();
+    }
     if (
       this.userOptionsForm.controls['printTickets'].value == false &&
       this.userOptionsForm.controls['printNumbers'].value == false

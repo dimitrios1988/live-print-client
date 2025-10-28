@@ -4,3 +4,14 @@
   align-items: center;
   padding: 10px;
 }
+
+.event-item-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.event-item-container .event-title {
+  flex-grow: 1;
+}

@@ -143,12 +143,15 @@ export class RunnerEnquiryComponent {
 
   private printRunner(): void {
     const options = this.userOptionsService.getUserOptions();
-    const printPromises: Promise<{ success: boolean; message: string }>[] = [];
+    const printPromises: Promise<{
+      success: boolean;
+      message: string;
+    } | null>[] = [];
 
     if (options?.printNumbers?.[0] === true) {
       printPromises.push(
         this.runnerPrinterService.printLoadedRunnerNumber().then((result) => {
-          if (result.success) {
+          if (result?.success) {
             if (this.runnerPrinterService.runnerForPrint() != null) {
               this.runnerService
                 .setRunnerAsPrinted(
@@ -174,7 +177,7 @@ export class RunnerEnquiryComponent {
       Promise.all(printPromises)
         .then((results) => {
           if (
-            results.filter((result) => result.success === false).length === 0
+            results.filter((result) => result?.success === false).length === 0
           ) {
             const runner = this.runnerPrinterService.runnerForPrint();
             if (runner != null) {

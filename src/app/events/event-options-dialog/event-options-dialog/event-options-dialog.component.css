@@ -1,0 +1,18 @@
+.event-settings-form {
+  display: flex;
+  flex-direction: column;
+  gap:16px;
+}
+
+.event-settings-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.event-settings-section section {
+  margin-bottom: 10px;
+}
+
+.event-settings-section mat-form-field {
+  width: 100%;
+} 

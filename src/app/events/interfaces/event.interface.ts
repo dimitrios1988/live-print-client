@@ -11,4 +11,7 @@ export interface IEvent {
   bib_frontside_template: string | null;
   bib_styling: string | null;
   has_timing: boolean;
+  numberPrinter: any;
+  ticketPrinter: any;
+  enabled: boolean;
 }

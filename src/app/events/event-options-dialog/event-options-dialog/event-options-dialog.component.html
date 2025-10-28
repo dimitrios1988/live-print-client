@@ -1,0 +1,44 @@
+<h2 mat-dialog-title>Επιλογές: {{ event.name }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="eventSettingsForm" class="event-settings-form">
+    <div class="event-settings-section">
+      <section>
+        <mat-slide-toggle formControlName="enabled"
+          >Ενεργό για εκτύπωση</mat-slide-toggle
+        >
+      </section>
+      <section>
+        <mat-form-field>
+          <mat-label>Εκτυπωτής Αριθμού</mat-label>
+          <mat-select formControlName="numberPrinter">
+            <mat-option [value]="null">Επιλέξτε Εκτυπωτή</mat-option>
+            @for (printer of printers | async; track printer) {
+            <mat-option [value]="printer.name">{{
+              printer.displayName
+            }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </section>
+      <section>
+        <mat-form-field>
+          <mat-label>Ετικετογράφος</mat-label>
+          <mat-select formControlName="ticketPrinter">
+            <mat-option [value]="null">Επιλέξτε Ετικετογράφο</mat-option>
+            @for (printer of printers | async; track printer) {
+            <mat-option [value]="printer.name">{{
+              printer.displayName
+            }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </section>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button mat-dialog-close cdkFocusInitial>Κλείσιμο</button
+  ><button mat-flat-button color="primary" (click)="saveEventSettings()">
+    Αποθήκευση
+  </button>
+</mat-dialog-actions>
