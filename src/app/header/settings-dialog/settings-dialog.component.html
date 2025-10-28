@@ -1,46 +1,23 @@
 <h2 mat-dialog-title>Ρυθμίσεις</h2>
 <button
-          mat-icon-button
-          id="registration-icon"
-          aria-label="Settings"
-          type="button" (click)="openRegistrationDialog()"
-        >
-          <mat-icon fontIcon="vpn_key"></mat-icon>
-        </button>
+  mat-icon-button
+  id="registration-icon"
+  aria-label="Settings"
+  type="button"
+  (click)="openRegistrationDialog()"
+>
+  <mat-icon fontIcon="vpn_key"></mat-icon>
+</button>
 <mat-dialog-content>
   <form [formGroup]="settingsForm" class="settings-form">
-    <div class="settings-section">
-      <h3>Εκτυπώσεις</h3>
-      <mat-form-field>
-        <mat-label>Εκτυπωτής Αριθμού</mat-label>
-        <mat-select formControlName="numberPrinter">
-          <mat-option [value]="null">Επιλέξτε Εκτυπωτή</mat-option>
-          @for (printer of printers | async; track printer) {
-          <mat-option [value]="printer.name">{{
-            printer.displayName
-          }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Ετικετογράφος</mat-label>
-        <mat-select formControlName="ticketPrinter">
-          <mat-option [value]="null">Επιλέξτε Ετικετογράφο</mat-option>
-          @for (printer of printers | async; track printer) {
-          <mat-option [value]="printer.name">{{
-            printer.displayName
-          }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-    </div>
     <div class="settings-section">
       <h3>Server</h3>
       <mat-form-field>
         <mat-label>Διεύθυνση</mat-label>
         <input
           matInput
-          placeholder=""
+          title="Διεύθυνση API"
+          placeholder="https://remoteliveprint1.segas.gr"
           type="text"
           formControlName="apiAddress"
         />
@@ -50,7 +27,13 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>Όνομα Εφαρμογής</mat-label>
-        <input matInput type="text" formControlName="appName" />
+        <input
+          matInput
+          type="text"
+          formControlName="appName"
+          title="Όνομα Εφαρμογής"
+          placeholder="π.χ. live_print_server"
+        />
         <mat-hint align="start">π.χ. live_print_server</mat-hint>
       </mat-form-field>
     </div>

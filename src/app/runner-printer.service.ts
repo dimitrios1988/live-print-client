@@ -1,6 +1,5 @@
 import { computed, Injectable, signal, WritableSignal } from '@angular/core';
 import { IRunner } from './runner-enquiry/interfaces/runner.interface';
-import { SettingsService } from './header/settings-dialog/settings.service';
 import { PrinterService } from './printer.service';
 import { EventsService } from './events/events.service';
 import { IEvent } from './events/interfaces/event.interface';
@@ -13,7 +12,6 @@ export class RunnerPrinterService {
   runnerForPrint = computed(this._runnerForPrint);
 
   constructor(
-    private settingsService: SettingsService,
     private printerService: PrinterService,
     private eventService: EventsService
   ) {}
@@ -35,11 +33,18 @@ export class RunnerPrinterService {
   async printLoadedRunnerNumber(): Promise<{
     success: boolean;
     message: string;
-  }> {
+  } | null> {
     const event = this.eventService.events().find((e: IEvent) => {
       return this.runnerForPrint()?.event_id === e.id;
     });
-    const selectedPrinter = this.settingsService.settings()?.numberPrinter;
+    const selectedPrinter = event?.numberPrinter;
+    if (
+      selectedPrinter === null ||
+      selectedPrinter === undefined ||
+      selectedPrinter.trim() === ''
+    ) {
+      return null;
+    }
     const variables = {
       bib: this.runnerForPrint()?.bib?.toString() ?? '',
       full_name: `${this.runnerForPrint()?.first_name?.toString() ?? ''} ${
@@ -117,8 +122,18 @@ export class RunnerPrinterService {
   async printLoadedRunnerTicket(): Promise<{
     success: boolean;
     message: string;
-  }> {
-    const selectedPrinter = this.settingsService.settings()?.ticketPrinter;
+  } | null> {
+    const event = this.eventService.events().find((e: IEvent) => {
+      return this.runnerForPrint()?.event_id === e.id;
+    });
+    const selectedPrinter = event?.ticketPrinter;
+    if (
+      selectedPrinter === null ||
+      selectedPrinter === undefined ||
+      selectedPrinter.trim() === ''
+    ) {
+      return null;
+    }
     return this.printerService.printBinary(
       this.runnerForPrint()?.bib?.toString() || '',
       selectedPrinter

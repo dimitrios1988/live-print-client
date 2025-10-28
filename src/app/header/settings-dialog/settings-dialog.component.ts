@@ -56,8 +56,6 @@ export class SettingsDialogComponent {
     this.printers = printerService.getSystemPrinters();
 
     this.settingsForm = fb.group({
-      numberPrinter: [''],
-      ticketPrinter: [''],
       apiAddress: ['', Validators.required],
       appName: ['', Validators.required],
     });
@@ -65,8 +63,6 @@ export class SettingsDialogComponent {
     effect(() => {
       this.settingsForm.setValue(
         settingsService.settings() ?? {
-          numberPrinter: '',
-          ticketPrinter: '',
           apiAddress: '',
           appName: '',
         }

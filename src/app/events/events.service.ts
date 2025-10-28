@@ -80,10 +80,25 @@ export class EventsService {
                   e['0(event)'].bib_frontside_template || null,
                 bib_styling: e['0(event)'].bib_styling || null,
                 has_timing: e['0(event)'].has_timing,
+                enabled: false,
               } as IEvent;
             })
           );
         },
       });
+  }
+
+  updateEvent(updatedEvent: IEvent): void {
+    this._events.update((events) => {
+      const index = events.findIndex((e) => e.id === updatedEvent.id);
+      if (index !== -1) {
+        events[index] = updatedEvent;
+      }
+      return events;
+    });
+  }
+
+  refreshEvents(): void {
+    this._events.set([...this._events()]); // Trigger change detection
   }
 }
