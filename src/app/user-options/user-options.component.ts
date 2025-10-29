@@ -65,10 +65,9 @@ export class UserOptionsComponent {
   onSelectionChange() {
     if (
       this.eventsService
-        .events()
+        .selectedEvents()
         .some(
           (event) =>
-            event.enabled === true &&
             event.numberPrinter !== null &&
             event.numberPrinter !== undefined &&
             event.numberPrinter.trim() !== ''
@@ -82,10 +81,9 @@ export class UserOptionsComponent {
 
     if (
       this.eventsService
-        .events()
+        .selectedEvents()
         .some(
           (event) =>
-            event.enabled === true &&
             event.ticketPrinter !== null &&
             event.ticketPrinter !== undefined &&
             event.ticketPrinter.trim() !== ''
