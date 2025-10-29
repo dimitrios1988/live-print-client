@@ -1,9 +1,7 @@
 <app-user-options></app-user-options>
 <mat-drawer-container [hasBackdrop]="true">
   <mat-drawer #sidenav mode="side" [(opened)]="sidemenuOpen">
-    <app-events
-      (selectedOptionsChange)="updateSelectedEvents($event)"
-    ></app-events>
+    <app-events></app-events>
   </mat-drawer>
   <mat-drawer-content>
     <button

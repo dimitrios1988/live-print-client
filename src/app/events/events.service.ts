@@ -16,10 +16,14 @@ import { LoginService } from '../login/login.service';
   deps: [],
 })
 export class EventsService {
+  events: Signal<IEvent[]> = computed(() => this._events());
+
   private appName: string = '';
   private apiAddress: string = '';
   private _events: WritableSignal<IEvent[]> = signal([]);
-  events: Signal<IEvent[]> = computed(() => this._events());
+  selectedEvents: Signal<IEvent[]> = computed(() =>
+    this._events().filter((e) => e.enabled)
+  ) as Signal<IEvent[]>;
   constructor(
     settingsService: SettingsService,
     private httpClient: HttpClient,
@@ -80,7 +84,15 @@ export class EventsService {
                   e['0(event)'].bib_frontside_template || null,
                 bib_styling: e['0(event)'].bib_styling || null,
                 has_timing: e['0(event)'].has_timing,
-                enabled: false,
+                enabled: this.selectedEvents().some(
+                  (se) => se.id === e['0(event)'].id
+                ),
+                numberPrinter:
+                  this.selectedEvents().find((se) => se.id === e['0(event)'].id)
+                    ?.numberPrinter || null,
+                ticketPrinter:
+                  this.selectedEvents().find((se) => se.id === e['0(event)'].id)
+                    ?.ticketPrinter || null,
               } as IEvent;
             })
           );

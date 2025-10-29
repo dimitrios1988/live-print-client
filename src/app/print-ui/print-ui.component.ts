@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { UserOptionsComponent } from '../user-options/user-options.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { EventsComponent } from '../events/events.component';
@@ -8,6 +8,7 @@ import { RunnerEnquiryComponent } from '../runner-enquiry/runner-enquiry.compone
 import { IEvent } from '../events/interfaces/event.interface';
 import { RunnerStatusComponent } from '../runner-status/runner-status.component';
 import { RunnerInfoComponent } from '../runner-info/runner-info.component';
+import { EventsService } from '../events/events.service';
 @Component({
   selector: 'app-print-ui',
   imports: [
@@ -27,8 +28,9 @@ export class PrintUiComponent {
   sidemenuOpen = false;
   selectedEvents: IEvent[] = [];
 
-  constructor() {}
-  updateSelectedEvents($events: IEvent[]) {
-    this.selectedEvents = $events;
+  constructor(eventsService: EventsService) {
+    effect(() => {
+      this.selectedEvents = eventsService.selectedEvents();
+    });
   }
 }

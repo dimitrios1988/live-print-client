@@ -226,9 +226,10 @@ export class RunnerEnquiryComponent {
   }
 
   hasSelectToPrint(): boolean {
-    return (
-      this.userOptionsService.getUserOptions().printNumbers[0] === true ||
-      this.userOptionsService.getUserOptions().printTickets[0] === true
-    );
+    return this.userOptionsService.getUserOptions().printNumbers
+      ? this.userOptionsService.getUserOptions().printNumbers[0] === true
+      : false || this.userOptionsService.getUserOptions().printTickets
+      ? this.userOptionsService.getUserOptions().printTickets[0] === true
+      : false;
   }
 }

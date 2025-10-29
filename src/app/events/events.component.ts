@@ -14,25 +14,16 @@ import { EventOptionsDialogComponent } from './event-options-dialog/event-option
   styleUrl: './events.component.css',
 })
 export class EventsComponent {
-  @Output() selectedOptionsChange = new EventEmitter<IEvent[]>();
+  //@Output() selectedOptionsChange = new EventEmitter<IEvent[]>();
 
   public events: IEvent[] = [];
 
   private dialog: MatDialog = inject(MatDialog);
   constructor(private eventsService: EventsService) {
     effect(() => {
-      const selectedEvents = [...this.selectedEvents()];
+      //const selectedEvents = [...this.selectedEvents()];
       this.events = eventsService.events();
-      selectedEvents.forEach((se) => {
-        const event = this.events.find((e) => e.id === se.id);
-        if (event) {
-          event.enabled = true;
-          event.numberPrinter = se.numberPrinter;
-          event.ticketPrinter = se.ticketPrinter;
-          this.eventsService.updateEvent(event);
-        }
-      });
-      this.selectedOptionsChange.emit(this.selectedEvents());
+      //this.selectedOptionsChange.emit(this.selectedEvents());
     });
   }
 
@@ -58,7 +49,7 @@ export class EventsComponent {
       event!!.ticketPrinter = result.ticketPrinter;
       event!!.enabled = result.enabled; */
       this.eventsService.refreshEvents();
-      this.selectedOptionsChange.emit(this.selectedEvents());
+      //this.selectedOptionsChange.emit(this.selectedEvents());
     });
   }
 }
