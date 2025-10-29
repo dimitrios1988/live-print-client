@@ -108,9 +108,6 @@ export class EventsService {
       }
       return events;
     });
-  }
-
-  refreshEvents(): void {
-    this._events.set([...this._events()]); // Trigger change detection
+    this._events.set([...this._events()]);
   }
 }
