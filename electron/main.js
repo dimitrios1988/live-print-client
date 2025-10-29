@@ -160,7 +160,13 @@ async function printBinaryContent(number, printerName) {
       writeFileSync(tempFilePath, createNumberRaster(number));
 
       // Use Windows' built-in print command
-      const printCommand = `mspaint /pt "${tempFilePath}" "${printerName}"`;
+      const isWindows = process.platform === "win32";
+      let printCommand;
+      if (isWindows) {
+        printCommand = `mspaint /pt "${tempFilePath}" "${printerName}"`;
+      } else {
+        printCommand = `lp -d "${printerName}" "${tempFilePath}"`;
+      }
 
       exec(printCommand, (error, stdout, stderr) => {
         if (error) {
