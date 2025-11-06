@@ -14,6 +14,7 @@ import { IRunner } from '../interfaces/runner.interface';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 @Component({
   selector: 'app-runner-group-dialog',
   imports: [
@@ -27,6 +28,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatCheckboxModule,
     FormsModule,
     MatIconModule,
+    ScrollingModule,
   ],
   templateUrl: './runner-group-dialog.component.html',
   styleUrl: './runner-group-dialog.component.css',
