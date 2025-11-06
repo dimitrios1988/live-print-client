@@ -61,6 +61,7 @@ export class RunnerEnquiryComponent {
 
   onSubmit(): void {
     this.runnerPrinterService.loadRunnerForPrint(null);
+    this.runnersToPrint = [];
     this.eventService.getEvents();
     if (this.enquryForm.valid && this.events?.length > 0) {
       if (
@@ -219,7 +220,7 @@ export class RunnerEnquiryComponent {
 
   private displayGroupDialog(data: IRunner[]) {
     return this.groupDialog.open(RunnerGroupDialogComponent, {
-      minWidth: '800px',
+      minWidth: '900px',
       minHeight: '400px',
       data,
     });
