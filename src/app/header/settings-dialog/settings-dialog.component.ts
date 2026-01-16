@@ -19,7 +19,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { SettingsService } from './settings.service';
-import { CommonModule } from '@angular/common';
+
 import { MatIconModule } from '@angular/material/icon';
 import { LicenseRegistrationComponent } from '../../license-registration/license-registration.component';
 @Component({
@@ -35,9 +35,8 @@ import { LicenseRegistrationComponent } from '../../license-registration/license
     MatSelectModule,
     ReactiveFormsModule,
     MatInputModule,
-    CommonModule,
-    MatIconModule,
-  ],
+    MatIconModule
+],
   templateUrl: './settings-dialog.component.html',
   styleUrl: './settings-dialog.component.css',
 })
