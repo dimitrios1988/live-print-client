@@ -49,7 +49,7 @@ export class RunnerEnquiryComponent {
     private eventService: EventsService,
     public runnerPrinterService: RunnerPrinterService,
     private userOptionsService: UserOptionsService,
-    private appService: AppService
+    private appService: AppService,
   ) {
     const fb = inject(FormBuilder);
     this.enquryForm = fb.group({
@@ -72,7 +72,7 @@ export class RunnerEnquiryComponent {
         this.runnerService
           .getGroupRunners(
             groupId,
-            this.events.map((e) => e.id)
+            this.events.map((e) => e.id),
           )
           .subscribe({
             next: (runners: IRunner[]) => {
@@ -89,14 +89,22 @@ export class RunnerEnquiryComponent {
           });
       } else {
         this.runnerService
-          .getRunner(
+          .getRunner2(
             Number(this.enquryForm.value.raceNumber),
-            this.events.map((e) => e.id)
+            this.events.map((e) => e.id),
           )
           .subscribe({
-            next: (response: IRunner) => {
-              this.runnersToPrint = [response];
-              this.runnerPrinterService.loadRunnerForPrint(response);
+            next: (response: IRunner | null | undefined) => {
+              if (response !== null && response !== undefined) {
+                this.runnersToPrint = [response];
+                this.runnerPrinterService.loadRunnerForPrint(response);
+              } else if (response === undefined) {
+                this.runnersToPrint = [];
+                this.runnerPrinterService.loadRunnerForPrint(undefined);
+              } else {
+                this.runnersToPrint = [];
+                this.runnerPrinterService.loadRunnerForPrint(null);
+              }
             },
           });
       }
@@ -156,7 +164,7 @@ export class RunnerEnquiryComponent {
             if (this.runnerPrinterService.runnerForPrint() != null) {
               this.runnerService
                 .setRunnerAsPrinted(
-                  this.runnerPrinterService.runnerForPrint()?.id ?? 0
+                  this.runnerPrinterService.runnerForPrint()?.id ?? 0,
                 )
                 .subscribe({
                   next: (response) => {
@@ -166,7 +174,7 @@ export class RunnerEnquiryComponent {
             }
           }
           return result;
-        })
+        }),
       );
     }
 
@@ -227,10 +235,13 @@ export class RunnerEnquiryComponent {
   }
 
   hasSelectToPrint(): boolean {
-    return this.userOptionsService.getUserOptions().printNumbers
-      ? this.userOptionsService.getUserOptions().printNumbers[0] === true
-      : false || this.userOptionsService.getUserOptions().printTickets
-      ? this.userOptionsService.getUserOptions().printTickets[0] === true
-      : false;
+    return (
+      (this.userOptionsService.getUserOptions().printNumbers
+        ? this.userOptionsService.getUserOptions().printNumbers[0] === true
+        : false) ||
+      (this.userOptionsService.getUserOptions().printTickets
+        ? this.userOptionsService.getUserOptions().printTickets[0] === true
+        : false)
+    );
   }
 }

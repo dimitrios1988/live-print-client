@@ -15,7 +15,7 @@ import { QRCodeComponent } from 'angularx-qrcode';
 export class RunnerInfoComponent {
   @ViewChild('chip2goqrcode', { static: false, read: ElementRef })
   chip2GoQrElement!: ElementRef;
-  runner: IRunner | null = null;
+  runner: IRunner | null | undefined = null;
 
   constructor(private runnerPrinterService: RunnerPrinterService) {
     effect(() => {

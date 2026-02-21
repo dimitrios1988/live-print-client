@@ -8,15 +8,16 @@ import { IEvent } from './events/interfaces/event.interface';
   providedIn: 'root',
 })
 export class RunnerPrinterService {
-  private _runnerForPrint: WritableSignal<IRunner | null> = signal(null);
+  private _runnerForPrint: WritableSignal<IRunner | null | undefined> =
+    signal(null);
   runnerForPrint = computed(this._runnerForPrint);
 
   constructor(
     private printerService: PrinterService,
-    private eventService: EventsService
+    private eventService: EventsService,
   ) {}
 
-  loadRunnerForPrint(runner: IRunner | null) {
+  loadRunnerForPrint(runner: IRunner | undefined | null) {
     this._runnerForPrint.set(runner);
   }
 
@@ -62,7 +63,7 @@ export class RunnerPrinterService {
       tshirt_indicator: 'X',
       tshirt_size: '',
       qr: event?.has_timing
-        ? this.runnerForPrint()?.chip_2_go_qr_base64?.toString() ?? ''
+        ? (this.runnerForPrint()?.chip_2_go_qr_base64?.toString() ?? '')
         : '',
       registration_level: this.runnerForPrint()?.registration_level
         ? `Επίπεδο:<br>${this.runnerForPrint()?.registration_level?.toString()}`.trim()
@@ -95,27 +96,27 @@ export class RunnerPrinterService {
       return this.printerService.printHTML(
         `<html><body><style>${this.replaceVariables(
           event?.bib_styling || '',
-          variables
+          variables,
         )}</style>${this.replaceVariables(
           htmlBodyContent,
-          variables
+          variables,
         )}</body></html>`,
         selectedPrinter,
         true,
-        true
+        true,
       );
     }
     return this.printerService.printHTML(
       `<html><body><style>${this.replaceVariables(
         event?.bib_styling || '',
-        variables
+        variables,
       )}</style>${this.replaceVariables(
         htmlBodyContent,
-        variables
+        variables,
       )}</body></html>`,
       selectedPrinter,
       true,
-      false
+      false,
     );
   }
 
@@ -136,17 +137,17 @@ export class RunnerPrinterService {
     }
     return this.printerService.printBinary(
       this.runnerForPrint()?.bib?.toString() || '',
-      selectedPrinter
+      selectedPrinter,
     );
   }
 
   private replaceVariables(
     template: string,
-    variables: { [key: string]: string }
+    variables: { [key: string]: string },
   ): string {
     return template.replace(
       /{{\s*(\w+)\s*}}/g,
-      (_, key) => variables[key] || ''
+      (_, key) => variables[key] || '',
     );
   }
 }

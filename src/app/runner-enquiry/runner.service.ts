@@ -1,14 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { effect, Injectable } from '@angular/core';
 import { SettingsService } from '../header/settings-dialog/settings.service';
-import { IGetRunnerIdResponse } from './interfaces/get-runner-id.resp';
-import { forkJoin, map, Observable, pipe } from 'rxjs';
-import { IGetRunnerResponse } from './interfaces/get-runner.resp';
+import { forkJoin, map, Observable } from 'rxjs';
 import { IRunner } from './interfaces/runner.interface';
-import { IGetRunnerIdCmd } from './interfaces/get-runner-id.cmd';
 import { SetRunnerPrintedCmd } from './interfaces/set-runner-printed.cmd';
 import { SetRunnerPrintedResp } from './interfaces/set-runner-printed.resp';
 import { IGetGroupResponse } from './interfaces/get-group.resp';
+import { IGetRunnerResponse } from './interfaces/get-runner.resp';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +17,7 @@ export class RunnerService {
 
   constructor(
     private httpClient: HttpClient,
-    settingsService: SettingsService
+    settingsService: SettingsService,
   ) {
     effect(() => {
       this.appName = settingsService.settings()?.appName || '';
@@ -27,136 +25,71 @@ export class RunnerService {
     });
   }
 
-  private getRunnerIdByBib(
-    bib: number,
-    eventids: number[]
-  ): Observable<IGetRunnerIdResponse> {
+  getRunner2(bib: number, eventids: number[]): Observable<IRunner | undefined> {
     const obs = eventids.map((eventid) => {
-      const data: IGetRunnerIdCmd = {
-        '0(runner)': {
-          bib: bib,
-        },
-        '1(event)': {
-          id: eventid,
-        },
-      };
-      return this.httpClient.post<IGetRunnerIdResponse>(
-        `${this.apiAddress}/api/${this.appName}/runner_id/v1`,
-        data
+      const data = { bib, event: eventid };
+      return this.httpClient.get<IGetRunnerResponse[]>(
+        `${this.apiAddress}/api/${this.appName}/runners2/v1`,
+        { params: data as any },
       );
     });
     return forkJoin(obs).pipe(
-      map((responses: IGetRunnerIdResponse[]) => {
-        return responses.filter((response) => {
-          return response[0] != null;
-        })[0];
-      })
+      map((responses: IGetRunnerResponse[][]) => {
+        return responses.filter((r) => r.length > 0).length > 0
+          ? responses.filter((r) => r.length > 0)[0][0]
+          : null;
+      }),
+      map((response: IGetRunnerResponse | null) => {
+        if (response !== null) {
+          const runner: IRunner = {
+            bib: response['0(runner)'].bib,
+            birthdate: response['0(runner)'].birthdate
+              ? new Date(response['0(runner)'].birthdate * 1000)
+              : null,
+            chip_2_go_qr_data: response['0(runner)'].chip_2_go_qr_data || '',
+            club: response['0(runner)'].club.trim() || '',
+            fathers_name: response['0(runner)'].fathers_name || '',
+            first_name:
+              response['0(runner)'].first_name_greek !== null &&
+              response['0(runner)'].first_name_greek.trim() !== ''
+                ? response['0(runner)'].first_name_greek
+                : response['0(runner)'].first_name_latin || '',
+            id: response['0(runner)'].id,
+            is_printed: response['0(runner)'].is_printed,
+            last_name:
+              response['0(runner)'].last_name_greek !== null &&
+              response['0(runner)'].last_name_greek.trim() !== ''
+                ? response['0(runner)'].last_name_greek
+                : response['0(runner)'].last_name_latin || '',
+            event_name: response['1(event)'].printed_text || '',
+            event_id: response['1(event)'].id,
+            allow_reprinting: response['1(event)'].allow_reprinting,
+            tshirt_size: response['5(t_shirt_size)'].printed_text || '',
+            gender: response['2(gender)'].printed_text || '',
+            block: response['0(runner)'].block,
+            nationality: response['7(nationality)'].printed_text || '',
+            group_name: response['3(group)'].name.trim() || '',
+            group_id: response['3(group)'].id,
+            printed_at: response['4(print_log)']?.printed_at
+              ? new Date(response['4(print_log)'].printed_at * 1000)
+              : null,
+            registration_level:
+              response['6(registration_level)'].printed_text || '',
+            has_tshirt: response['6(registration_level)'].has_tshirt,
+            receives_as_a_group: response['0(runner)'].receives_as_a_group,
+          };
+          return runner;
+        }
+        return undefined;
+      }),
     );
-  }
-
-  private getRunnerById(id: number): Observable<IGetRunnerResponse[]> {
-    return this.httpClient.get<IGetRunnerResponse[]>(
-      `${this.apiAddress}/api/${this.appName}/runners/v1/${id}?limit=1`
-    );
-  }
-
-  getRunner(bib: number, eventids: number[]): Observable<IRunner> {
-    return new Observable<IRunner>((observer) => {
-      this.getRunnerIdByBib(bib, eventids).subscribe({
-        next: (getRunnerIdResponse: IGetRunnerIdResponse) => {
-          if (
-            getRunnerIdResponse === null ||
-            getRunnerIdResponse === undefined
-          ) {
-            observer.next(getRunnerIdResponse);
-          } else if (getRunnerIdResponse[1] != null) {
-            this.getRunnerById(getRunnerIdResponse[0])
-              .pipe(
-                map((getRunnerResponse: IGetRunnerResponse[]) => {
-                  const runner: IRunner = {
-                    bib: getRunnerResponse[0]['0(runner)'].bib,
-                    birthdate: getRunnerResponse[0]['0(runner)'].birthdate
-                      ? new Date(
-                          getRunnerResponse[0]['0(runner)'].birthdate * 1000
-                        )
-                      : null,
-                    chip_2_go_qr_data:
-                      getRunnerResponse[0]['0(runner)'].chip_2_go_qr_data || '',
-                    club: getRunnerResponse[0]['0(runner)'].club || '',
-                    fathers_name:
-                      getRunnerResponse[0]['0(runner)'].fathers_name || '',
-                    first_name:
-                      getRunnerResponse[0]['0(runner)'].first_name_greek !==
-                        null &&
-                      getRunnerResponse[0]['0(runner)'].first_name_greek !== ''
-                        ? getRunnerResponse[0]['0(runner)'].first_name_greek
-                        : getRunnerResponse[0]['0(runner)'].first_name_latin ||
-                          '',
-                    id: getRunnerResponse[0]['0(runner)'].id,
-                    is_printed: getRunnerResponse[0]['0(runner)'].is_printed,
-                    last_name:
-                      getRunnerResponse[0]['0(runner)'].last_name_greek !==
-                        null &&
-                      getRunnerResponse[0]['0(runner)'].last_name_greek !== ''
-                        ? getRunnerResponse[0]['0(runner)'].last_name_greek
-                        : getRunnerResponse[0]['0(runner)'].last_name_latin ||
-                          '',
-                    event_name:
-                      getRunnerResponse[0]['1(event)'].printed_text || '',
-                    event_id: getRunnerResponse[0]['1(event)'].id,
-                    allow_reprinting:
-                      getRunnerResponse[0]['1(event)'].allow_reprinting,
-                    tshirt_size:
-                      getRunnerResponse[0]['7(t_shirt_size)'].printed_text ||
-                      '',
-                    gender:
-                      getRunnerResponse[0]['2(gender)'].printed_text || '',
-                    block: getRunnerResponse[0]['0(runner)'].block,
-                    nationality:
-                      getRunnerResponse[0]['10(nationality)'].printed_text ||
-                      '',
-                    group_name: getRunnerResponse[0]['5(group)'].name || '',
-                    group_id: getRunnerResponse[0]['5(group)'].id,
-                    printed_at: getRunnerResponse[0]['6(print_log)']?.printed_at
-                      ? new Date(
-                          getRunnerResponse[0]['6(print_log)'].printed_at * 1000
-                        )
-                      : null,
-                    registration_level:
-                      getRunnerResponse[0]['9(registration_level)']
-                        .printed_text || '',
-                    has_tshirt:
-                      getRunnerResponse[0]['9(registration_level)'].has_tshirt,
-                    receives_as_a_group:
-                      getRunnerResponse[0]['0(runner)'].receives_as_a_group,
-                  };
-                  return runner;
-                })
-              )
-              .subscribe({
-                next: (runnerResponse: IRunner) => {
-                  observer.next(runnerResponse);
-                  observer.complete();
-                },
-                error: (err) => {
-                  //observer.next(undefined);
-                  //observer.error(err);
-                },
-              });
-          } else {
-            observer.error('Runner ID not found');
-          }
-        },
-        error: (err) => observer.error(err),
-      });
-    });
   }
 
   getGroupRunners(groupId: number, eventIds: number[]): Observable<IRunner[]> {
     return this.httpClient
-      .get<IGetGroupResponse[]>(
-        `${this.apiAddress}/api/${this.appName}/group/v1/${groupId}`
-      )
+      .get<
+        IGetGroupResponse[]
+      >(`${this.apiAddress}/api/${this.appName}/group/v1/${groupId}`)
       .pipe(
         map((response: IGetGroupResponse[]) => {
           return response.filter((runner: IGetGroupResponse) => {
@@ -215,7 +148,7 @@ export class RunnerService {
             return acc;
           }, []);
           return uniqueData;
-        })
+        }),
       );
   }
 
@@ -227,7 +160,7 @@ export class RunnerService {
     };
     return this.httpClient.post<SetRunnerPrintedResp>(
       `${this.apiAddress}/api/${this.appName}/print_log/v1`,
-      data
+      data,
     );
   }
 }

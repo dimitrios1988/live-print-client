@@ -1,4 +1,4 @@
-import { Component, inject, model } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
   MatDialogActions,
@@ -28,9 +28,9 @@ import { CommonModule, DatePipe } from '@angular/common';
   styleUrl: './multiple-printing-dialog.component.css',
 })
 export class MultiplePrintingDialogComponent {
-  public runnerForPrint: IRunner | null = null;
+  public runnerForPrint: IRunner | null | undefined = null;
   private readonly dialogRef = inject(
-    MatDialogRef<MultiplePrintingDialogComponent>
+    MatDialogRef<MultiplePrintingDialogComponent>,
   );
   constructor(private runnerPrinterService: RunnerPrinterService) {
     this.runnerForPrint = this.runnerPrinterService.runnerForPrint();
