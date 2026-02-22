@@ -81,7 +81,11 @@ export class RunnerEnquiryComponent {
                 this.displayGroupDialog(runners)
                   .afterClosed()
                   .subscribe((result: IRunner[]) => {
-                    if (result !== null && result.length > 0) {
+                    if (
+                      result !== null &&
+                      result !== undefined &&
+                      result.length > 0
+                    ) {
                       this.runnersToPrint = result;
                       this.runnerPrinterService.loadRunnerForPrint(result[0]);
                     }
