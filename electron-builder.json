@@ -1,6 +1,6 @@
 {
   "appId": "gr.zefksisconsulting.liveprintclient",
-  "productName": "Live Print Client",
+  "productName": "LivePrint Client",
   "files": ["dist/", "electron/"],
   "directories": {
     "output": "dist/electron-build"
