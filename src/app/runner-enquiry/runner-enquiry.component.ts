@@ -244,8 +244,9 @@ export class RunnerEnquiryComponent {
 
   private displayGroupDialog(data: IRunner[]) {
     return this.groupDialog.open(RunnerGroupDialogComponent, {
-      minWidth: '900px',
+      minWidth: '920px',
       minHeight: '400px',
+      width: '95vw',
       data,
     });
   }
