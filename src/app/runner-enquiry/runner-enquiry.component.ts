@@ -41,6 +41,7 @@ export class RunnerEnquiryComponent {
   private readonly multiplePrintingDialog: MatDialog;
   private readonly groupDialog: MatDialog;
   @ViewChild('raceNumber') raceNumberInput: ElementRef | undefined;
+  @ViewChild('nextButton') nextButton: MatButton | undefined;
   @ViewChild('printButton') printButton: MatButton | undefined;
   printingTimeout = false;
 
@@ -199,6 +200,17 @@ export class RunnerEnquiryComponent {
             ) {
               this.loadNextRunner();
               this.printButton?._elementRef.nativeElement.focus();
+              if (
+                this.userOptionsService.getUserOptions().turboPrint !==
+                  undefined &&
+                this.userOptionsService.getUserOptions().turboPrint[0] ===
+                  true &&
+                this.runnersToPrint.length >= 1
+              ) {
+                setTimeout(() => {
+                  this.printButton?._elementRef.nativeElement.click();
+                }, 1000);
+              }
             } else {
               if (this.raceNumberInput) {
                 this.raceNumberInput.nativeElement.focus();

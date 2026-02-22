@@ -24,9 +24,10 @@ export class UserOptionsService {
   }
   private getDefaultUserOptions(): UserOptions {
     return {
-      printNumbers: [true],
-      printTickets: [true],
-      continuousPrint: [true],
+      printNumbers: [],
+      printTickets: [],
+      continuousPrint: [],
+      turboPrint: [],
     } as UserOptions;
   }
 }
