@@ -29,7 +29,7 @@ export class RunnerService {
     const obs = eventids.map((eventid) => {
       const data = { bib, event: eventid };
       return this.httpClient.get<IGetRunnerResponse[]>(
-        `${this.apiAddress}/api/${this.appName}/runners2/v1`,
+        `${this.apiAddress}/api/${this.appName}/runners/v1`,
         { params: data as any },
       );
     });
