@@ -51,7 +51,7 @@ interface _1runner {
   last_name_greek: string | null;
   last_name_latin: string | null;
   is_printed: boolean;
-  chip_2_go_qr_data: string;
+  chip_2_go_data: string;
   block: number | null;
   club: string | null;
   receives_as_a_group: boolean;

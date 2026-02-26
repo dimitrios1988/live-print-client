@@ -51,7 +51,7 @@ interface _0runner {
   bib: number;
   birthdate: number;
   block: number;
-  chip_2_go_qr_data: string;
+  chip_2_go_data: string;
   club: string;
   fathers_name: string;
   first_name_greek: string;
