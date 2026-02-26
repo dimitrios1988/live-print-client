@@ -22,12 +22,12 @@ export class EventsService {
   private apiAddress: string = '';
   private _events: WritableSignal<IEvent[]> = signal([]);
   selectedEvents: Signal<IEvent[]> = computed(() =>
-    this._events().filter((e) => e.enabled)
+    this._events().filter((e) => e.enabled),
   ) as Signal<IEvent[]>;
   constructor(
     settingsService: SettingsService,
     private httpClient: HttpClient,
-    private loginService: LoginService
+    private loginService: LoginService,
   ) {
     effect(() => {
       this.appName = settingsService.settings()?.appName || '';
@@ -44,9 +44,9 @@ export class EventsService {
 
   getEvents(): void {
     this.httpClient
-      .get<IGetEventResponse[]>(
-        `${this.apiAddress}/api/${this.appName}/events/v1`
-      )
+      .get<
+        IGetEventResponse[]
+      >(`${this.apiAddress}/api/${this.appName}/events/v1`)
       .subscribe({
         next: (response) => {
           this._events.set(
@@ -85,7 +85,7 @@ export class EventsService {
                 bib_styling: e['0(event)'].bib_styling || null,
                 has_timing: e['0(event)'].has_timing,
                 enabled: this.selectedEvents().some(
-                  (se) => se.id === e['0(event)'].id
+                  (se) => se.id === e['0(event)'].id,
                 ),
                 numberPrinter:
                   this.selectedEvents().find((se) => se.id === e['0(event)'].id)
@@ -94,20 +94,22 @@ export class EventsService {
                   this.selectedEvents().find((se) => se.id === e['0(event)'].id)
                     ?.ticketPrinter || null,
               } as IEvent;
-            })
+            }),
           );
         },
       });
   }
 
   updateEvent(updatedEvent: IEvent): void {
-    this._events.update((events) => {
-      const index = events.findIndex((e) => e.id === updatedEvent.id);
-      if (index !== -1) {
-        events[index] = updatedEvent;
-      }
-      return events;
-    });
-    this._events.set([...this._events()]);
+    if (updatedEvent !== undefined && updatedEvent !== null) {
+      this._events.update((events) => {
+        const index = events.findIndex((e) => e.id === updatedEvent.id);
+        if (index !== -1) {
+          events[index] = updatedEvent;
+        }
+        return events;
+      });
+      this._events.set([...this._events()]);
+    }
   }
 }
