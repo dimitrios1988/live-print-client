@@ -47,7 +47,7 @@ export class RunnerService {
               ? new Date(response['0(runner)'].birthdate * 1000)
               : null,
             chip_2_go_data: response['0(runner)'].chip_2_go_data || '',
-            club: response['0(runner)'].club.trim() || '',
+            club: response['0(runner)'].club?.trim() || '',
             fathers_name: response['0(runner)'].fathers_name || '',
             first_name:
               response['0(runner)'].first_name_greek !== null &&
@@ -68,7 +68,7 @@ export class RunnerService {
             gender: response['2(gender)'].printed_text || '',
             block: response['0(runner)'].block,
             nationality: response['7(nationality)'].printed_text || '',
-            group_name: response['3(group)'].name.trim() || '',
+            group_name: response['3(group)'].name?.trim() || '',
             group_id: response['3(group)'].id,
             printed_at: response['4(print_log)']?.printed_at
               ? new Date(response['4(print_log)'].printed_at * 1000)

@@ -15,7 +15,7 @@ interface _7nationality {
 }
 
 interface _5t_shirt_size {
-  name: string;
+  name: string | null;
   printed_text: string | null;
 }
 
@@ -51,14 +51,14 @@ interface _0runner {
   bib: number;
   birthdate: number;
   block: number;
-  chip_2_go_data: string;
-  club: string;
-  fathers_name: string;
-  first_name_greek: string;
+  chip_2_go_data: string | null;
+  club: string | null;
+  fathers_name: string | null;
+  first_name_greek: string | null;
   first_name_latin: string;
   id: number;
   is_printed: boolean;
-  last_name_greek: string;
+  last_name_greek: string | null;
   last_name_latin: string;
   receives_as_a_group: boolean;
 }
