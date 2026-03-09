@@ -19,6 +19,7 @@
   },
   "linux": {
     "target": "AppImage",
+    "category": "Utility",
     "icon": "src/assets/icons"
   }
 }
