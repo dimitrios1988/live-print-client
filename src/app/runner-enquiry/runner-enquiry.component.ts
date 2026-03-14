@@ -213,7 +213,7 @@ export class RunnerEnquiryComponent {
               ) {
                 setTimeout(() => {
                   this.printButton?._elementRef.nativeElement.click();
-                }, 2500);
+                }, 3000);
               }
             } else {
               if (this.raceNumberInput) {
