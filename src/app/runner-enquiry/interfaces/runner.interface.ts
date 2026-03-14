@@ -1,7 +1,7 @@
 export interface IRunner {
   bib: number | null;
   birthdate: Date | null;
-  chip_2_go_qr_data: string;
+  chip_2_go_data: string;
   chip_2_go_qr_base64?: string;
   club: string | null;
   fathers_name: string | null;

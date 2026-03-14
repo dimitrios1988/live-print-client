@@ -41,6 +41,7 @@ export class RunnerEnquiryComponent {
   private readonly multiplePrintingDialog: MatDialog;
   private readonly groupDialog: MatDialog;
   @ViewChild('raceNumber') raceNumberInput: ElementRef | undefined;
+  @ViewChild('nextButton') nextButton: MatButton | undefined;
   @ViewChild('printButton') printButton: MatButton | undefined;
   printingTimeout = false;
 
@@ -49,7 +50,7 @@ export class RunnerEnquiryComponent {
     private eventService: EventsService,
     public runnerPrinterService: RunnerPrinterService,
     private userOptionsService: UserOptionsService,
-    private appService: AppService
+    private appService: AppService,
   ) {
     const fb = inject(FormBuilder);
     this.enquryForm = fb.group({
@@ -61,6 +62,7 @@ export class RunnerEnquiryComponent {
 
   onSubmit(): void {
     this.runnerPrinterService.loadRunnerForPrint(null);
+    this.runnersToPrint = [];
     this.eventService.getEvents();
     if (this.enquryForm.valid && this.events?.length > 0) {
       if (
@@ -71,7 +73,7 @@ export class RunnerEnquiryComponent {
         this.runnerService
           .getGroupRunners(
             groupId,
-            this.events.map((e) => e.id)
+            this.events.map((e) => e.id),
           )
           .subscribe({
             next: (runners: IRunner[]) => {
@@ -79,7 +81,11 @@ export class RunnerEnquiryComponent {
                 this.displayGroupDialog(runners)
                   .afterClosed()
                   .subscribe((result: IRunner[]) => {
-                    if (result !== null && result.length > 0) {
+                    if (
+                      result !== null &&
+                      result !== undefined &&
+                      result.length > 0
+                    ) {
                       this.runnersToPrint = result;
                       this.runnerPrinterService.loadRunnerForPrint(result[0]);
                     }
@@ -88,14 +94,22 @@ export class RunnerEnquiryComponent {
           });
       } else {
         this.runnerService
-          .getRunner(
+          .getRunner2(
             Number(this.enquryForm.value.raceNumber),
-            this.events.map((e) => e.id)
+            this.events.map((e) => e.id),
           )
           .subscribe({
-            next: (response: IRunner) => {
-              this.runnersToPrint = [response];
-              this.runnerPrinterService.loadRunnerForPrint(response);
+            next: (response: IRunner | null | undefined) => {
+              if (response !== null && response !== undefined) {
+                this.runnersToPrint = [response];
+                this.runnerPrinterService.loadRunnerForPrint(response);
+              } else if (response === undefined) {
+                this.runnersToPrint = [];
+                this.runnerPrinterService.loadRunnerForPrint(undefined);
+              } else {
+                this.runnersToPrint = [];
+                this.runnerPrinterService.loadRunnerForPrint(null);
+              }
             },
           });
       }
@@ -155,7 +169,7 @@ export class RunnerEnquiryComponent {
             if (this.runnerPrinterService.runnerForPrint() != null) {
               this.runnerService
                 .setRunnerAsPrinted(
-                  this.runnerPrinterService.runnerForPrint()?.id ?? 0
+                  this.runnerPrinterService.runnerForPrint()?.id ?? 0,
                 )
                 .subscribe({
                   next: (response) => {
@@ -165,7 +179,7 @@ export class RunnerEnquiryComponent {
             }
           }
           return result;
-        })
+        }),
       );
     }
 
@@ -190,6 +204,17 @@ export class RunnerEnquiryComponent {
             ) {
               this.loadNextRunner();
               this.printButton?._elementRef.nativeElement.focus();
+              if (
+                this.userOptionsService.getUserOptions().turboPrint !==
+                  undefined &&
+                this.userOptionsService.getUserOptions().turboPrint[0] ===
+                  true &&
+                this.runnersToPrint.length >= 1
+              ) {
+                setTimeout(() => {
+                  this.printButton?._elementRef.nativeElement.click();
+                }, 3000);
+              }
             } else {
               if (this.raceNumberInput) {
                 this.raceNumberInput.nativeElement.focus();
@@ -219,16 +244,21 @@ export class RunnerEnquiryComponent {
 
   private displayGroupDialog(data: IRunner[]) {
     return this.groupDialog.open(RunnerGroupDialogComponent, {
-      minWidth: '800px',
+      minWidth: '920px',
       minHeight: '400px',
+      width: '95vw',
       data,
     });
   }
 
   hasSelectToPrint(): boolean {
     return (
-      this.userOptionsService.getUserOptions().printNumbers[0] === true ||
-      this.userOptionsService.getUserOptions().printTickets[0] === true
+      (this.userOptionsService.getUserOptions().printNumbers
+        ? this.userOptionsService.getUserOptions().printNumbers[0] === true
+        : false) ||
+      (this.userOptionsService.getUserOptions().printTickets
+        ? this.userOptionsService.getUserOptions().printTickets[0] === true
+        : false)
     );
   }
 }

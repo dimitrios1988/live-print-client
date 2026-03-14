@@ -16,14 +16,18 @@ import { LoginService } from '../login/login.service';
   deps: [],
 })
 export class EventsService {
+  events: Signal<IEvent[]> = computed(() => this._events());
+
   private appName: string = '';
   private apiAddress: string = '';
   private _events: WritableSignal<IEvent[]> = signal([]);
-  events: Signal<IEvent[]> = computed(() => this._events());
+  selectedEvents: Signal<IEvent[]> = computed(() =>
+    this._events().filter((e) => e.enabled),
+  ) as Signal<IEvent[]>;
   constructor(
     settingsService: SettingsService,
     private httpClient: HttpClient,
-    private loginService: LoginService
+    private loginService: LoginService,
   ) {
     effect(() => {
       this.appName = settingsService.settings()?.appName || '';
@@ -40,9 +44,9 @@ export class EventsService {
 
   getEvents(): void {
     this.httpClient
-      .get<IGetEventResponse[]>(
-        `${this.apiAddress}/api/${this.appName}/events/v1`
-      )
+      .get<
+        IGetEventResponse[]
+      >(`${this.apiAddress}/api/${this.appName}/events/v1`)
       .subscribe({
         next: (response) => {
           this._events.set(
@@ -80,25 +84,32 @@ export class EventsService {
                   e['0(event)'].bib_frontside_template || null,
                 bib_styling: e['0(event)'].bib_styling || null,
                 has_timing: e['0(event)'].has_timing,
-                enabled: false,
+                enabled: this.selectedEvents().some(
+                  (se) => se.id === e['0(event)'].id,
+                ),
+                numberPrinter:
+                  this.selectedEvents().find((se) => se.id === e['0(event)'].id)
+                    ?.numberPrinter || null,
+                ticketPrinter:
+                  this.selectedEvents().find((se) => se.id === e['0(event)'].id)
+                    ?.ticketPrinter || null,
               } as IEvent;
-            })
+            }),
           );
         },
       });
   }
 
   updateEvent(updatedEvent: IEvent): void {
-    this._events.update((events) => {
-      const index = events.findIndex((e) => e.id === updatedEvent.id);
-      if (index !== -1) {
-        events[index] = updatedEvent;
-      }
-      return events;
-    });
-  }
-
-  refreshEvents(): void {
-    this._events.set([...this._events()]); // Trigger change detection
+    if (updatedEvent !== undefined && updatedEvent !== null) {
+      this._events.update((events) => {
+        const index = events.findIndex((e) => e.id === updatedEvent.id);
+        if (index !== -1) {
+          events[index] = updatedEvent;
+        }
+        return events;
+      });
+      this._events.set([...this._events()]);
+    }
   }
 }

@@ -25,6 +25,7 @@
       </button>
       <button
         mat-flat-button
+        #printButton
         color="primary"
         type="button"
         [disabled]="
@@ -46,7 +47,7 @@
         type="button"
         [disabled]="!hasNextRunnerToPrint()"
         (click)="loadNextRunner()"
-        #printButton
+        #nextButton
       >
         <mat-icon>arrow_forward</mat-icon>
         Επόμενος

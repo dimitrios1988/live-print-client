@@ -16,8 +16,6 @@ import {
 } from '@angular/material/dialog';
 import { MatError, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { FileValidators } from 'ngx-file-drag-drop';
-import { NgxFileDragDropComponent } from 'ngx-file-drag-drop';
 import { LicenseService } from './license.service';
 import { AppService } from '../app.service';
 import { ILicense } from './license.interface';
@@ -34,7 +32,6 @@ import { ILicense } from './license.interface';
     ReactiveFormsModule,
     MatInputModule,
     CommonModule,
-    NgxFileDragDropComponent,
     MatError,
   ],
   templateUrl: './license-registration.component.html',
@@ -45,21 +42,15 @@ export class LicenseRegistrationComponent {
   isVerified = false;
   licenseUser: string | null = null;
   licenseExpiryDate: Date | null = null;
+  selectedFile: File | null = null;
+
   constructor(
     fb: FormBuilder,
     private appService: AppService,
     private licenseService: LicenseService
   ) {
     this.licenseForm = fb.group({
-      licenseKey: new FormControl('', [Validators.required]),
-      licenseFile: new FormControl(
-        [],
-        [
-          FileValidators.required,
-          FileValidators.maxFileCount(1),
-          FileValidators.fileExtension(['lic']),
-        ]
-      ),
+      licenseKey: ['', Validators.required],
     });
     this.isVerified = this.licenseService.isVerified;
     this.licenseUser = this.licenseService.licenseeInfo?.licenseUser || null;
@@ -67,17 +58,25 @@ export class LicenseRegistrationComponent {
       this.licenseService.licenseeInfo?.licenseExpiryDate || null;
   }
 
+  // Method to handle file input change
+  onFileChange(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+    }
+  }
+
   registerLicense() {
     localStorage.setItem('licenseKey', this.licenseForm.value.licenseKey);
-    const file: File = this.licenseForm.value.licenseFile[0];
-    if (file) {
+
+    if (this.selectedFile) {
       const reader = new FileReader();
       reader.onload = (e: ProgressEvent<FileReader>) => {
         const fileContent = e.target?.result as string;
         localStorage.setItem('licenseFileContent', fileContent);
         this.verifyLicense();
       };
-      reader.readAsText(file);
+      reader.readAsText(this.selectedFile);
     }
   }
 

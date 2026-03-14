@@ -14,6 +14,7 @@ import { IRunner } from '../interfaces/runner.interface';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 @Component({
   selector: 'app-runner-group-dialog',
   imports: [
@@ -27,6 +28,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatCheckboxModule,
     FormsModule,
     MatIconModule,
+    ScrollingModule,
   ],
   templateUrl: './runner-group-dialog.component.html',
   styleUrl: './runner-group-dialog.component.css',
@@ -66,7 +68,7 @@ export class RunnerGroupDialogComponent {
     this.runnersGroupedByEventArray = Object.keys(runnersGroupedByEvent).map(
       (key: string) => {
         return runnersGroupedByEvent[Number(key)];
-      }
+      },
     );
   }
 
@@ -75,13 +77,16 @@ export class RunnerGroupDialogComponent {
   }
 
   onLoadRunnersClick(): void {
-    const runnersToPrint = [...this.runnersGroupedByEventArray].flatMap((r) => {
+    let runnersToPrint = [...this.runnersGroupedByEventArray].flatMap((r) => {
       return r
         .filter((t: any) => t.selected)
         .map((t: any) => {
           delete t.selected;
           return t;
         });
+    });
+    runnersToPrint = runnersToPrint.sort((r1, r2) => {
+      return (r1.bib ?? 0) - (r2.bib ?? 0);
     });
     this.dialogRef.close(runnersToPrint);
   }

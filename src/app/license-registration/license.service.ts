@@ -70,7 +70,7 @@ export class LicenseService {
     let decrypted: string;
     try {
       const plaintextBuffer = await crypto.subtle.decrypt(
-        { name: 'AES-GCM', iv },
+        { name: 'AES-GCM', iv: new Uint8Array(iv) },
         key,
         encryptedBytes
       );

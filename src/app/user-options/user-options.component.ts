@@ -37,17 +37,23 @@ export class UserOptionsComponent {
       label: 'Συνεχής Εκτύπωση',
       formControlName: 'continuousPrint',
     },
+    {
+      value: true,
+      label: 'Turbo Εκτύπωση',
+      formControlName: 'turboPrint',
+    },
   ];
   constructor(
     private userOptionsService: UserOptionsService,
     private eventsService: EventsService,
-    fb: FormBuilder
+    fb: FormBuilder,
   ) {
     this.userOptions = userOptionsService.getUserOptions();
     this.userOptionsForm = fb.group({
       printNumbers: [],
       printTickets: [],
       continuousPrint: [],
+      turboPrint: [],
     });
 
     for (const key in this.userOptions) {
@@ -65,13 +71,12 @@ export class UserOptionsComponent {
   onSelectionChange() {
     if (
       this.eventsService
-        .events()
+        .selectedEvents()
         .some(
           (event) =>
-            event.enabled === true &&
             event.numberPrinter !== null &&
             event.numberPrinter !== undefined &&
-            event.numberPrinter.trim() !== ''
+            event.numberPrinter.trim() !== '',
         )
     ) {
       this.userOptionsForm.controls['printNumbers'].enable();
@@ -82,13 +87,12 @@ export class UserOptionsComponent {
 
     if (
       this.eventsService
-        .events()
+        .selectedEvents()
         .some(
           (event) =>
-            event.enabled === true &&
             event.ticketPrinter !== null &&
             event.ticketPrinter !== undefined &&
-            event.ticketPrinter.trim() !== ''
+            event.ticketPrinter.trim() !== '',
         )
     ) {
       this.userOptionsForm.controls['printTickets'].enable();
@@ -104,6 +108,12 @@ export class UserOptionsComponent {
       this.userOptionsForm.controls['continuousPrint'].disable();
     } else {
       this.userOptionsForm.controls['continuousPrint'].enable();
+    }
+    if (this.userOptionsForm.controls['continuousPrint'].value == false) {
+      this.userOptionsForm.controls['turboPrint'].setValue(false);
+      this.userOptionsForm.controls['turboPrint'].disable();
+    } else {
+      this.userOptionsForm.controls['turboPrint'].enable();
     }
     this.userOptions = this.userOptionsForm.value;
     this.userOptionsService.setUserOptions(this.userOptions);
