@@ -68,7 +68,7 @@ export class RunnerGroupDialogComponent {
     this.runnersGroupedByEventArray = Object.keys(runnersGroupedByEvent).map(
       (key: string) => {
         return runnersGroupedByEvent[Number(key)];
-      }
+      },
     );
   }
 
@@ -77,13 +77,16 @@ export class RunnerGroupDialogComponent {
   }
 
   onLoadRunnersClick(): void {
-    const runnersToPrint = [...this.runnersGroupedByEventArray].flatMap((r) => {
+    let runnersToPrint = [...this.runnersGroupedByEventArray].flatMap((r) => {
       return r
         .filter((t: any) => t.selected)
         .map((t: any) => {
           delete t.selected;
           return t;
         });
+    });
+    runnersToPrint = runnersToPrint.sort((r1, r2) => {
+      return (r1.bib ?? 0) - (r2.bib ?? 0);
     });
     this.dialogRef.close(runnersToPrint);
   }
