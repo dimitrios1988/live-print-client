@@ -22,4 +22,5 @@ export interface IRunner {
   registration_level: string | null;
   has_tshirt: boolean;
   receives_as_a_group: boolean;
+  age_group: string | null;
 }

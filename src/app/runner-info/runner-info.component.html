@@ -21,6 +21,7 @@
         <strong>Όνομα</strong>
         <strong>Όνομα Πατρός</strong>
         <strong>Έτος Γέννησης</strong>
+        <strong>Ηλικιακή Κατηγορία</strong>
         <strong>Φύλο</strong>
         <strong>Εθνικότητα</strong>
         <strong>Σύλλογος</strong>
@@ -31,6 +32,7 @@
         <span>{{ runner.first_name }} {{ runner.last_name }}</span>
         <span>{{ runner.fathers_name }}</span>
         <span>{{ runner.birthdate | date: "yyyy" }}</span>
+        <span>{{ runner.age_group }}</span>
         <span>{{ runner.gender }}</span>
         <span>{{ runner.nationality }}</span>
         <span>{{ runner.club }}</span>

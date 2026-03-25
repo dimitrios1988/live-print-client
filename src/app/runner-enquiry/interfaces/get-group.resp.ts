@@ -7,8 +7,13 @@ export interface IGetGroupResponse {
   '6(t_shirt_size)': _6ts_shirt_size;
   '8(registration_level)': _8registrationlevel;
   '9(nationality)': _9nationality;
+  '10(age_group)': _10agegroup;
 }
 
+interface _10agegroup {
+  printed_text: string | null;
+  name: string | null;
+}
 interface _9nationality {
   name: string;
   printed_text: string | null;

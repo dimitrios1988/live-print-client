@@ -70,6 +70,9 @@ export class RunnerPrinterService {
         : '',
       frontside_background_url: event?.bib_frontside_background_url || '',
       backside_background_url: event?.bib_backside_background_url || '',
+      age_group: this.runnerForPrint()?.age_group
+        ? `${this.runnerForPrint()?.gender ?? ''}${this.runnerForPrint()?.age_group ?? ''}`
+        : '',
     };
     if (
       this.runnerForPrint()?.tshirt_size !== null &&
