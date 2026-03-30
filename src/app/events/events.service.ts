@@ -83,7 +83,6 @@ export class EventsService {
                 bib_frontside_template:
                   e['0(event)'].bib_frontside_template || null,
                 bib_styling: e['0(event)'].bib_styling || null,
-                has_timing: e['0(event)'].has_timing,
                 enabled: this.selectedEvents().some(
                   (se) => se.id === e['0(event)'].id,
                 ),
