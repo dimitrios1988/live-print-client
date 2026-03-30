@@ -42,8 +42,11 @@
         style="display: none"
         #chip2goqrcode
         [qrdata]="runner.chip_2_go_data"
-        [width]="817"
+        [width]="900"
         [errorCorrectionLevel]="'H'"
+        [colorDark]="'#000000'"
+        [colorLight]="'#ffffff'"
+        [margin]="5"
         (qrCodeURL)="qrChanged()"
       ></qrcode>
     </div>
