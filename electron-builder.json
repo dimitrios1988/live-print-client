@@ -2,6 +2,7 @@
   "appId": "gr.zefksisconsulting.liveprintclient",
   "productName": "LivePrint Client",
   "files": ["dist/", "electron/"],
+  "asar": true,
   "directories": {
     "output": "dist/electron-build"
   },

@@ -77,6 +77,7 @@ export class RunnerService {
               response['6(registration_level)'].printed_text || '',
             has_tshirt: response['6(registration_level)'].has_tshirt,
             receives_as_a_group: response['0(runner)'].receives_as_a_group,
+            age_group: response['8(age_group)']?.printed_text || null,
           };
           return runner;
         }
@@ -132,6 +133,7 @@ export class RunnerService {
             registration_level: runner['8(registration_level)'].printed_text,
             has_tshirt: runner['8(registration_level)'].has_tshirt,
             receives_as_a_group: runner['1(runner)'].receives_as_a_group,
+            age_group: runner['10(age_group)']?.printed_text || null,
           }));
           const uniqueData = data.reduce((acc: IRunner[], current: IRunner) => {
             const existing = acc.find((item) => item.id === current.id);

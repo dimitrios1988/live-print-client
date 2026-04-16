@@ -62,14 +62,16 @@ export class RunnerPrinterService {
         : '',
       tshirt_indicator: 'X',
       tshirt_size: '',
-      qr: event?.has_timing
-        ? (this.runnerForPrint()?.chip_2_go_qr_base64?.toString() ?? '')
-        : '',
+      qr: this.runnerForPrint()?.chip_2_go_qr_base64?.toString() ?? '',
+
       registration_level: this.runnerForPrint()?.registration_level
         ? `Επίπεδο:<br>${this.runnerForPrint()?.registration_level?.toString()}`.trim()
         : '',
       frontside_background_url: event?.bib_frontside_background_url || '',
       backside_background_url: event?.bib_backside_background_url || '',
+      age_group: this.runnerForPrint()?.age_group
+        ? `${this.runnerForPrint()?.gender ?? ''}${this.runnerForPrint()?.age_group ?? ''}`
+        : '',
     };
     if (
       this.runnerForPrint()?.tshirt_size !== null &&

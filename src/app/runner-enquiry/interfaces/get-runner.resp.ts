@@ -7,6 +7,12 @@ export interface IGetRunnerResponse {
   '5(t_shirt_size)': _5t_shirt_size;
   '6(registration_level)': _6registrationlevel;
   '7(nationality)': _7nationality;
+  '8(age_group)': _8agegroup;
+}
+
+interface _8agegroup {
+  name: string | null;
+  printed_text: string | null;
 }
 
 interface _7nationality {
