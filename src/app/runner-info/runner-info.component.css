@@ -24,6 +24,14 @@
   padding: 10px;
 }
 
+.runner-info-content span {
+  height: 20px;
+}
+
+.runner-info-content strong {
+  height: 20px;
+}
+
 .runner-info-content-header {
   display: grid;
   grid-template-columns: 1fr;
