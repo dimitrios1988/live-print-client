@@ -36,6 +36,13 @@
         />
         <mat-hint align="start">π.χ. live_print_server</mat-hint>
       </mat-form-field>
+      <mat-checkbox
+        formControlName="secondaryScreen"
+        title="Ενεργοποίηση Δευτερεύουσας Οθόνης"
+        (change)="toggleSecondaryScreen()"
+      >
+        Δευτερέυουσα Οθόνη
+      </mat-checkbox>
     </div>
   </form>
 </mat-dialog-content>

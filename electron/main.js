@@ -10,6 +10,8 @@ import { exec } from "child_process";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 let mainWindow;
+let secondWindow;
+let secondWindowReady = false;
 const appStore = new store();
 function createMainWindow() {
   mainWindow = new BrowserWindow({
@@ -30,10 +32,13 @@ function createMainWindow() {
   } else {
     // Load the built Angular app (for packaged app)
     mainWindow.loadFile(
-      path.join(__dirname, "../dist/live-print-client/browser/index.html")
+      path.join(__dirname, "../dist/live-print-client/browser/index.html"),
     );
   }
-  mainWindow.on("closed", () => (mainWindow = null));
+  mainWindow.on("closed", () => {
+    mainWindow = null;
+    secondWindow?.close();
+  });
 }
 
 app.on("ready", createMainWindow);
@@ -70,10 +75,10 @@ ipcMain.on(
       htmlContent,
       printerName,
       true,
-      duplex
+      duplex,
     );
     event.sender.send("print-status", result);
-  }
+  },
 );
 
 ipcMain.on("print-binary", async (event, { content, printerName }) => {
@@ -86,7 +91,7 @@ async function printHTMLContent(htmlContent, printerName, landscape, duplex) {
     const printWindow = new BrowserWindow({ show: false });
 
     printWindow.loadURL(
-      `data:text/html;charset=utf-8,${encodeURIComponent(htmlContent)}`
+      `data:text/html;charset=utf-8,${encodeURIComponent(htmlContent)}`,
     );
 
     printWindow.webContents.on("did-finish-load", () => {
@@ -107,7 +112,7 @@ async function printHTMLContent(htmlContent, printerName, landscape, duplex) {
             } else {
               reject({ success: false, message: `Print failed: ${errorType}` });
             }
-          }
+          },
         );
       } else {
         printWindow.webContents.print(
@@ -128,7 +133,7 @@ async function printHTMLContent(htmlContent, printerName, landscape, duplex) {
             } else {
               reject({ success: false, message: `Print failed: ${errorType}` });
             }
-          }
+          },
         );
       }
     });
@@ -141,7 +146,7 @@ async function printHTMLContent(htmlContent, printerName, landscape, duplex) {
           success: false,
           message: `Failed to load content: ${errorDescription}`,
         });
-      }
+      },
     );
 
     printWindow.on("closed", () => {
@@ -213,4 +218,64 @@ function createNumberRaster(number) {
   ctx.fillText(number, LABEL_WIDTH / 2, LABEL_HEIGHT / 2);
 
   return canvas.toBuffer("image/png");
+}
+
+ipcMain.on("send-to-second-window", (_, data) => {
+  if (secondWindow && secondWindowReady) {
+    secondWindow.webContents.send("receive-data", data);
+  }
+});
+
+ipcMain.handle("open-second-window", () => {
+  createSecondWindow();
+});
+
+function createSecondWindow() {
+  if (secondWindow) {
+    secondWindow.focus();
+    return;
+  }
+
+  secondWindowReady = false;
+
+  secondWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
+      contextIsolation: true,
+      nodeIntegration: false,
+    },
+  });
+
+  secondWindow.loadURL("http://localhost:4200/secondary");
+
+  secondWindow.webContents.on("did-finish-load", () => {
+    secondWindowReady = true;
+  });
+
+  secondWindow.on("closed", () => {
+    secondWindow = null;
+    secondWindowReady = false;
+    if (mainWindow) {
+      mainWindow.webContents.send('secondary-window-closed');
+    }
+  });
+}
+
+ipcMain.handle('close-second-window', () => {
+  if (secondWindow) {
+    closeSecondWindow();
+  }
+});
+
+function closeSecondWindow() {
+  if (secondWindow) {
+    secondWindow.close();
+    secondWindow = null;
+    secondWindowReady = false;
+    if (mainWindow) {
+      mainWindow.webContents.send('secondary-window-closed');
+    }
+  }
 }

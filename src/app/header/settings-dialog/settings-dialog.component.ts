@@ -21,6 +21,7 @@ import {
 import { SettingsService } from './settings.service';
 
 import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { LicenseRegistrationComponent } from '../../license-registration/license-registration.component';
 @Component({
   selector: 'app-settings-dialog',
@@ -35,8 +36,9 @@ import { LicenseRegistrationComponent } from '../../license-registration/license
     MatSelectModule,
     ReactiveFormsModule,
     MatInputModule,
-    MatIconModule
-],
+    MatIconModule,
+    MatCheckboxModule,
+  ],
   templateUrl: './settings-dialog.component.html',
   styleUrl: './settings-dialog.component.css',
 })
@@ -49,7 +51,7 @@ export class SettingsDialogComponent {
   constructor(
     printerService: PrinterService,
     private settingsService: SettingsService,
-    fb: FormBuilder
+    fb: FormBuilder,
   ) {
     this.dialog = inject(MatDialog);
     this.printers = printerService.getSystemPrinters();
@@ -57,15 +59,18 @@ export class SettingsDialogComponent {
     this.settingsForm = fb.group({
       apiAddress: ['', Validators.required],
       appName: ['', Validators.required],
+      secondaryScreen: [false],
     });
 
     effect(() => {
-      this.settingsForm.setValue(
-        settingsService.settings() ?? {
-          apiAddress: '',
-          appName: '',
-        }
-      );
+      const settings = settingsService.settings() ?? {
+        apiAddress: '',
+        appName: '',
+        secondaryScreen: false,
+      };
+      if (settings) {
+        this.settingsForm.patchValue(settings);
+      }
     });
   }
 
@@ -78,5 +83,22 @@ export class SettingsDialogComponent {
       minWidth: '600px',
       minHeight: '400px',
     });
+  }
+
+  toggleSecondaryScreen() {
+    const currentValue = this.settingsForm.get('secondaryScreen')
+      ?.value as boolean;
+    if (currentValue === true) {
+      (window as any).electronAPI.openSecondWindow();
+      setTimeout(() => {
+        (window as any).electronAPI.sendToSecondWindow({
+          firstName: 'John',
+          lastName: 'Doe',
+        });
+      }, 2000);
+    } else {
+      (window as any).electronAPI.closeSecondWindow();
+    }
+    this.settingsService.updateSettings({ secondaryScreen: currentValue });
   }
 }
