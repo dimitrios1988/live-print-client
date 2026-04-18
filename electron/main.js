@@ -248,7 +248,17 @@ function createSecondWindow() {
     },
   });
 
-  secondWindow.loadURL("http://localhost:4200/secondary");
+  if (process.env.NODE_ENV === "development") {
+    // Load Angular dev server (only for `npm run electron:serve`)
+    secondWindow.loadURL("http://localhost:4200/#/secondary");
+    secondWindow.webContents.openDevTools();
+  } 
+   else {
+    // Load the built Angular app (for packaged app)
+    secondWindow.loadFile(
+      path.join(__dirname, "../dist/live-print-client/browser/index.html"),{ hash: '/secondary' },
+    );
+  } 
 
   secondWindow.webContents.on("did-finish-load", () => {
     secondWindowReady = true;

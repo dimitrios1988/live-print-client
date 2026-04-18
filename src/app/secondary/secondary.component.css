@@ -1,0 +1,96 @@
+.secondary-screen {
+   display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+    margin-left: 8rem;
+    margin-right: 8rem;
+    gap: 1rem;
+}
+
+.not-found{
+      text-align: center;
+
+}
+
+.not-found > span {
+    display: inline-block;
+    padding: 10px;
+    font-size: 3rem;
+    color: var(--mat-stepper-header-error-state-label-text-color, var(--mat-sys-error));
+    font-weight: 500;
+}
+
+.printed {
+    text-align: center;
+}
+
+.printed > span {
+    display: inline-block;
+    padding: 10px;
+    font-size: 3rem;
+    color: var(--mat-stepper-header-error-state-label-text-color, var(--mat-sys-error));
+    font-weight: 500;
+}
+
+.event-info{
+    font-weight: 500;
+    font-size: 1.5rem;
+}
+
+
+.runner-info-header {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 5px;
+  flex-direction: row;
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--mat-divider-color, var(--mat-sys-outline));
+  padding-bottom: 1rem;
+}
+.runner-info-header > div {
+  padding: 10px;
+  align-self: end;
+      display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.runner-info-header-title {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.runner-info-header-data{
+    display: block;
+    font-size: 3rem;
+}
+
+.runner-info-content {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1.5rem;
+  flex-direction: row;
+  padding: 10px;
+  font-size: 2rem;
+}
+
+.runner-info-content-header {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(6, 1fr);
+  grid-column-gap: 0px;
+  justify-items: end;
+  grid-row-gap: 1.3rem;
+  line-height: 2rem;
+  text-align: right;
+}
+.runner-info-content-data {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(6, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 1.3rem;
+  line-height: 2rem;
+}
