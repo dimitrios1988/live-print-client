@@ -24,18 +24,11 @@
   padding: 10px;
 }
 
-.runner-info-content span {
-  height: 20px;
-}
-
-.runner-info-content strong {
-  height: 20px;
-}
 
 .runner-info-content-header {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: repeat(7, 1fr);
+  grid-template-rows: repeat(8, 1fr);
   grid-column-gap: 0px;
   justify-items: end;
   grid-row-gap: 5px;
@@ -43,7 +36,7 @@
 .runner-info-content-data {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: repeat(7, 1fr);
+  grid-template-rows: repeat(8, 1fr);
   grid-column-gap: 0px;
   grid-row-gap: 5px;
 }
