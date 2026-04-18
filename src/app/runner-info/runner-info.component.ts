@@ -20,6 +20,7 @@ export class RunnerInfoComponent {
   constructor(private runnerPrinterService: RunnerPrinterService) {
     effect(() => {
       this.runner = this.runnerPrinterService.runnerForPrint();
+      (window as any).electronAPI.sendToSecondWindow(this.runner);
     });
   }
 

@@ -1,0 +1,46 @@
+<div class="secondary-screen">
+  @if (runnerPrintStatus == "AlreadyPrinted") {
+    <div class="printed"><span>Έχει Εκτυπωθεί</span></div>
+  } @else if (runnerPrintStatus == "NotFound") {
+    <div class="not-found"><span>Δε βρέθηκε Δρομέας</span></div>
+  }
+
+  @if (
+    runner !== null &&
+    runner !== undefined &&
+    (runnerPrintStatus === "Ok" || runnerPrintStatus === "AlreadyPrinted")
+  ) {
+    <div class="event-info">
+      <span>{{ runner.event_name }}</span>
+    </div>
+    <div class="runner-info-header">
+      <div>
+        <strong class="runner-info-header-title">Bib</strong>
+        <span class="runner-info-header-data">{{ runner.bib }}</span>
+      </div>
+      <mat-divider [vertical]="true"></mat-divider>
+      <div>
+        <span class="runner-info-header-data">Block {{ runner.block }}</span>
+      </div>
+    </div>
+    <div class="runner-info-content">
+      <div class="runner-info-content-header">
+        <span>Όνομα</span>
+        <span>Όνομα Πατρός</span>
+        <span>Ημ/νία Γέννησης</span>
+        <span>Φύλο</span>
+        <span>Σύλλογος</span>
+        <span>Εθνικότητα</span>
+      </div>
+      <mat-divider [vertical]="true"></mat-divider>
+      <div class="runner-info-content-data">
+        <strong>{{ runner.first_name }} {{ runner.last_name }}</strong>
+        <strong>{{ runner.fathers_name }}</strong>
+        <strong>{{ runner.birthdate | date: "dd/MM/yyyy" }}</strong>
+        <strong>{{ runner.gender }}</strong>
+        <strong>{{ runner.club }}</strong>
+        <strong>{{ runner.nationality }}</strong>
+      </div>
+    </div>
+  }
+</div>
