@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as ed25519 from '@noble/ed25519';
-import { sha512 } from '@noble/hashes/sha2';
+import { sha512 } from '@noble/hashes/sha2.js';
 import { ILicense } from './license.interface';
 import { AppService } from '../app.service';
 
@@ -12,13 +12,13 @@ export class LicenseService {
   licenseeInfo: { licenseUser: string; licenseExpiryDate: Date } | null = null;
 
   constructor(private appService: AppService) {
-    ed25519.etc.sha512Sync = sha512;
+    ed25519.hashes.sha512 = sha512;
   }
 
   async verifyAndDecrypt(
     fileContent: string,
     licenseKey: string,
-    prettyPrint = false
+    prettyPrint = false,
   ): Promise<string | ILicense> {
     this.appService.getAppConfig().publicKeyHex || '';
     const base64Payload = fileContent
@@ -55,14 +55,14 @@ export class LicenseService {
     // Hash license key to get 256-bit secret
     const keyMaterial = await crypto.subtle.digest(
       'SHA-256',
-      new TextEncoder().encode(licenseKey)
+      new TextEncoder().encode(licenseKey),
     );
     const key = await crypto.subtle.importKey(
       'raw',
       keyMaterial,
       { name: 'AES-GCM' },
       false,
-      ['decrypt']
+      ['decrypt'],
     );
 
     const encryptedBytes = new Uint8Array([...cipherText, ...tag]);
@@ -72,7 +72,7 @@ export class LicenseService {
       const plaintextBuffer = await crypto.subtle.decrypt(
         { name: 'AES-GCM', iv: new Uint8Array(iv) },
         key,
-        encryptedBytes
+        encryptedBytes,
       );
       decrypted = new TextDecoder().decode(plaintextBuffer);
     } catch (err) {
@@ -101,7 +101,7 @@ export class LicenseService {
         const decryptedContent: ILicense = (await this.verifyAndDecrypt(
           licenseFileContent,
           licenseKey,
-          false
+          false,
         )) as ILicense;
         if (
           decryptedContent.meta.expiry &&
@@ -147,13 +147,20 @@ export class LicenseService {
     localStorage.setItem('licenseFileContent', licenseFileContent);
   }
 
+  unregisterLicense(): void {
+    this.isVerified = false;
+    this.licenseeInfo = null;
+    localStorage.removeItem('licenseKey');
+    localStorage.removeItem('licenseFileContent');
+  }
+
   private base64ToBytes(b64: string): Uint8Array {
     return Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
   }
 
   private hexToBytes(hex: string): Uint8Array {
     return new Uint8Array(
-      hex.match(/.{1,2}/g)!.map((byte) => parseInt(byte, 16))
+      hex.match(/.{1,2}/g)!.map((byte) => parseInt(byte, 16)),
     );
   }
 }

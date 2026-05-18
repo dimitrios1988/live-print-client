@@ -47,7 +47,7 @@ export class LicenseRegistrationComponent {
   constructor(
     fb: FormBuilder,
     private appService: AppService,
-    private licenseService: LicenseService
+    private licenseService: LicenseService,
   ) {
     this.licenseForm = fb.group({
       licenseKey: ['', Validators.required],
@@ -84,8 +84,7 @@ export class LicenseRegistrationComponent {
     this.isVerified = false;
     this.licenseUser = null;
     this.licenseExpiryDate = null;
-    localStorage.removeItem('licenseKey');
-    localStorage.removeItem('licenseFileContent');
+    this.licenseService.unregisterLicense();
     this.appService.displayMessage('Η άδεια αφαιρέθηκε.', 5000);
   }
 
@@ -102,13 +101,13 @@ export class LicenseRegistrationComponent {
             this.licenseService.licenseeInfo?.licenseExpiryDate || null;
           this.appService.displayMessage(
             'Η άδεια επαληθεύτηκε με επιτυχία.',
-            5000
+            5000,
           );
         })
         .catch((error) => {
           this.appService.displayMessage(
             'Η επαλήθευση της άδειας απέτυχε. Παρακαλώ δηλώστε το προϊόν για να μπορέσετε να το χρησιμοποιήσετε.',
-            5000
+            5000,
           );
           this.isVerified = this.licenseService.isVerified;
           this.licenseUser =
