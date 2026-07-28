@@ -260,6 +260,15 @@ function createSecondWindow() {
     );
   } 
 
+  // No application menu (see Menu.setApplicationMenu(null) above), so F11 has no
+  // default accelerator — wire it up manually for the customer-facing display.
+  secondWindow.webContents.on("before-input-event", (event, input) => {
+    if (input.type === "keyDown" && input.key === "F11" && !input.isAutoRepeat) {
+      event.preventDefault();
+      secondWindow.setFullScreen(!secondWindow.isFullScreen());
+    }
+  });
+
   secondWindow.webContents.on("did-finish-load", () => {
     secondWindowReady = true;
   });
