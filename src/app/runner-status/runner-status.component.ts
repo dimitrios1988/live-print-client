@@ -1,13 +1,16 @@
 import { Component, effect } from '@angular/core';
 import { RunnerPrintStatus } from './runner-print-status.enum';
 import { RunnerPrinterService } from '../runner-printer.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-runner-status',
+  imports: [MatIconModule],
   templateUrl: './runner-status.component.html',
   styleUrls: ['./runner-status.component.css'],
 })
 export class RunnerStatusComponent {
+  readonly RunnerPrintStatus = RunnerPrintStatus;
   runnerPrintStatus: RunnerPrintStatus | null = null;
 
   constructor(private runnerPrinterService: RunnerPrinterService) {

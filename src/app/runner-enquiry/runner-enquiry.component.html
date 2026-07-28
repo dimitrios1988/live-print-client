@@ -1,57 +1,68 @@
-<section>
-  <form [formGroup]="enquryForm" (ngSubmit)="onSubmit()">
-    <div class="field-container">
-      <mat-form-field appearance="fill">
-        <mat-label>Race Number:</mat-label>
-        <input
-          matInput
-          formControlName="raceNumber"
-          autocomplete="off"
-          type="text"
-          required
-          title="Race Number:"
-          #raceNumber
-        />
-      </mat-form-field>
-      <button
-        mat-flat-button
-        color="primary"
-        type="button"
-        [disabled]="enquryForm.invalid"
-        (click)="onSubmit()"
-      >
-        <mat-icon>search</mat-icon>
-        Εύρεση
-      </button>
-      <button
-        mat-flat-button
-        #printButton
-        color="primary"
-        type="button"
-        [disabled]="
-          runnerPrinterService.runnerForPrint() === null ||
-          runnerPrinterService.runnerForPrint() === undefined ||
-          (runnerPrinterService.runnerForPrint()?.allow_reprinting === false &&
-            runnerPrinterService.runnerForPrint()?.is_printed === true) ||
-          hasSelectToPrint() === false ||
-          printingTimeout
-        "
-        (click)="onPrint()"
-      >
-        <mat-icon>print</mat-icon>
-        Εκτύπωση
-      </button>
-      <button
-        mat-flat-button
-        color="primary"
-        type="button"
-        [disabled]="!hasNextRunnerToPrint()"
-        (click)="loadNextRunner()"
-        #nextButton
-      >
-        <mat-icon>arrow_forward</mat-icon>
-        Επόμενος
-      </button>
+<section class="enquiry-card">
+  <form [formGroup]="enquryForm" (ngSubmit)="onSubmit()" class="enquiry-form">
+    <mat-form-field appearance="outline" class="race-number-field">
+      <mat-label>Αριθμός Δρομέα</mat-label>
+      <mat-icon matPrefix>tag</mat-icon>
+      <input
+        matInput
+        formControlName="raceNumber"
+        autocomplete="off"
+        type="text"
+        required
+        title="Αριθμός Δρομέα"
+        #raceNumber
+      />
+      <mat-hint>Για ομάδα: πληκτρολογήστε $ και τον κωδικό (π.χ. $1234)</mat-hint>
+    </mat-form-field>
+
+    <div class="enquiry-actions">
+      <span matTooltip="Αναζήτηση δρομέα">
+        <button
+          mat-flat-button
+          type="button"
+          class="action-search"
+          [disabled]="enquryForm.invalid"
+          (click)="onSubmit()"
+        >
+          <mat-icon>search</mat-icon>
+          Εύρεση
+        </button>
+      </span>
+
+      <span [matTooltip]="printTooltip()">
+        <button
+          mat-flat-button
+          #printButton
+          type="button"
+          class="action-print"
+          [disabled]="
+            runnerPrinterService.runnerForPrint() === null ||
+            runnerPrinterService.runnerForPrint() === undefined ||
+            (runnerPrinterService.runnerForPrint()?.allow_reprinting === false &&
+              runnerPrinterService.runnerForPrint()?.is_printed === true) ||
+            hasSelectToPrint() === false ||
+            printingTimeout
+          "
+          (click)="onPrint()"
+        >
+          <mat-icon>print</mat-icon>
+          Εκτύπωση
+        </button>
+      </span>
+
+      <span [matTooltip]="nextTooltip()">
+        <button
+          mat-stroked-button
+          type="button"
+          class="action-next"
+          [disabled]="!hasNextRunnerToPrint()"
+          (click)="loadNextRunner()"
+          #nextButton
+        >
+          <mat-icon>arrow_forward</mat-icon>
+          Επόμενος
+        </button>
+      </span>
     </div>
   </form>
 </section>

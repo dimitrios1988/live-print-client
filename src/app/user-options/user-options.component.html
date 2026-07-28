@@ -1,15 +1,21 @@
-<mat-toolbar color="secondary">
+<mat-toolbar class="user-options-toolbar">
+  <span class="user-options-label">Λειτουργία εκτύπωσης</span>
   <form [formGroup]="userOptionsForm" class="user-options-form">
-    @for (option of options; track option) {
-    <mat-button-toggle-group
-      multiple
-      [formControlName]="option.formControlName"
-      (change)="this.onSelectionChange()"
-    >
-      <mat-button-toggle [value]="option.value">{{
-        option.label
-      }}</mat-button-toggle>
-    </mat-button-toggle-group>
+    @for (option of options; track option.formControlName) {
+      <mat-button-toggle-group
+        multiple
+        class="user-option-group"
+        [formControlName]="option.formControlName"
+        (change)="this.onSelectionChange()"
+      >
+        <mat-button-toggle
+          [value]="option.value"
+          [matTooltip]="option.description"
+        >
+          <mat-icon>{{ option.icon }}</mat-icon>
+          <span class="user-option-text">{{ option.label }}</span>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
     }
-  </form></mat-toolbar
->
+  </form>
+</mat-toolbar>

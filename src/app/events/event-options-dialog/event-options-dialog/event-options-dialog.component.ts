@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -33,10 +33,10 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
   templateUrl: './event-options-dialog.component.html',
   styleUrls: ['./event-options-dialog.component.css'],
 })
-export class EventOptionsDialogComponent implements OnInit {
+export class EventOptionsDialogComponent {
   readonly dialogRef = inject(MatDialogRef<EventOptionsDialogComponent>);
   readonly event = inject<IEvent>(MAT_DIALOG_DATA);
-  printers: Promise<any[]>;
+  printers: Promise<{ name: string; displayName: string }[]>;
   eventSettingsForm: FormGroup;
 
   constructor(printerService: PrinterService, fb: FormBuilder) {
@@ -47,8 +47,6 @@ export class EventOptionsDialogComponent implements OnInit {
       enabled: [this.event.enabled],
     });
   }
-
-  ngOnInit() {}
 
   saveEventSettings() {
     this.event.numberPrinter = this.eventSettingsForm.value.numberPrinter;

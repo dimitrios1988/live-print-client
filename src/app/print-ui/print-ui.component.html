@@ -1,18 +1,24 @@
 <app-user-options></app-user-options>
-<mat-drawer-container [hasBackdrop]="true">
+<mat-drawer-container [hasBackdrop]="false">
   <mat-drawer #sidenav mode="side" [(opened)]="sidemenuOpen">
     <app-events></app-events>
   </mat-drawer>
   <mat-drawer-content>
-    <button
-      mat-icon-button
-      (click)="sidemenuOpen = !sidemenuOpen"
-      color="primary"
-    >
-      <mat-icon>{{ sidemenuOpen ? "close" : "menu" }}</mat-icon>
-    </button>
-    <app-runner-enquiry [events]="selectedEvents"></app-runner-enquiry>
-    <app-runner-status></app-runner-status>
-    <app-runner-info></app-runner-info>
+    <div class="workspace">
+      <div class="workspace-toolbar">
+        <button
+          mat-icon-button
+          type="button"
+          (click)="sidemenuOpen = !sidemenuOpen"
+          [matTooltip]="sidemenuOpen ? 'Απόκρυψη αγώνων' : 'Εμφάνιση αγώνων'"
+          aria-label="Εναλλαγή λίστας αγώνων"
+        >
+          <mat-icon>{{ sidemenuOpen ? "menu_open" : "menu" }}</mat-icon>
+        </button>
+      </div>
+      <app-runner-enquiry [events]="selectedEvents"></app-runner-enquiry>
+      <app-runner-status></app-runner-status>
+      <app-runner-info></app-runner-info>
+    </div>
   </mat-drawer-content>
 </mat-drawer-container>

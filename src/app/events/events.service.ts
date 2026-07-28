@@ -21,6 +21,8 @@ export class EventsService {
   private appName: string = '';
   private apiAddress: string = '';
   private _events: WritableSignal<IEvent[]> = signal([]);
+  private _loading: WritableSignal<boolean> = signal(false);
+  readonly loading: Signal<boolean> = computed(() => this._loading());
   selectedEvents: Signal<IEvent[]> = computed(() =>
     this._events().filter((e) => e.enabled),
   ) as Signal<IEvent[]>;
@@ -43,6 +45,7 @@ export class EventsService {
   }
 
   getEvents(): void {
+    this._loading.set(true);
     this.httpClient
       .get<
         IGetEventResponse[]
@@ -95,6 +98,10 @@ export class EventsService {
               } as IEvent;
             }),
           );
+          this._loading.set(false);
+        },
+        error: () => {
+          this._loading.set(false);
         },
       });
   }

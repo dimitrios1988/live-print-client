@@ -1,7 +1,16 @@
-@if (runnerPrintStatus == "Ok") {
-  <div class="ready"><span>Έτοιμο Για Εκτύπωση</span></div>
-} @else if (runnerPrintStatus == "AlreadyPrinted") {
-  <div class="printed"><span>Ο Δρομέας Έχει Εκτυπωθεί</span></div>
-} @else if (runnerPrintStatus == "NotFound") {
-  <div class="not-found"><span>Δε βρέθηκε Δρομέας</span></div>
+@if (runnerPrintStatus === RunnerPrintStatus.NOT_PRINTED) {
+  <div class="status-band status-ready">
+    <mat-icon>check_circle</mat-icon>
+    <span>Έτοιμο Για Εκτύπωση</span>
+  </div>
+} @else if (runnerPrintStatus === RunnerPrintStatus.ALREADY_PRINTED) {
+  <div class="status-band status-printed">
+    <mat-icon>history</mat-icon>
+    <span>Ο Δρομέας Έχει Εκτυπωθεί</span>
+  </div>
+} @else if (runnerPrintStatus === RunnerPrintStatus.NOT_FOUND) {
+  <div class="status-band status-not-found">
+    <mat-icon>error</mat-icon>
+    <span>Δε βρέθηκε Δρομέας</span>
+  </div>
 }

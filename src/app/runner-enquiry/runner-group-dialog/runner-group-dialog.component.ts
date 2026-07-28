@@ -15,6 +15,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+
+type GroupedRunner = IRunner & { selected: boolean };
+
 @Component({
   selector: 'app-runner-group-dialog',
   imports: [
@@ -36,7 +39,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 export class RunnerGroupDialogComponent {
   private readonly dialogRef = inject(MatDialogRef<RunnerGroupDialogComponent>);
   public data: IRunner[] = inject(MAT_DIALOG_DATA);
-  public runnersGroupedByEventArray: any[] = [];
+  public runnersGroupedByEventArray: GroupedRunner[][] = [];
   displayedColumns: string[] = [
     'selected',
     'bib',
@@ -49,26 +52,19 @@ export class RunnerGroupDialogComponent {
 
   constructor() {
     const runnersGroupedByEvent = this.data
-      .sort((r1, r2) => {
-        return (r1.bib ?? 0) - (r2.bib ?? 0);
-      })
-      .map<any>((runner: IRunner) => {
-        if (runner.is_printed === true) {
-          return { ...runner, selected: false };
-        } else {
-          return { ...runner, selected: true };
-        }
-      })
-      .reduce((groups, runner) => {
+      .sort((r1, r2) => (r1.bib ?? 0) - (r2.bib ?? 0))
+      .map<GroupedRunner>((runner: IRunner) => ({
+        ...runner,
+        selected: runner.is_printed !== true,
+      }))
+      .reduce<Record<number, GroupedRunner[]>>((groups, runner) => {
         const group = groups[runner.event_id] || [];
         group.push(runner);
         groups[runner.event_id] = group;
         return groups;
       }, {});
     this.runnersGroupedByEventArray = Object.keys(runnersGroupedByEvent).map(
-      (key: string) => {
-        return runnersGroupedByEvent[Number(key)];
-      },
+      (key: string) => runnersGroupedByEvent[Number(key)],
     );
   }
 
@@ -77,69 +73,49 @@ export class RunnerGroupDialogComponent {
   }
 
   onLoadRunnersClick(): void {
-    let runnersToPrint = [...this.runnersGroupedByEventArray].flatMap((r) => {
-      return r
-        .filter((t: any) => t.selected)
-        .map((t: any) => {
-          delete t.selected;
-          return t;
-        });
-    });
-    runnersToPrint = runnersToPrint.sort((r1, r2) => {
-      return (r1.bib ?? 0) - (r2.bib ?? 0);
-    });
+    const runnersToPrint = this.runnersGroupedByEventArray
+      .flatMap((group) => group.filter((runner) => runner.selected))
+      .map(({ selected, ...runner }) => runner as IRunner)
+      .sort((r1, r2) => (r1.bib ?? 0) - (r2.bib ?? 0));
     this.dialogRef.close(runnersToPrint);
   }
 
-  partiallySelected(groupOfRunners: any) {
-    const runnersSelected = groupOfRunners.filter((r: any) => r.selected);
+  partiallySelected(groupOfRunners: GroupedRunner[]): boolean {
+    const selectedCount = groupOfRunners.filter((r) => r.selected).length;
+    return selectedCount > 0 && selectedCount < groupOfRunners.length;
+  }
+
+  allSelected(groupOfRunners: GroupedRunner[]): boolean {
     return (
-      runnersSelected.length > 0 &&
-      runnersSelected.length != groupOfRunners.length &&
-      groupOfRunners.length > 0
+      groupOfRunners.length > 0 && groupOfRunners.every((r) => r.selected)
     );
   }
 
-  allSelected(groupOfRunners: any) {
-    const runnersSelected = groupOfRunners.filter((r: any) => r.selected);
-    return (
-      runnersSelected.length === groupOfRunners.length &&
-      groupOfRunners.length > 0
-    );
-  }
-  updateSelectedRunners(checked: boolean, groupOfRunners: any) {
-    if (checked) {
-      groupOfRunners = groupOfRunners.map((r: any) => {
-        r.selected = true;
-        return r;
-      });
-    } else {
-      groupOfRunners = groupOfRunners.map((r: any) => {
-        r.selected = false;
-        return r;
-      });
-    }
+  updateSelectedRunners(checked: boolean, groupOfRunners: GroupedRunner[]): void {
+    groupOfRunners.forEach((runner) => (runner.selected = checked));
   }
 
   hasRunnersSelected(): boolean {
-    return (
-      [...this.runnersGroupedByEventArray].flatMap((r) => {
-        return r.filter((t: any) => t.selected);
-      }).length > 0
+    return this.runnersGroupedByEventArray.some((group) =>
+      group.some((runner) => runner.selected),
     );
   }
 
-  getNumberOfEventSelectedRunners(groupOfRunners: any[]) {
-    return groupOfRunners.filter((r: any) => r.selected).length;
+  getNumberOfEventSelectedRunners(groupOfRunners: GroupedRunner[]): number {
+    return groupOfRunners.filter((r) => r.selected).length;
   }
-  getNumberOfTotalSelectedRunners() {
-    return [...this.runnersGroupedByEventArray].flatMap((r) => {
-      return r.filter((t: any) => t.selected);
-    }).length;
+
+  getNumberOfTotalSelectedRunners(): number {
+    return this.runnersGroupedByEventArray.reduce(
+      (total, group) => total + group.filter((r) => r.selected).length,
+      0,
+    );
   }
-  getNumberOfTotalRunners() {
-    return [...this.runnersGroupedByEventArray].flatMap((r) => {
-      return r;
-    }).length;
+
+  getNumberOfTotalRunners(): number {
+    return this.runnersGroupedByEventArray.reduce(
+      (total, group) => total + group.length,
+      0,
+    );
   }
 }

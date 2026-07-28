@@ -1,19 +1,64 @@
 .event-container {
   display: flex;
   flex-direction: column;
-  gap: 40px;
-  padding-bottom: 15px;
-}
-
-.virtual-scroll-viewport {
-  height: 450px;
-  width: 100%;
+  gap: var(--app-gap-lg);
+  padding-bottom: var(--app-gap-md);
 }
 
 .athletes-group-container {
-  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-gap-sm);
 }
 
-table {
+.group-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--app-gap-md);
+}
+
+.group-heading h3 {
+  margin: 0;
+  font: var(--mat-sys-title-small);
+}
+
+.group-count {
+  font: var(--mat-sys-label-large);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.virtual-scroll-viewport {
+  height: min(50vh, 450px);
   width: 100%;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--app-radius);
+}
+
+.group-table {
+  width: 100%;
+  background: transparent;
+}
+
+.mat-column-selected,
+.mat-column-gender {
+  width: 72px;
+}
+
+.mat-column-bib,
+.mat-column-nationality,
+.mat-column-is_printed {
+  width: 110px;
+}
+
+.icon-printed {
+  color: var(--app-success);
+}
+
+.icon-pending {
+  color: var(--mat-sys-outline);
+}
+
+.group-total {
+  margin-top: var(--app-gap-md);
 }

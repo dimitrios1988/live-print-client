@@ -3,15 +3,17 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { IRunner } from '../runner-enquiry/interfaces/runner.interface';
 import { RunnerPrintStatus } from '../runner-status/runner-print-status.enum';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-secondary',
   templateUrl: './secondary.component.html',
   styleUrls: ['./secondary.component.css'],
-  imports: [MatDividerModule, CommonModule],
+  imports: [MatDividerModule, MatIconModule, CommonModule],
   providers: [DatePipe],
 })
 export class SecondaryComponent implements OnInit {
+  readonly RunnerPrintStatus = RunnerPrintStatus;
   runner: IRunner | null = null;
   runnerPrintStatus: RunnerPrintStatus | null = null;
 

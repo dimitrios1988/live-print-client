@@ -1,20 +1,26 @@
 .settings-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--app-gap-md);
 }
 
 .settings-section {
   display: flex;
   flex-direction: column;
+  gap: var(--app-gap-sm);
+}
+
+.settings-section h3 {
+  margin: 0 0 var(--app-gap-xs);
+  font: var(--mat-sys-title-small);
 }
 
 .settings-section mat-form-field {
-  margin-bottom: 10px;
+  width: 100%;
 }
 
 #registration-icon {
-    position: absolute;
-    right: 10px;
-    top: 10px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
 }

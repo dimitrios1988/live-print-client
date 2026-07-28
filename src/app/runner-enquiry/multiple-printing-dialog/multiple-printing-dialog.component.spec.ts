@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogRef } from '@angular/material/dialog';
 
 import { MultiplePrintingDialogComponent } from './multiple-printing-dialog.component';
 
@@ -8,9 +9,9 @@ describe('MultiplePrintingDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MultiplePrintingDialogComponent]
-    })
-    .compileComponents();
+      imports: [MultiplePrintingDialogComponent],
+      providers: [{ provide: MatDialogRef, useValue: { close: () => {} } }],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MultiplePrintingDialogComponent);
     component = fixture.componentInstance;

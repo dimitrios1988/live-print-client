@@ -1,25 +1,57 @@
-<div class="header-container">
-  <h3>Αγώνες</h3>
-  <button mat-icon-button (click)="refreshEvents()">
-    <mat-icon>refresh</mat-icon>
-  </button>
-</div>
-<mat-list>
-  @for (event of events; track event){
-  <div class="event-item-container">
-    @if (event.enabled) {
-    <mat-icon color="primary">check</mat-icon>
-    } @else {
-    <mat-icon color="warn">close</mat-icon>
-    }
-    <mat-list-item class="event-title">{{ event.name }}</mat-list-item>
+<div class="events-panel">
+  <div class="events-header">
+    <h2>Αγώνες</h2>
     <button
       mat-icon-button
-      aria-label="Open event options"
-      (click)="openEventOptionsDialog(event)"
+      type="button"
+      (click)="refreshEvents()"
+      matTooltip="Ανανέωση αγώνων"
+      aria-label="Ανανέωση αγώνων"
     >
-      <mat-icon>open_in_new</mat-icon>
+      <mat-icon>refresh</mat-icon>
     </button>
   </div>
+
+  @if (loading() && events.length === 0) {
+    <div class="events-placeholder">
+      <mat-spinner diameter="36"></mat-spinner>
+      <span>Φόρτωση αγώνων…</span>
+    </div>
+  } @else if (events.length === 0) {
+    <div class="events-placeholder">
+      <mat-icon class="placeholder-icon">event_busy</mat-icon>
+      <span>Δεν βρέθηκαν αγώνες.</span>
+      <button mat-stroked-button type="button" (click)="refreshEvents()">
+        <mat-icon>refresh</mat-icon>
+        Ανανέωση
+      </button>
+    </div>
+  } @else {
+    <div class="events-list">
+      @for (event of events; track event.id) {
+        <div class="event-item" [class.event-item--active]="event.enabled">
+          <mat-slide-toggle
+            [checked]="event.enabled"
+            (change)="toggleEvent(event, $event.checked)"
+            [matTooltip]="
+              event.enabled
+                ? 'Απενεργοποίηση για εκτύπωση'
+                : 'Ενεργοποίηση για εκτύπωση'
+            "
+          >
+            <span class="event-name">{{ event.name }}</span>
+          </mat-slide-toggle>
+          <button
+            mat-icon-button
+            type="button"
+            aria-label="Επιλογές εκτύπωσης αγώνα"
+            matTooltip="Επιλογές εκτύπωσης"
+            (click)="openEventOptionsDialog(event)"
+          >
+            <mat-icon>tune</mat-icon>
+          </button>
+        </div>
+      }
+    </div>
   }
-</mat-list>
+</div>

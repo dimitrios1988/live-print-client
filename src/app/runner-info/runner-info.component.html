@@ -1,54 +1,67 @@
 @if (runner !== null && runner !== undefined) {
-  <div class="runner-info-container">
+  <div class="runner-info-card">
     <div class="runner-info-header">
-      <div>
-        <strong class="runner-info-header-title">Block</strong>
-        <span>{{ runner.block }}</span>
+      <div class="header-cell">
+        <span class="header-label">Block</span>
+        <span class="header-value">{{ runner.block }}</span>
       </div>
       <mat-divider [vertical]="true"></mat-divider>
-      <div>
-        <strong class="runner-info-header-title">Bib</strong>
-        <span>{{ runner.bib }}</span>
+      <div class="header-cell header-cell--bib">
+        <span class="header-label">Bib</span>
+        <span class="header-value">{{ runner.bib }}</span>
       </div>
       <mat-divider [vertical]="true"></mat-divider>
-      <div>
-        <strong class="runner-info-header-title">Αγώνας</strong>
-        <span>{{ runner.event_name }}</span>
+      <div class="header-cell header-cell--event">
+        <span class="header-label">Αγώνας</span>
+        <span class="header-value">{{ runner.event_name }}</span>
       </div>
     </div>
-    <div class="runner-info-content">
-      <div class="runner-info-content-header">
-        <strong>Όνομα</strong>
-        <strong>Όνομα Πατρός</strong>
-        <strong>Ημ/νία Γέννησης</strong>
-        <strong>Ηλικιακή Κατηγορία</strong>
-        <strong>Φύλο</strong>
-        <strong>Εθνικότητα</strong>
-        <strong>Σύλλογος</strong>
-        <strong>Ομάδα</strong>
+
+    <dl class="runner-info-details">
+      <div class="detail-row">
+        <dt>Όνομα</dt>
+        <dd>{{ runner.first_name }} {{ runner.last_name }}</dd>
       </div>
-      <mat-divider [vertical]="true"></mat-divider>
-      <div class="runner-info-content-data">
-        <span>{{ runner.first_name }} {{ runner.last_name }}</span>
-        <span>{{ runner.fathers_name }}</span>
-        <span>{{ runner.birthdate | date: "dd/MM/yyyy" }}</span>
-        <span>{{ runner.age_group }}</span>
-        <span>{{ runner.gender }}</span>
-        <span>{{ runner.nationality }}</span>
-        <span>{{ runner.club }}</span>
-        <span>{{ runner.group_name }}</span>
+      <div class="detail-row">
+        <dt>Όνομα Πατρός</dt>
+        <dd>{{ runner.fathers_name }}</dd>
       </div>
-      <qrcode
-        style="display: none"
-        #chip2goqrcode
-        [qrdata]="runner.chip_2_go_data"
-        [width]="900"
-        [errorCorrectionLevel]="'H'"
-        [colorDark]="'#000000'"
-        [colorLight]="'#ffffff'"
-        [margin]="5"
-        (qrCodeURL)="qrChanged()"
-      ></qrcode>
-    </div>
+      <div class="detail-row">
+        <dt>Ημ/νία Γέννησης</dt>
+        <dd>{{ runner.birthdate | date: "dd/MM/yyyy" }}</dd>
+      </div>
+      <div class="detail-row">
+        <dt>Ηλικιακή Κατηγορία</dt>
+        <dd>{{ runner.age_group }}</dd>
+      </div>
+      <div class="detail-row">
+        <dt>Φύλο</dt>
+        <dd>{{ runner.gender }}</dd>
+      </div>
+      <div class="detail-row">
+        <dt>Εθνικότητα</dt>
+        <dd>{{ runner.nationality }}</dd>
+      </div>
+      <div class="detail-row">
+        <dt>Σύλλογος</dt>
+        <dd>{{ runner.club }}</dd>
+      </div>
+      <div class="detail-row">
+        <dt>Ομάδα</dt>
+        <dd>{{ runner.group_name }}</dd>
+      </div>
+    </dl>
+
+    <qrcode
+      class="hidden-qr"
+      #chip2goqrcode
+      [qrdata]="runner.chip_2_go_data"
+      [width]="900"
+      [errorCorrectionLevel]="'H'"
+      [colorDark]="'#000000'"
+      [colorLight]="'#ffffff'"
+      [margin]="5"
+      (qrCodeURL)="qrChanged()"
+    ></qrcode>
   </div>
 }

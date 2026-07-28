@@ -2,20 +2,38 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-}
-
-mat-drawer {
-  padding: 10px;
+  min-height: 0;
 }
 
 mat-drawer-container {
   flex-grow: 1;
+  background: var(--mat-sys-surface-container);
+}
+
+mat-drawer {
+  width: 320px;
+  border-right: 1px solid var(--mat-sys-outline-variant);
+  background: var(--mat-sys-surface);
+  padding: 0;
 }
 
 mat-drawer-content {
-  background-color: white;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 10px;
+}
+
+.workspace {
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-gap-md);
+  padding: var(--app-gap-md);
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.workspace-toolbar {
+  display: flex;
+  align-items: center;
 }

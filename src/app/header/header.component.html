@@ -1,6 +1,22 @@
 <mat-toolbar class="liveprint-toolbar">
+  <mat-icon class="brand-icon" aria-hidden="true">directions_run</mat-icon>
+  <span class="app-name">{{ appName() }}</span>
   <span class="spacer"></span>
-  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="More options">
+  <button
+    style="display: none"
+    mat-icon-button
+    (click)="onSettingsClicked()"
+    matTooltip="Ρυθμίσεις"
+    aria-label="Ρυθμίσεις"
+  >
+    <mat-icon>settings</mat-icon>
+  </button>
+  <button
+    mat-icon-button
+    [matMenuTriggerFor]="menu"
+    matTooltip="Περισσότερα"
+    aria-label="Περισσότερες επιλογές"
+  >
     <mat-icon>more_vert</mat-icon>
   </button>
   <mat-menu #menu="matMenu">

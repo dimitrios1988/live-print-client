@@ -25,7 +25,6 @@ import { CommonModule, DatePipe } from '@angular/common';
   ],
   providers: [DatePipe],
   templateUrl: './multiple-printing-dialog.component.html',
-  styleUrl: './multiple-printing-dialog.component.css',
 })
 export class MultiplePrintingDialogComponent {
   public runnerForPrint: IRunner | null | undefined = null;
