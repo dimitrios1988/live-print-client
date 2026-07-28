@@ -13,18 +13,23 @@ export class RunnerStatusComponent {
   readonly RunnerPrintStatus = RunnerPrintStatus;
   runnerPrintStatus: RunnerPrintStatus | null = null;
 
+  public receivesAsGroup: boolean = false;
+
   constructor(private runnerPrinterService: RunnerPrinterService) {
     effect(() => {
       const runner = this.runnerPrinterService.runnerForPrint();
       if (runner === null) {
         this.runnerPrintStatus = null;
+        this.receivesAsGroup = false;
       } else if (runner !== undefined) {
+        this.receivesAsGroup = runner.receives_as_a_group;
         if (runner.is_printed == true) {
           this.runnerPrintStatus = RunnerPrintStatus.ALREADY_PRINTED;
         } else if (runner.is_printed == false) {
           this.runnerPrintStatus = RunnerPrintStatus.NOT_PRINTED;
         }
       } else {
+        this.receivesAsGroup = false;
         this.runnerPrintStatus = RunnerPrintStatus.NOT_FOUND;
       }
     });

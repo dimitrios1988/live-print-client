@@ -1,3 +1,9 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-gap-sm);
+}
+
 .status-band {
   display: flex;
   align-items: center;
