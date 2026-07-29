@@ -1,4 +1,7 @@
 <mat-toolbar class="user-options-toolbar">
+  <!-- Slot for chrome controls (e.g. the events drawer toggle) so they ride in
+       this existing row instead of costing the workspace another 64px band. -->
+  <ng-content></ng-content>
   <span class="user-options-label">Λειτουργία εκτύπωσης</span>
   <form [formGroup]="userOptionsForm" class="user-options-form">
     @for (option of options; track option.formControlName) {

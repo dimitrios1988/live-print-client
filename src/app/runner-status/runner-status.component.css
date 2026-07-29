@@ -9,17 +9,17 @@
   align-items: center;
   justify-content: center;
   gap: var(--app-gap-sm);
-  padding: var(--app-gap-md) var(--app-gap-lg);
+  padding: var(--app-gap-sm) var(--app-gap-md);
   border-radius: var(--app-radius);
-  font-size: 1.75rem;
+  font-size: 1.4rem;
   font-weight: 600;
   text-align: center;
 }
 
 .status-band mat-icon {
-  width: 2.25rem;
-  height: 2.25rem;
-  font-size: 2.25rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 1.75rem;
 }
 
 .status-ready {
