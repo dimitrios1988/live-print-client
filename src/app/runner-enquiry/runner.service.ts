@@ -25,7 +25,7 @@ export class RunnerService {
     });
   }
 
-  getRunner2(bib: number, eventids: number[]): Observable<IRunner | undefined> {
+  getRunner(bib: number, eventids: number[]): Observable<IRunner | undefined> {
     const obs = eventids.map((eventid) => {
       const data = { bib, event: eventid };
       return this.httpClient.get<IGetRunnerResponse[]>(
