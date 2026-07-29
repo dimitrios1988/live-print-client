@@ -19,7 +19,7 @@ import {
 import { SettingsService } from './settings.service';
 
 import { MatIconModule } from '@angular/material/icon';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { LicenseRegistrationComponent } from '../../license-registration/license-registration.component';
 import { DIALOG_SIZE } from '../../shared/dialog.config';
 @Component({
@@ -35,7 +35,7 @@ import { DIALOG_SIZE } from '../../shared/dialog.config';
     ReactiveFormsModule,
     MatInputModule,
     MatIconModule,
-    MatCheckboxModule,
+    MatSlideToggleModule,
   ],
   templateUrl: './settings-dialog.component.html',
   styleUrl: './settings-dialog.component.css',
