@@ -97,7 +97,7 @@ export class RunnerEnquiryComponent {
           });
       } else {
         this.runnerService
-          .getRunner2(
+          .getRunner(
             Number(this.enquryForm.value.raceNumber),
             this.events.map((e) => e.id),
           )
