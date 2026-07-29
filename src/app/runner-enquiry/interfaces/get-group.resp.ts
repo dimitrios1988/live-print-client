@@ -42,6 +42,7 @@ interface _3gender {
 interface _2event {
   allow_reprinting: boolean;
   printed_text: string | null;
+  printed_text_en: string | null;
   id: number;
   name: string;
 }
