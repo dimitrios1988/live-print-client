@@ -2,7 +2,7 @@
   <form [formGroup]="enquryForm" (ngSubmit)="onSubmit()" class="enquiry-form">
     <mat-form-field appearance="outline" class="race-number-field">
       <mat-label>Αριθμός Δρομέα</mat-label>
-      <mat-icon matPrefix>tag</mat-icon>
+      <mat-icon matPrefix>pin</mat-icon>
       <input
         matInput
         formControlName="raceNumber"
@@ -12,7 +12,9 @@
         title="Αριθμός Δρομέα"
         #raceNumber
       />
-      <mat-hint>Για ομάδα: πληκτρολογήστε $ και τον κωδικό (π.χ. $1234)</mat-hint>
+      <mat-hint
+        >Για ομάδα: πληκτρολογήστε $ και τον κωδικό (π.χ. $1234)</mat-hint
+      >
     </mat-form-field>
 
     <div class="enquiry-actions">
@@ -38,7 +40,8 @@
           [disabled]="
             runnerPrinterService.runnerForPrint() === null ||
             runnerPrinterService.runnerForPrint() === undefined ||
-            (runnerPrinterService.runnerForPrint()?.allow_reprinting === false &&
+            (runnerPrinterService.runnerForPrint()?.allow_reprinting ===
+              false &&
               runnerPrinterService.runnerForPrint()?.is_printed === true) ||
             hasSelectToPrint() === false ||
             printingTimeout
