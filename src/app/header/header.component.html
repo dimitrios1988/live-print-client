@@ -4,15 +4,6 @@
   <span class="app-name">{{ appName() }}</span>
   <span class="spacer"></span>
   <button
-    style="display: none"
-    mat-icon-button
-    (click)="onSettingsClicked()"
-    matTooltip="Ρυθμίσεις"
-    aria-label="Ρυθμίσεις"
-  >
-    <mat-icon>settings</mat-icon>
-  </button>
-  <button
     mat-icon-button
     [matMenuTriggerFor]="menu"
     matTooltip="Περισσότερα"
