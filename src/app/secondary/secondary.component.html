@@ -10,12 +10,12 @@
   @if (runnerPrintStatus === RunnerPrintStatus.ALREADY_PRINTED) {
     <div class="banner banner--warning">
       <mat-icon>history</mat-icon>
-      <span>Έχει Εκτυπωθεί</span>
+      <span>{{ t().alreadyPrinted }}</span>
     </div>
   } @else if (runnerPrintStatus === RunnerPrintStatus.NOT_FOUND) {
     <div class="banner banner--error">
       <mat-icon>error</mat-icon>
-      <span>Δε βρέθηκε Δρομέας</span>
+      <span>{{ t().notFound }}</span>
     </div>
   }
 
@@ -25,42 +25,42 @@
     (runnerPrintStatus === RunnerPrintStatus.NOT_PRINTED ||
       runnerPrintStatus === RunnerPrintStatus.ALREADY_PRINTED)
   ) {
-    <div class="event-info">{{ runner.event_name }}</div>
+    <div class="event-info">{{ eventName }}</div>
 
     <div class="bib-header">
       <div class="bib-block">
-        <span class="bib-label">Bib</span>
+        <span class="bib-label">{{ t().bib }}</span>
         <span class="bib-value">{{ runner.bib }}</span>
       </div>
       <mat-divider [vertical]="true"></mat-divider>
       <div class="block-block">
-        <span class="block-value">Block {{ runner.block }}</span>
+        <span class="block-value">{{ t().block }} {{ runner.block }}</span>
       </div>
     </div>
 
     <dl class="runner-details">
       <div class="detail-row">
-        <dt>Όνομα</dt>
+        <dt>{{ t().name }}</dt>
         <dd>{{ runner.first_name }} {{ runner.last_name }}</dd>
       </div>
       <div class="detail-row">
-        <dt>Όνομα Πατρός</dt>
+        <dt>{{ t().fathersName }}</dt>
         <dd>{{ runner.fathers_name }}</dd>
       </div>
       <div class="detail-row">
-        <dt>Ημ/νία Γέννησης</dt>
+        <dt>{{ t().birthdate }}</dt>
         <dd>{{ runner.birthdate | date: "dd/MM/yyyy" }}</dd>
       </div>
       <div class="detail-row">
-        <dt>Φύλο</dt>
+        <dt>{{ t().gender }}</dt>
         <dd>{{ runner.gender }}</dd>
       </div>
       <div class="detail-row">
-        <dt>Σύλλογος</dt>
+        <dt>{{ t().club }}</dt>
         <dd>{{ runner.club }}</dd>
       </div>
       <div class="detail-row">
-        <dt>Εθνικότητα</dt>
+        <dt>{{ t().nationality }}</dt>
         <dd>{{ runner.nationality }}</dd>
       </div>
     </dl>
