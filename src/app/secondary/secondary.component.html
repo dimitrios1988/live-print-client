@@ -7,15 +7,26 @@
     <img class="brand-badge" src="assets/logo.svg" alt="" />
   }
 
-  @if (runnerPrintStatus === RunnerPrintStatus.ALREADY_PRINTED) {
-    <div class="banner banner--warning">
-      <mat-icon>history</mat-icon>
-      <span>{{ t().alreadyPrinted }}</span>
-    </div>
-  } @else if (runnerPrintStatus === RunnerPrintStatus.NOT_FOUND) {
-    <div class="banner banner--error">
-      <mat-icon>error</mat-icon>
-      <span>{{ t().notFound }}</span>
+  @if (showBanners) {
+    <div class="banners">
+      @if (runnerPrintStatus === RunnerPrintStatus.ALREADY_PRINTED) {
+        <div class="banner banner--warning">
+          <mat-icon>history</mat-icon>
+          <span>{{ t().alreadyPrinted }}</span>
+        </div>
+      } @else if (runnerPrintStatus === RunnerPrintStatus.NOT_FOUND) {
+        <div class="banner banner--error">
+          <mat-icon>error</mat-icon>
+          <span>{{ t().notFound }}</span>
+        </div>
+      }
+
+      @if (receivesAsGroup) {
+        <div class="banner banner--warning banner--group">
+          <mat-icon>group</mat-icon>
+          <span>{{ t().receivesAsGroup }}</span>
+        </div>
+      }
     </div>
   }
 

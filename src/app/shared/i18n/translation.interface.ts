@@ -8,6 +8,7 @@ export type Language = 'el' | 'en';
 export interface ITranslations {
   alreadyPrinted: string;
   notFound: string;
+  receivesAsGroup: string;
   bib: string;
   block: string;
   name: string;

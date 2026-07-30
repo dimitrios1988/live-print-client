@@ -39,6 +39,20 @@ export class SecondaryComponent implements OnInit {
       : this.runner.event_name;
   }
 
+  /** True when a runner is loaded and picks up as part of a group. */
+  get receivesAsGroup(): boolean {
+    return this.runner?.receives_as_a_group === true;
+  }
+
+  /** Whether any banner is shown — keeps the banner row out of the flex flow when empty. */
+  get showBanners(): boolean {
+    return (
+      this.runnerPrintStatus === RunnerPrintStatus.ALREADY_PRINTED ||
+      this.runnerPrintStatus === RunnerPrintStatus.NOT_FOUND ||
+      this.receivesAsGroup
+    );
+  }
+
   ngOnInit() {
     (window as any).electronAPI.onReceiveData((data: IRunner) => {
       this.ngZone.run(() => {
