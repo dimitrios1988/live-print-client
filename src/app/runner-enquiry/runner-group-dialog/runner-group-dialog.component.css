@@ -1,3 +1,13 @@
+:host {
+  /* Must stay in sync with ROW_HEIGHT in the component: the fixed-size virtual
+     scroll strategy positions rows arithmetically from that number. */
+  --row-height: 48px;
+  --table-columns: 56px 80px minmax(0, 1.4fr) minmax(0, 1.4fr) 110px 72px 120px;
+  /* Pinned rather than left to the platform, so the header row (which sits
+     outside the scrolling viewport) can reserve exactly the same gutter. */
+  --scrollbar-width: 10px;
+}
+
 .event-container {
   display: flex;
   flex-direction: column;
@@ -28,27 +38,70 @@
   color: var(--mat-sys-on-surface-variant);
 }
 
-.virtual-scroll-viewport {
-  height: min(50vh, 450px);
-  width: 100%;
+/* Frames the sticky header row and the viewport as a single table. */
+.group-table {
   border: 1px solid var(--mat-sys-outline-variant);
   border-radius: var(--app-radius);
+  overflow: hidden;
 }
 
-.group-table {
+.virtual-scroll-viewport {
   width: 100%;
-  background: transparent;
+  /* height is bound per group so short events don't render a half-empty box */
 }
 
-.mat-column-selected,
-.mat-column-gender {
-  width: 72px;
+.virtual-scroll-viewport::-webkit-scrollbar {
+  width: var(--scrollbar-width);
 }
 
-.mat-column-bib,
-.mat-column-nationality,
-.mat-column-is_printed {
-  width: 110px;
+.virtual-scroll-viewport::-webkit-scrollbar-thumb {
+  background: var(--mat-sys-outline-variant);
+  border-radius: calc(var(--scrollbar-width) / 2);
+}
+
+.virtual-scroll-viewport::-webkit-scrollbar-thumb:hover {
+  background: var(--mat-sys-outline);
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: var(--table-columns);
+  align-items: center;
+  gap: var(--app-gap-sm);
+  height: var(--row-height);
+  box-sizing: border-box;
+  padding: 0 var(--app-gap-md);
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.table-row > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.table-header {
+  font: var(--mat-sys-title-small);
+  color: var(--mat-sys-on-surface-variant);
+  background: var(--mat-sys-surface-container-low);
+}
+
+/* Keeps the header columns aligned with the rows once the viewport scrolls. */
+.table-header.has-scrollbar {
+  padding-right: calc(var(--app-gap-md) + var(--scrollbar-width));
+}
+
+/* Checkbox and icon cells centre their control instead of sitting on the text
+   baseline; they opt out of the ellipsis treatment the text cells need. */
+.cell-select,
+.cell-icon {
+  display: flex;
+  align-items: center;
+  overflow: visible;
+}
+
+.virtual-scroll-viewport .table-row:hover {
+  background: var(--mat-sys-surface-container-highest);
 }
 
 .icon-printed {
@@ -59,6 +112,11 @@
   color: var(--mat-sys-outline);
 }
 
+/* Lives in the actions bar, which never scrolls. margin-right: auto pins it left
+   while align="end" keeps the buttons on the right. */
 .group-total {
-  margin-top: var(--app-gap-md);
+  margin-right: auto;
+  padding-left: var(--app-gap-sm);
+  font: var(--mat-sys-label-large);
+  color: var(--mat-sys-on-surface-variant);
 }
