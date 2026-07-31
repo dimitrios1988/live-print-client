@@ -1,46 +1,79 @@
 <div class="secondary-screen">
-  @if (runnerPrintStatus == "AlreadyPrinted") {
-    <div class="printed"><span>Έχει Εκτυπωθεί</span></div>
-  } @else if (runnerPrintStatus == "NotFound") {
-    <div class="not-found"><span>Δε βρέθηκε Δρομέας</span></div>
+  @if (runnerPrintStatus === null) {
+    <div class="idle-brand">
+      <img src="assets/logo.svg" alt="" />
+    </div>
+  } @else {
+    <img class="brand-badge" src="assets/logo.svg" alt="" />
+  }
+
+  @if (showBanners) {
+    <div class="banners">
+      @if (runnerPrintStatus === RunnerPrintStatus.ALREADY_PRINTED) {
+        <div class="banner banner--error banner--group">
+          <mat-icon>history</mat-icon>
+          <span>{{ t().alreadyPrinted }}</span>
+        </div>
+      } @else if (runnerPrintStatus === RunnerPrintStatus.NOT_FOUND) {
+        <div class="banner banner--error">
+          <mat-icon>error</mat-icon>
+          <span>{{ t().notFound }}</span>
+        </div>
+      }
+
+      @if (receivesAsGroup) {
+        <div class="banner banner--warning banner--group">
+          <mat-icon>group</mat-icon>
+          <span>{{ t().receivesAsGroup }}</span>
+        </div>
+      }
+    </div>
   }
 
   @if (
     runner !== null &&
     runner !== undefined &&
-    (runnerPrintStatus === "Ok" || runnerPrintStatus === "AlreadyPrinted")
+    (runnerPrintStatus === RunnerPrintStatus.NOT_PRINTED ||
+      runnerPrintStatus === RunnerPrintStatus.ALREADY_PRINTED)
   ) {
-    <div class="event-info">
-      <span>{{ runner.event_name }}</span>
-    </div>
-    <div class="runner-info-header">
-      <div>
-        <strong class="runner-info-header-title">Bib</strong>
-        <span class="runner-info-header-data">{{ runner.bib }}</span>
+    <div class="event-info">{{ eventName }}</div>
+
+    <div class="bib-header">
+      <div class="bib-block">
+        <span class="bib-label">{{ t().bib }}</span>
+        <span class="bib-value">{{ runner.bib }}</span>
       </div>
       <mat-divider [vertical]="true"></mat-divider>
-      <div>
-        <span class="runner-info-header-data">Block {{ runner.block }}</span>
+      <div class="block-block">
+        <span class="block-value">{{ t().block }} {{ runner.block }}</span>
       </div>
     </div>
-    <div class="runner-info-content">
-      <div class="runner-info-content-header">
-        <span>Όνομα</span>
-        <span>Όνομα Πατρός</span>
-        <span>Ημ/νία Γέννησης</span>
-        <span>Φύλο</span>
-        <span>Σύλλογος</span>
-        <span>Εθνικότητα</span>
+
+    <dl class="runner-details">
+      <div class="detail-row">
+        <dt>{{ t().name }}</dt>
+        <dd>{{ runner.first_name }} {{ runner.last_name }}</dd>
       </div>
-      <mat-divider [vertical]="true"></mat-divider>
-      <div class="runner-info-content-data">
-        <strong>{{ runner.first_name }} {{ runner.last_name }}</strong>
-        <strong>{{ runner.fathers_name }}</strong>
-        <strong>{{ runner.birthdate | date: "dd/MM/yyyy" }}</strong>
-        <strong>{{ runner.gender }}</strong>
-        <strong>{{ runner.club }}</strong>
-        <strong>{{ runner.nationality }}</strong>
+      <div class="detail-row">
+        <dt>{{ t().fathersName }}</dt>
+        <dd>{{ runner.fathers_name }}</dd>
       </div>
-    </div>
+      <div class="detail-row">
+        <dt>{{ t().birthdate }}</dt>
+        <dd>{{ runner.birthdate | date: "dd/MM/yyyy" }}</dd>
+      </div>
+      <div class="detail-row">
+        <dt>{{ t().gender }}</dt>
+        <dd>{{ runner.gender }}</dd>
+      </div>
+      <div class="detail-row">
+        <dt>{{ t().club }}</dt>
+        <dd>{{ runner.club }}</dd>
+      </div>
+      <div class="detail-row">
+        <dt>{{ t().nationality }}</dt>
+        <dd>{{ runner.nationality }}</dd>
+      </div>
+    </dl>
   }
 </div>

@@ -1,18 +1,14 @@
 .event-settings-form {
   display: flex;
   flex-direction: column;
-  gap:16px;
+  gap: var(--app-gap-md);
 }
 
-.event-settings-section {
+.event-settings-form section {
   display: flex;
   flex-direction: column;
 }
 
-.event-settings-section section {
-  margin-bottom: 10px;
-}
-
-.event-settings-section mat-form-field {
+.event-settings-form mat-form-field {
   width: 100%;
-} 
+}

@@ -4,6 +4,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { EventsComponent } from '../events/events.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RunnerEnquiryComponent } from '../runner-enquiry/runner-enquiry.component';
 import { IEvent } from '../events/interfaces/event.interface';
 import { RunnerStatusComponent } from '../runner-status/runner-status.component';
@@ -17,6 +18,7 @@ import { EventsService } from '../events/events.service';
     EventsComponent,
     MatButtonModule,
     MatIconModule,
+    MatTooltipModule,
     RunnerEnquiryComponent,
     RunnerStatusComponent,
     RunnerInfoComponent,
@@ -25,7 +27,7 @@ import { EventsService } from '../events/events.service';
   styleUrl: './print-ui.component.css',
 })
 export class PrintUiComponent {
-  sidemenuOpen = false;
+  sidemenuOpen = true;
   selectedEvents: IEvent[] = [];
 
   constructor(eventsService: EventsService) {

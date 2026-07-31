@@ -10,6 +10,7 @@ export interface IRunner {
   is_printed: boolean;
   last_name: string | null;
   event_name: string;
+  event_name_en: string | null;
   event_id: number;
   allow_reprinting: boolean;
   tshirt_size: string | null;

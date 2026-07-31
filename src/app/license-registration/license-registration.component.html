@@ -1,75 +1,72 @@
 <h2 mat-dialog-title>Δήλωση Άδειας</h2>
 <mat-dialog-content>
   @if (!isVerified) {
-  <form [formGroup]="licenseForm" (ngSubmit)="registerLicense()">
-    <div class="register-license-section">
-      <mat-form-field appearance="fill" class="full-width">
-        <mat-label>License Key</mat-label>
-        <input
-          matInput
-          formControlName="licenseKey"
-          required
-          placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX"
-        />
-        @if (licenseForm.get('licenseKey')?.invalid &&
-        licenseForm.get('licenseKey')?.touched) {
-        <mat-error>License key is required</mat-error>
-        }
-      </mat-form-field>
+    <form [formGroup]="licenseForm" (ngSubmit)="registerLicense()">
+      <div class="register-license-section">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Κλειδί Άδειας</mat-label>
+          <input
+            matInput
+            formControlName="licenseKey"
+            required
+            placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX"
+          />
+          @if (
+            licenseForm.get('licenseKey')?.invalid &&
+            licenseForm.get('licenseKey')?.touched
+          ) {
+            <mat-error>Το κλειδί άδειας είναι υποχρεωτικό</mat-error>
+          }
+        </mat-form-field>
 
-      <div class="file-input-wrapper">
-        <input
-          #fileInput
-          type="file"
-          accept=".lic"
-          (change)="onFileChange($event)"
-          style="display: none"
-        />
+        <div class="file-input-wrapper">
+          <input
+            #fileInput
+            type="file"
+            accept=".lic"
+            (change)="onFileChange($event)"
+            class="hidden-file-input"
+            title="Αρχείο άδειας"
+          />
+          <button type="button" mat-stroked-button (click)="fileInput.click()">
+            <mat-icon>upload_file</mat-icon>
+            Επιλογή Αρχείου Άδειας
+          </button>
+          @if (selectedFile) {
+            <span class="file-name">{{ selectedFile.name }}</span>
+          }
+        </div>
+
         <button
-          type="button"
-          mat-button
-          (click)="fileInput.click()"
-          color="primary"
+          type="submit"
+          mat-flat-button
+          [disabled]="licenseForm.invalid"
         >
-          Select License File
+          <mat-icon>verified</mat-icon>
+          Δήλωση Άδειας
         </button>
-        @if (selectedFile) {
-        <span class="file-name">{{ selectedFile.name }}</span>
-        }
       </div>
-
-      <button
-        type="submit"
-        mat-raised-button
-        color="primary"
-        [disabled]="licenseForm.invalid"
-      >
-        Register License
+    </form>
+  }
+  @if (isVerified) {
+    <div class="license-section">
+      <div class="license-verified-header">
+        <mat-icon class="license-verified-icon">verified_user</mat-icon>
+        <h2>Επιτυχής Εγγραφή Άδειας</h2>
+      </div>
+      <p>Η άδεια χρήσης έχει εγγραφεί με επιτυχία.</p>
+      <p>Όνομα Χρήστη: {{ licenseUser }}</p>
+      <p>
+        Ημερομηνία Λήξης:
+        {{ licenseExpiryDate | date: "dd/MM/yyyy HH:mm" }}
+      </p>
+      <button type="button" mat-stroked-button (click)="unregisterLicense()">
+        <mat-icon>link_off</mat-icon>
+        Απεγγραφή
       </button>
     </div>
-  </form>
-  } @if(isVerified) {
-  <div class="license-section">
-    <h2>Επιτυχής Εγγραφή Άδειας</h2>
-    <p>Η άδεια χρήσης έχει εγγραφεί με επιτυχία.</p>
-    <p>Όνομα Χρήστη: {{ licenseUser }}</p>
-    <p>
-      Ημερομηνία Λήξης:
-      {{ licenseExpiryDate | date : "hh:mma dd/MM/yyyy" | lowercase }}
-    </p>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      (click)="unregisterLicense()"
-    >
-      Απεγγραφή
-    </button>
-  </div>
   }
 </mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-flat-button mat-dialog-close cdkFocusInitial>
-    Κλείσιμο
-  </button></mat-dialog-actions
->
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close cdkFocusInitial>Κλείσιμο</button>
+</mat-dialog-actions>

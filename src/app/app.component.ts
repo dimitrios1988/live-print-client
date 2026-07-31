@@ -39,6 +39,7 @@ export class AppComponent implements OnInit {
           this.appService.displayMessage(
             'Η επαλήθευση της άδειας απέτυχε. Παρακαλώ δηλώστε το προϊόν για να μπορέσετε να το χρησιμοποιήσετε.',
             5000,
+            'error',
           );
           console.error('License verification failed:', error);
         });

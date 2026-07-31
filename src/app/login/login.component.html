@@ -1,47 +1,70 @@
 <div class="login-container">
   <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Login</mat-card-title>
-        <button
-          mat-icon-button
-          class="example-icon"
-          aria-label="Settings"
-          (click)="onSettingsClicked()"
-          type="button"
-        >
-          <mat-icon fontIcon="settings"></mat-icon>
-        </button>
-      </mat-card-header>
-      <mat-card-content>
-        <mat-form-field appearance="fill">
-          <mat-label>Username</mat-label>
+    <mat-card appearance="outlined" class="login-card">
+      <button
+        mat-icon-button
+        class="settings-button"
+        matTooltip="Ρυθμίσεις"
+        aria-label="Ρυθμίσεις"
+        (click)="onSettingsClicked()"
+        type="button"
+      >
+        <mat-icon>settings</mat-icon>
+      </button>
+      <div class="login-brand">
+        <img class="login-logo" src="assets/logo.svg" alt="" />
+        <h1 class="login-title">LivePrint Client</h1>
+      </div>
+      <mat-card-content class="login-content">
+        <mat-form-field appearance="outline">
+          <mat-label>Όνομα χρήστη</mat-label>
+          <mat-icon matPrefix>person</mat-icon>
           <input
             matInput
             formControlName="username"
             autocomplete="off"
+            title="Όνομα χρήστη"
             required
           />
         </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Password</mat-label>
+        <mat-form-field appearance="outline">
+          <mat-label>Κωδικός</mat-label>
+          <mat-icon matPrefix>lock</mat-icon>
           <input
             matInput
-            type="password"
+            [type]="hidePassword ? 'password' : 'text'"
             formControlName="password"
             autocomplete="off"
+            title="Κωδικός"
             required
           />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hidePassword = !hidePassword"
+            [matTooltip]="
+              hidePassword ? 'Εμφάνιση κωδικού' : 'Απόκρυψη κωδικού'
+            "
+            [attr.aria-label]="
+              hidePassword ? 'Εμφάνιση κωδικού' : 'Απόκρυψη κωδικού'
+            "
+          >
+            <mat-icon>{{
+              hidePassword ? "visibility_off" : "visibility"
+            }}</mat-icon>
+          </button>
         </mat-form-field>
       </mat-card-content>
-      <mat-card-actions>
+      <mat-card-actions class="login-actions">
         <button
-          mat-raised-button
-          color="primary"
+          mat-flat-button
           type="submit"
+          class="login-submit"
           [disabled]="loginForm.invalid"
         >
-          Login
+          <mat-icon>login</mat-icon>
+          Σύνδεση
         </button>
       </mat-card-actions>
     </mat-card>

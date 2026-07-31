@@ -19,8 +19,15 @@ export class AppService {
     this._progressBarActive.set(show);
   }
 
-  displayMessage(message: string, duration: number) {
-    this._snackBar.open(message, 'Κλείσιμο', { duration: duration });
+  displayMessage(
+    message: string,
+    duration: number,
+    type: 'info' | 'success' | 'error' = 'info',
+  ) {
+    this._snackBar.open(message, 'Κλείσιμο', {
+      duration,
+      panelClass: `app-snack-${type}`,
+    });
   }
 
   getAppConfig(): any {

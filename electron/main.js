@@ -168,7 +168,7 @@ async function printBinaryContent(number, printerName) {
       const isWindows = process.platform === "win32";
       let printCommand;
       if (isWindows) {
-        printCommand = `mspaint /pt "${tempFilePath}" "${printerName}"`;
+        printCommand = `powershell -Command "Add-Type -AssemblyName System.Drawing; $i=[System.Drawing.Image]::FromFile('${tempFilePath}'); $p=New-Object System.Drawing.Printing.PrintDocument; $p.PrinterSettings.PrinterName='${printerName}'; $p.add_PrintPage({param($s,$e); $r=$e.MarginBounds; $f=[Math]::Min($r.Width/$i.Width,$r.Height/$i.Height); $w=$i.Width*$f; $h=$i.Height*$f; $e.Graphics.DrawImage($i,[int]($r.X+($r.Width-$w)/2),[int]($r.Y+($r.Height-$h)/2),[int]$w,[int]$h)}); $p.Print(); $i.Dispose()"`;
       } else {
         printCommand = `lp -d "${printerName}" "${tempFilePath}"`;
       }
@@ -259,6 +259,15 @@ function createSecondWindow() {
       path.join(__dirname, "../dist/live-print-client/browser/index.html"),{ hash: '/secondary' },
     );
   } 
+
+  // No application menu (see Menu.setApplicationMenu(null) above), so F11 has no
+  // default accelerator — wire it up manually for the customer-facing display.
+  secondWindow.webContents.on("before-input-event", (event, input) => {
+    if (input.type === "keyDown" && input.key === "F11" && !input.isAutoRepeat) {
+      event.preventDefault();
+      secondWindow.setFullScreen(!secondWindow.isFullScreen());
+    }
+  });
 
   secondWindow.webContents.on("did-finish-load", () => {
     secondWindowReady = true;

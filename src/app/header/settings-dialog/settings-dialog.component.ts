@@ -7,11 +7,9 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatTabsModule } from '@angular/material/tabs';
-import { PrinterService } from '../../printer.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import {
   ReactiveFormsModule,
   FormGroup,
@@ -21,8 +19,9 @@ import {
 import { SettingsService } from './settings.service';
 
 import { MatIconModule } from '@angular/material/icon';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { LicenseRegistrationComponent } from '../../license-registration/license-registration.component';
+import { DIALOG_SIZE } from '../../shared/dialog.config';
 @Component({
   selector: 'app-settings-dialog',
   imports: [
@@ -31,31 +30,25 @@ import { LicenseRegistrationComponent } from '../../license-registration/license
     MatDialogContent,
     MatDialogTitle,
     MatButtonModule,
-    MatTabsModule,
+    MatTooltipModule,
     MatFormFieldModule,
-    MatSelectModule,
     ReactiveFormsModule,
     MatInputModule,
     MatIconModule,
-    MatCheckboxModule,
+    MatSlideToggleModule,
   ],
   templateUrl: './settings-dialog.component.html',
   styleUrl: './settings-dialog.component.css',
 })
 export class SettingsDialogComponent {
-  private readonly dialog: MatDialog;
+  private readonly dialog = inject(MatDialog);
 
-  printers: Promise<any[]>;
   settingsForm: FormGroup;
 
   constructor(
-    printerService: PrinterService,
     private settingsService: SettingsService,
     fb: FormBuilder,
   ) {
-    this.dialog = inject(MatDialog);
-    this.printers = printerService.getSystemPrinters();
-
     this.settingsForm = fb.group({
       apiAddress: ['', Validators.required],
       appName: ['', Validators.required],
@@ -79,26 +72,16 @@ export class SettingsDialogComponent {
   }
 
   openRegistrationDialog() {
-    this.dialog.open(LicenseRegistrationComponent, {
-      minWidth: '600px',
-      minHeight: '400px',
-    });
+    this.dialog.open(LicenseRegistrationComponent, DIALOG_SIZE.medium);
   }
 
   toggleSecondaryScreen() {
-    const currentValue = this.settingsForm.get('secondaryScreen')
-      ?.value as boolean;
-    if (currentValue === true) {
+    const enabled = this.settingsForm.get('secondaryScreen')?.value as boolean;
+    if (enabled === true) {
       (window as any).electronAPI.openSecondWindow();
-      setTimeout(() => {
-        (window as any).electronAPI.sendToSecondWindow({
-          firstName: 'John',
-          lastName: 'Doe',
-        });
-      }, 2000);
     } else {
       (window as any).electronAPI.closeSecondWindow();
     }
-    this.settingsService.updateSettings({ secondaryScreen: currentValue });
+    this.settingsService.updateSettings({ secondaryScreen: enabled });
   }
 }

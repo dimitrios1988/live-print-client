@@ -1,0 +1,13 @@
+{
+  "alreadyPrinted": "Already Printed",
+  "notFound": "Runner Not Found",
+  "receivesAsGroup": "Receives With The Group",
+  "bib": "Bib",
+  "block": "Block",
+  "name": "Name",
+  "fathersName": "Father's Name",
+  "birthdate": "Date of Birth",
+  "gender": "Gender",
+  "club": "Club",
+  "nationality": "Nationality"
+}

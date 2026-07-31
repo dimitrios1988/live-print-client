@@ -1,42 +1,92 @@
+.runner-info-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-gap-md);
+  padding: var(--app-gap-md);
+  background: var(--mat-sys-surface);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--app-radius);
+  box-shadow: var(--mat-sys-level1);
+}
+
 .runner-info-header {
   display: flex;
-  flex-wrap: nowrap;
-  gap: 5px;
-  flex-direction: row;
-  border-style: solid;
-  border-width: 1px;
-  border-color: var(--mat-divider-color, var(--mat-sys-outline));
-}
-.runner-info-header > div {
-  padding: 10px;
+  align-items: stretch;
+  gap: var(--app-gap-md);
+  padding-bottom: var(--app-gap-sm);
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
 }
 
-.runner-info-header-title {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.runner-info-content {
+.header-cell {
   display: flex;
-  flex-wrap: nowrap;
-  gap: 5px;
-  flex-direction: row;
-  padding: 10px;
+  flex-direction: column;
+  gap: var(--app-gap-xs);
+  min-width: 0;
 }
 
-
-.runner-info-content-header {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: repeat(8, 1fr);
-  grid-column-gap: 0px;
-  justify-items: end;
-  grid-row-gap: 5px;
+.header-cell--event {
+  flex: 1 1 auto;
 }
-.runner-info-content-data {
+
+.header-label {
+  font: var(--mat-sys-label-medium);
+  color: var(--mat-sys-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.header-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--mat-sys-on-surface);
+  overflow-wrap: anywhere;
+}
+
+/* Bib keeps its natural width so the number never wraps; the event name flexes instead. */
+.header-cell--bib {
+  flex: 0 0 auto;
+  min-width: auto;
+}
+
+.header-cell--bib .header-value {
+  color: var(--mat-sys-primary);
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
+/* Rows are self-contained, so adding/removing a field needs no row-count edit. */
+.runner-info-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-gap-xs);
+  margin: 0;
+}
+
+.detail-row {
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: repeat(8, 1fr);
-  grid-column-gap: 0px;
-  grid-row-gap: 5px;
+  grid-template-columns: minmax(140px, 34%) 1fr;
+  gap: var(--app-gap-md);
+  align-items: baseline;
+  padding-bottom: var(--app-gap-xs);
+  border-bottom: 1px solid var(--mat-sys-surface-container-highest);
+}
+
+.detail-row dt {
+  margin: 0;
+  text-align: right;
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.detail-row dd {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--mat-sys-on-surface);
+  overflow-wrap: anywhere;
+}
+
+.hidden-qr {
+  display: none;
 }

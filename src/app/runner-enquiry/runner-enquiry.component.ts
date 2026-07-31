@@ -8,6 +8,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { IEvent } from '../events/interfaces/event.interface';
 import { RunnerService } from './runner.service';
 import { EventsService } from '../events/events.service';
@@ -19,6 +20,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MultiplePrintingDialogComponent } from './multiple-printing-dialog/multiple-printing-dialog.component';
 import { RunnerGroupDialogComponent } from './runner-group-dialog/runner-group-dialog.component';
 import { AppService } from '../app.service';
+import { DIALOG_SIZE } from '../shared/dialog.config';
 
 @Component({
   selector: 'app-runner-enquiry',
@@ -30,6 +32,7 @@ import { AppService } from '../app.service';
     MatButtonModule,
     MatInputModule,
     MatIconModule,
+    MatTooltipModule,
   ],
 })
 export class RunnerEnquiryComponent {
@@ -94,7 +97,7 @@ export class RunnerEnquiryComponent {
           });
       } else {
         this.runnerService
-          .getRunner2(
+          .getRunner(
             Number(this.enquryForm.value.raceNumber),
             this.events.map((e) => e.id),
           )
@@ -236,17 +239,15 @@ export class RunnerEnquiryComponent {
   }
 
   private displayMultiplePrintingDialog() {
-    return this.multiplePrintingDialog.open(MultiplePrintingDialogComponent, {
-      minWidth: '800px',
-      minHeight: '400px',
-    });
+    return this.multiplePrintingDialog.open(
+      MultiplePrintingDialogComponent,
+      DIALOG_SIZE.large,
+    );
   }
 
   private displayGroupDialog(data: IRunner[]) {
     return this.groupDialog.open(RunnerGroupDialogComponent, {
-      minWidth: '920px',
-      minHeight: '400px',
-      width: '95vw',
+      ...DIALOG_SIZE.wide,
       data,
     });
   }
@@ -260,5 +261,25 @@ export class RunnerEnquiryComponent {
         ? this.userOptionsService.getUserOptions().printTickets[0] === true
         : false)
     );
+  }
+
+  printTooltip(): string {
+    const runner = this.runnerPrinterService.runnerForPrint();
+    if (runner === null || runner === undefined) {
+      return 'Δεν έχει φορτωθεί δρομέας';
+    }
+    if (runner.allow_reprinting === false && runner.is_printed === true) {
+      return 'Έχει ήδη εκτυπωθεί — δεν επιτρέπεται επανεκτύπωση';
+    }
+    if (!this.hasSelectToPrint()) {
+      return 'Επιλέξτε τι θα εκτυπωθεί (Αριθμός ή Ετικέτα)';
+    }
+    return 'Εκτύπωση δρομέα';
+  }
+
+  nextTooltip(): string {
+    return this.hasNextRunnerToPrint()
+      ? 'Επόμενος δρομέας'
+      : 'Δεν υπάρχει επόμενος δρομέας';
   }
 }

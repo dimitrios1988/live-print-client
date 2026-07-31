@@ -16,6 +16,7 @@ import {
 } from '@angular/material/dialog';
 import { MatError, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { LicenseService } from './license.service';
 import { AppService } from '../app.service';
 import { ILicense } from './license.interface';
@@ -31,6 +32,7 @@ import { ILicense } from './license.interface';
     MatFormFieldModule,
     ReactiveFormsModule,
     MatInputModule,
+    MatIconModule,
     CommonModule,
     MatError,
   ],
@@ -102,12 +104,14 @@ export class LicenseRegistrationComponent {
           this.appService.displayMessage(
             'Η άδεια επαληθεύτηκε με επιτυχία.',
             5000,
+            'success',
           );
         })
         .catch((error) => {
           this.appService.displayMessage(
             'Η επαλήθευση της άδειας απέτυχε. Παρακαλώ δηλώστε το προϊόν για να μπορέσετε να το χρησιμοποιήσετε.',
             5000,
+            'error',
           );
           this.isVerified = this.licenseService.isVerified;
           this.licenseUser =
@@ -122,7 +126,7 @@ export class LicenseRegistrationComponent {
       this.licenseUser = this.licenseService.licenseeInfo?.licenseUser || null;
       this.licenseExpiryDate =
         this.licenseService.licenseeInfo?.licenseExpiryDate || null;
-      this.appService.displayMessage(e, 5000);
+      this.appService.displayMessage(e, 5000, 'error');
     }
   }
 }
