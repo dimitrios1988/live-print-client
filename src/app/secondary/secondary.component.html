@@ -10,7 +10,7 @@
   @if (showBanners) {
     <div class="banners">
       @if (runnerPrintStatus === RunnerPrintStatus.ALREADY_PRINTED) {
-        <div class="banner banner--warning">
+        <div class="banner banner--error banner--group">
           <mat-icon>history</mat-icon>
           <span>{{ t().alreadyPrinted }}</span>
         </div>

@@ -28,6 +28,11 @@
 }
 
 .status-printed {
+  background: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
+}
+
+.group-band{
   background: var(--app-warning-container);
   color: var(--app-on-warning-container);
 }
