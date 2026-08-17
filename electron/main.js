@@ -168,7 +168,7 @@ async function printBinaryContent(number, printerName) {
       const isWindows = process.platform === "win32";
       let printCommand;
       if (isWindows) {
-        printCommand = `powershell -Command "Add-Type -AssemblyName System.Drawing; $i=[System.Drawing.Image]::FromFile('${tempFilePath}'); $p=New-Object System.Drawing.Printing.PrintDocument; $p.PrinterSettings.PrinterName='${printerName}'; $p.add_PrintPage({param($s,$e); $r=$e.MarginBounds; $f=[Math]::Min($r.Width/$i.Width,$r.Height/$i.Height); $w=$i.Width*$f; $h=$i.Height*$f; $e.Graphics.DrawImage($i,[int]($r.X+($r.Width-$w)/2),[int]($r.Y+($r.Height-$h)/2),[int]$w,[int]$h)}); $p.Print(); $i.Dispose()"`;
+        printCommand = `powershell -Command "Add-Type -AssemblyName System.Drawing; $i=[System.Drawing.Image]::FromFile('${tempFilePath}'); $p=New-Object System.Drawing.Printing.PrintDocument; $p.PrinterSettings.PrinterName='${printerName}'; $p.DefaultPageSettings.Margins=[System.Drawing.Printing.Margins]::new(40,40,40,40); $p.add_PrintPage({param($s,$e); $e.Graphics.InterpolationMode='NearestNeighbor'; $e.Graphics.PixelOffsetMode='Half'; $r=$e.MarginBounds; $f=[Math]::Min($r.Width/$i.Width,$r.Height/$i.Height); $w=$i.Width*$f; $h=$i.Height*$f; $e.Graphics.DrawImage($i,[int]($r.X+($r.Width-$w)/2),[int]($r.Y+($r.Height-$h)/2),[int]$w,[int]$h)}); $p.Print(); $i.Dispose(); $p.Dispose()"`;
       } else {
         printCommand = `lp -d "${printerName}" "${tempFilePath}"`;
       }
