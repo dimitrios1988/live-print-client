@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, inject } from '@angular/core';
+import { Component, OnInit, NgZone, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { IRunner } from '../runner-enquiry/interfaces/runner.interface';
 import { RunnerPrintStatus } from '../runner-status/runner-print-status.enum';
@@ -11,6 +11,7 @@ import { TranslationService } from '../shared/i18n/translation.service';
   templateUrl: './secondary.component.html',
   styleUrls: ['./secondary.component.css'],
   imports: [MatDividerModule, MatIconModule, CommonModule],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [DatePipe],
 })
 export class SecondaryComponent implements OnInit {

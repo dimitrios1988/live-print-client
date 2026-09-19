@@ -1,4 +1,4 @@
-import { Component, effect } from '@angular/core';
+import { Component, effect, ChangeDetectionStrategy } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { UserOptions } from './interfaces/user-options.interface';
 import { UserOptionsService } from './user-options.service';
@@ -18,6 +18,7 @@ import { EventsService } from '../events/events.service';
     ReactiveFormsModule,
   ],
   templateUrl: './user-options.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './user-options.component.css',
 })
 export class UserOptionsComponent {

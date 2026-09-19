@@ -1,4 +1,4 @@
-import { Component, effect } from '@angular/core';
+import { Component, effect, ChangeDetectionStrategy } from '@angular/core';
 import { RunnerPrintStatus } from './runner-print-status.enum';
 import { RunnerPrinterService } from '../runner-printer.service';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
   selector: 'app-runner-status',
   imports: [MatIconModule],
   templateUrl: './runner-status.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./runner-status.component.css'],
 })
 export class RunnerStatusComponent {

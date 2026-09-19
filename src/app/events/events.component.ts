@@ -1,4 +1,4 @@
-import { Component, effect, inject, Signal } from '@angular/core';
+import { Component, effect, inject, Signal, ChangeDetectionStrategy } from '@angular/core';
 import { EventsService } from './events.service';
 import { IEvent } from './interfaces/event.interface';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,6 +20,7 @@ import { DIALOG_SIZE } from '../shared/dialog.config';
     MatProgressSpinnerModule,
   ],
   templateUrl: './events.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './events.component.css',
 })
 export class EventsComponent {

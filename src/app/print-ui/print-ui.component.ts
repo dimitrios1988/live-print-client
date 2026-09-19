@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, ChangeDetectionStrategy } from '@angular/core';
 import { UserOptionsComponent } from '../user-options/user-options.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { EventsComponent } from '../events/events.component';
@@ -24,6 +24,7 @@ import { EventsService } from '../events/events.service';
     RunnerInfoComponent,
   ],
   templateUrl: './print-ui.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './print-ui.component.css',
 })
 export class PrintUiComponent {

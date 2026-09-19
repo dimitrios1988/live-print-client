@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
   MatDialogActions,
@@ -24,6 +24,7 @@ import { CommonModule, DatePipe } from '@angular/common';
     CommonModule,
   ],
   providers: [DatePipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './multiple-printing-dialog.component.html',
 })
 export class MultiplePrintingDialogComponent {

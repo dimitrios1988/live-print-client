@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -37,6 +37,7 @@ import { ILicense } from './license.interface';
     MatError,
   ],
   templateUrl: './license-registration.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './license-registration.component.css',
 })
 export class LicenseRegistrationComponent {

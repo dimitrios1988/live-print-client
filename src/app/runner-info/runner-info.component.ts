@@ -1,4 +1,4 @@
-import { Component, effect, ElementRef, ViewChild } from '@angular/core';
+import { Component, effect, ElementRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { RunnerPrinterService } from '../runner-printer.service';
 import { IRunner } from '../runner-enquiry/interfaces/runner.interface';
 import { MatDividerModule } from '@angular/material/divider';
@@ -10,6 +10,7 @@ import { QRCodeComponent } from 'angularx-qrcode';
   imports: [MatDividerModule, CommonModule, QRCodeComponent],
   templateUrl: './runner-info.component.html',
   styleUrl: './runner-info.component.css',
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [DatePipe],
 })
 export class RunnerInfoComponent {

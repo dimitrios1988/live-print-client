@@ -4,6 +4,7 @@ import {
   effect,
   inject,
   OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -15,6 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
   selector: 'app-root',
   imports: [RouterOutlet, MatProgressBarModule],
   templateUrl: './app.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
