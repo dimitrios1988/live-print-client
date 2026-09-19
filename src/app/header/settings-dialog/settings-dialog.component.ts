@@ -1,4 +1,4 @@
-import { Component, effect, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import {
   MatDialog,
   MatDialogActions,
@@ -38,7 +38,6 @@ import { DIALOG_SIZE } from '../../shared/dialog.config';
     MatSlideToggleModule,
   ],
   templateUrl: './settings-dialog.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './settings-dialog.component.css',
 })
 export class SettingsDialogComponent {

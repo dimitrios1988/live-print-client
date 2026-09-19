@@ -1,4 +1,4 @@
-import { Component, effect, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Signal } from '@angular/core';
 import { UserOptionsComponent } from '../user-options/user-options.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { EventsComponent } from '../events/events.component';
@@ -24,16 +24,18 @@ import { EventsService } from '../events/events.service';
     RunnerInfoComponent,
   ],
   templateUrl: './print-ui.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './print-ui.component.css',
 })
 export class PrintUiComponent {
+  /**
+   * Plain field rather than a signal: it is only ever written by template
+   * events (the toggle button and the drawer's two-way binding), and those
+   * already mark an OnPush view dirty.
+   */
   sidemenuOpen = true;
-  selectedEvents: IEvent[] = [];
+  readonly selectedEvents: Signal<IEvent[]>;
 
   constructor(eventsService: EventsService) {
-    effect(() => {
-      this.selectedEvents = eventsService.selectedEvents();
-    });
+    this.selectedEvents = eventsService.selectedEvents;
   }
 }

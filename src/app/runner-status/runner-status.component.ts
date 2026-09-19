@@ -1,4 +1,4 @@
-import { Component, effect, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RunnerPrintStatus } from './runner-print-status.enum';
 import { RunnerPrinterService } from '../runner-printer.service';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,32 +7,33 @@ import { MatIconModule } from '@angular/material/icon';
   selector: 'app-runner-status',
   imports: [MatIconModule],
   templateUrl: './runner-status.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./runner-status.component.css'],
 })
 export class RunnerStatusComponent {
   readonly RunnerPrintStatus = RunnerPrintStatus;
-  runnerPrintStatus: RunnerPrintStatus | null = null;
 
-  public receivesAsGroup: boolean = false;
+  private readonly runnerPrinterService = inject(RunnerPrinterService);
 
-  constructor(private runnerPrinterService: RunnerPrinterService) {
-    effect(() => {
-      const runner = this.runnerPrinterService.runnerForPrint();
-      if (runner === null) {
-        this.runnerPrintStatus = null;
-        this.receivesAsGroup = false;
-      } else if (runner !== undefined) {
-        this.receivesAsGroup = runner.receives_as_a_group;
-        if (runner.is_printed == true) {
-          this.runnerPrintStatus = RunnerPrintStatus.ALREADY_PRINTED;
-        } else if (runner.is_printed == false) {
-          this.runnerPrintStatus = RunnerPrintStatus.NOT_PRINTED;
-        }
-      } else {
-        this.receivesAsGroup = false;
-        this.runnerPrintStatus = RunnerPrintStatus.NOT_FOUND;
-      }
-    });
-  }
+  /**
+   * Derived from the loaded runner rather than mirrored into a field by an
+   * effect: `null` means nothing is loaded, `undefined` means the lookup came
+   * back empty.
+   */
+  readonly runnerPrintStatus = computed<RunnerPrintStatus | null>(() => {
+    const runner = this.runnerPrinterService.runnerForPrint();
+    if (runner === null) {
+      return null;
+    }
+    if (runner === undefined) {
+      return RunnerPrintStatus.NOT_FOUND;
+    }
+    return runner.is_printed
+      ? RunnerPrintStatus.ALREADY_PRINTED
+      : RunnerPrintStatus.NOT_PRINTED;
+  });
+
+  readonly receivesAsGroup = computed(
+    () =>
+      this.runnerPrinterService.runnerForPrint()?.receives_as_a_group === true,
+  );
 }

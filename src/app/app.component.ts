@@ -1,11 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  effect,
-  inject,
-  OnInit,
-  ChangeDetectionStrategy
-} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AppService } from './app.service';
@@ -16,18 +9,16 @@ import { MatDialog } from '@angular/material/dialog';
   selector: 'app-root',
   imports: [RouterOutlet, MatProgressBarModule],
   templateUrl: './app.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  showProgressBar: boolean = false;
+  /** Read straight from the service so the OnPush view re-checks on change. */
+  readonly showProgressBar;
   readonly licenseDialog: MatDialog;
   private licenseService: LicenseService = inject(LicenseService);
   constructor(private appService: AppService) {
     this.licenseDialog = inject(MatDialog);
-    effect(() => {
-      this.showProgressBar = appService.progressBarActive();
-    });
+    this.showProgressBar = appService.progressBarActive;
   }
 
   ngOnInit(): void {

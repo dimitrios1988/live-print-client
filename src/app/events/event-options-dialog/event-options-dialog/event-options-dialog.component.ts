@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -31,7 +31,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     CommonModule,
   ],
   templateUrl: './event-options-dialog.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./event-options-dialog.component.css'],
 })
 export class EventOptionsDialogComponent {
