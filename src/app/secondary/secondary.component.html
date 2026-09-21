@@ -1,5 +1,5 @@
 <div class="secondary-screen">
-  @if (runnerPrintStatus === null) {
+  @if (runnerPrintStatus() === null) {
     <div class="idle-brand">
       <img src="assets/logo.svg" alt="" />
     </div>
@@ -7,21 +7,21 @@
     <img class="brand-badge" src="assets/logo.svg" alt="" />
   }
 
-  @if (showBanners) {
+  @if (showBanners()) {
     <div class="banners">
-      @if (runnerPrintStatus === RunnerPrintStatus.ALREADY_PRINTED) {
+      @if (runnerPrintStatus() === RunnerPrintStatus.ALREADY_PRINTED) {
         <div class="banner banner--error banner--group">
           <mat-icon>history</mat-icon>
           <span>{{ t().alreadyPrinted }}</span>
         </div>
-      } @else if (runnerPrintStatus === RunnerPrintStatus.NOT_FOUND) {
+      } @else if (runnerPrintStatus() === RunnerPrintStatus.NOT_FOUND) {
         <div class="banner banner--error">
           <mat-icon>error</mat-icon>
           <span>{{ t().notFound }}</span>
         </div>
       }
 
-      @if (receivesAsGroup) {
+      @if (receivesAsGroup()) {
         <div class="banner banner--warning banner--group">
           <mat-icon>group</mat-icon>
           <span>{{ t().receivesAsGroup }}</span>
@@ -30,13 +30,8 @@
     </div>
   }
 
-  @if (
-    runner !== null &&
-    runner !== undefined &&
-    (runnerPrintStatus === RunnerPrintStatus.NOT_PRINTED ||
-      runnerPrintStatus === RunnerPrintStatus.ALREADY_PRINTED)
-  ) {
-    <div class="event-info">{{ eventName }}</div>
+  @if (displayedRunner(); as runner) {
+    <div class="event-info">{{ eventName() }}</div>
 
     <div class="bib-header">
       <div class="bib-block">

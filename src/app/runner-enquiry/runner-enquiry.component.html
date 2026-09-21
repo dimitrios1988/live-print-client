@@ -44,7 +44,7 @@
               false &&
               runnerPrinterService.runnerForPrint()?.is_printed === true) ||
             hasSelectToPrint() === false ||
-            printingTimeout
+            printingTimeout()
           "
           (click)="onPrint()"
         >

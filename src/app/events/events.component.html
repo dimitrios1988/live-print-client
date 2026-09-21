@@ -12,12 +12,12 @@
     </button>
   </div>
 
-  @if (loading() && events.length === 0) {
+  @if (loading() && events().length === 0) {
     <div class="events-placeholder">
       <mat-spinner diameter="36"></mat-spinner>
       <span>Φόρτωση αγώνων…</span>
     </div>
-  } @else if (events.length === 0) {
+  } @else if (events().length === 0) {
     <div class="events-placeholder">
       <mat-icon class="placeholder-icon">event_busy</mat-icon>
       <span>Δεν βρέθηκαν αγώνες.</span>
@@ -28,7 +28,7 @@
     </div>
   } @else {
     <div class="events-list">
-      @for (event of events; track event.id) {
+      @for (event of events(); track event.id) {
         <div class="event-item" [class.event-item--active]="event.enabled">
           <mat-slide-toggle
             [checked]="event.enabled"

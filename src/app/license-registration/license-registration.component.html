@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>Δήλωση Άδειας</h2>
 <mat-dialog-content>
-  @if (!isVerified) {
+  @if (!isVerified()) {
     <form [formGroup]="licenseForm" (ngSubmit)="registerLicense()">
       <div class="register-license-section">
         <mat-form-field appearance="outline" class="full-width">
@@ -48,17 +48,17 @@
       </div>
     </form>
   }
-  @if (isVerified) {
+  @if (isVerified()) {
     <div class="license-section">
       <div class="license-verified-header">
         <mat-icon class="license-verified-icon">verified_user</mat-icon>
         <h2>Επιτυχής Εγγραφή Άδειας</h2>
       </div>
       <p>Η άδεια χρήσης έχει εγγραφεί με επιτυχία.</p>
-      <p>Όνομα Χρήστη: {{ licenseUser }}</p>
+      <p>Όνομα Χρήστη: {{ licenseUser() }}</p>
       <p>
         Ημερομηνία Λήξης:
-        {{ licenseExpiryDate | date: "dd/MM/yyyy HH:mm" }}
+        {{ licenseExpiryDate() | date: "dd/MM/yyyy HH:mm" }}
       </p>
       <button type="button" mat-stroked-button (click)="unregisterLicense()">
         <mat-icon>link_off</mat-icon>

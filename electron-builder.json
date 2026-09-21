@@ -1,7 +1,7 @@
 {
   "appId": "gr.weallrun.liveprintclient",
   "productName": "LivePrint Client",
-  "files": ["dist/", "electron/"],
+  "files": ["dist/live-print-client/**/*", "electron/**/*"],
   "asar": true,
   "directories": {
     "output": "dist/electron-build"

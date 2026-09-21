@@ -1,7 +1,10 @@
+/* Fills its host rather than re-claiming the drawer's full height, so the
+   version footer beside it stays on screen. */
 .events-panel {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
   box-sizing: border-box;
 }
 

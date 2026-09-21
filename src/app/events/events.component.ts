@@ -1,4 +1,4 @@
-import { Component, effect, inject, Signal } from '@angular/core';
+import { Component, inject, Signal } from '@angular/core';
 import { EventsService } from './events.service';
 import { IEvent } from './interfaces/event.interface';
 import { MatIconModule } from '@angular/material/icon';
@@ -23,15 +23,13 @@ import { DIALOG_SIZE } from '../shared/dialog.config';
   styleUrl: './events.component.css',
 })
 export class EventsComponent {
-  public events: IEvent[] = [];
+  readonly events: Signal<IEvent[]>;
   readonly loading: Signal<boolean>;
 
   private dialog: MatDialog = inject(MatDialog);
   constructor(private eventsService: EventsService) {
     this.loading = eventsService.loading;
-    effect(() => {
-      this.events = eventsService.events();
-    });
+    this.events = eventsService.events;
   }
 
   refreshEvents() {
