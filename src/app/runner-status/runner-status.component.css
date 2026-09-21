@@ -1,17 +1,43 @@
-div {
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-gap-sm);
+}
+
+.status-band {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--app-gap-sm);
+  padding: var(--app-gap-sm) var(--app-gap-md);
+  border-radius: var(--app-radius);
+  font-size: 1.4rem;
+  font-weight: 600;
   text-align: center;
-  font-size: xx-large;
-  font-weight: 500;
 }
 
-div.ready {
-  color: green;
+.status-band mat-icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 1.75rem;
 }
 
-div.printed {
-  color: orange;
+.status-ready {
+  background: var(--app-success-container);
+  color: var(--app-on-success-container);
 }
 
-div.not-found {
-  color: red;
+.status-printed {
+  background: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
+}
+
+.group-band{
+  background: var(--app-warning-container);
+  color: var(--app-on-warning-container);
+}
+
+.status-not-found {
+  background: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
 }

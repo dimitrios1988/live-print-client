@@ -1,44 +1,51 @@
 <h2 mat-dialog-title>Επιλογές Εκτύπωσης: {{ event.name }}</h2>
 <mat-dialog-content>
+  @let printerList = printers | async;
   <form [formGroup]="eventSettingsForm" class="event-settings-form">
-    <div class="event-settings-section">
-      <section>
-        <mat-slide-toggle formControlName="enabled"
-          >Ενεργό για εκτύπωση</mat-slide-toggle
-        >
-      </section>
-      <section>
-        <mat-form-field>
-          <mat-label>Εκτυπωτής Αριθμού</mat-label>
-          <mat-select formControlName="numberPrinter">
-            <mat-option [value]="null">Επιλέξτε Εκτυπωτή</mat-option>
-            @for (printer of printers | async; track printer) {
-            <mat-option [value]="printer.name">{{
-              printer.displayName
-            }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-      </section>
-      <section>
-        <mat-form-field>
-          <mat-label>Ετικετογράφος</mat-label>
-          <mat-select formControlName="ticketPrinter">
-            <mat-option [value]="null">Επιλέξτε Ετικετογράφο</mat-option>
-            @for (printer of printers | async; track printer) {
-            <mat-option [value]="printer.name">{{
-              printer.displayName
-            }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-      </section>
-    </div>
+    <section>
+      <mat-slide-toggle formControlName="enabled">
+        Ενεργό για εκτύπωση
+      </mat-slide-toggle>
+    </section>
+    <section>
+      <mat-form-field appearance="outline">
+        <mat-label>Εκτυπωτής Αριθμού</mat-label>
+        <mat-select formControlName="numberPrinter">
+          <mat-option [value]="null">Επιλέξτε Εκτυπωτή</mat-option>
+          @for (printer of printerList; track printer.name) {
+            <mat-option [value]="printer.name">
+              {{ printer.displayName }}
+            </mat-option>
+          }
+        </mat-select>
+        @if (printerList === null) {
+          <mat-hint>Φόρτωση εκτυπωτών…</mat-hint>
+        } @else if (printerList.length === 0) {
+          <mat-hint>Δεν βρέθηκαν εκτυπωτές</mat-hint>
+        }
+      </mat-form-field>
+    </section>
+    <section>
+      <mat-form-field appearance="outline">
+        <mat-label>Ετικετογράφος</mat-label>
+        <mat-select formControlName="ticketPrinter">
+          <mat-option [value]="null">Επιλέξτε Ετικετογράφο</mat-option>
+          @for (printer of printerList; track printer.name) {
+            <mat-option [value]="printer.name">
+              {{ printer.displayName }}
+            </mat-option>
+          }
+        </mat-select>
+        @if (printerList === null) {
+          <mat-hint>Φόρτωση εκτυπωτών…</mat-hint>
+        } @else if (printerList.length === 0) {
+          <mat-hint>Δεν βρέθηκαν εκτυπωτές</mat-hint>
+        }
+      </mat-form-field>
+    </section>
   </form>
 </mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-flat-button mat-dialog-close cdkFocusInitial>Κλείσιμο</button
-  ><button mat-flat-button color="primary" (click)="saveEventSettings()">
-    Αποθήκευση
-  </button>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close cdkFocusInitial>Κλείσιμο</button>
+  <button mat-flat-button (click)="saveEventSettings()">Αποθήκευση</button>
 </mat-dialog-actions>

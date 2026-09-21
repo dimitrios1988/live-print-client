@@ -1,0 +1,13 @@
+{
+  "alreadyPrinted": "Έχει Εκτυπωθεί",
+  "notFound": "Δε βρέθηκε Δρομέας",
+  "receivesAsGroup": "Παραλαμβάνει Ομαδικά",
+  "bib": "Bib",
+  "block": "Block",
+  "name": "Όνομα",
+  "fathersName": "Όνομα Πατρός",
+  "birthdate": "Ημ/νία Γέννησης",
+  "gender": "Φύλο",
+  "club": "Σύλλογος",
+  "nationality": "Εθνικότητα"
+}

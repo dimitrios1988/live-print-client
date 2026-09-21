@@ -3,24 +3,69 @@
   flex-direction: column;
   height: 100vh;
 }
+
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-grow: 1;
+  padding: var(--app-gap-md);
+  background: var(--mat-sys-surface-container);
 }
 
 .login-form {
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
 }
 
-.login-form mat-form-field {
+.login-card {
+  position: relative;
+  padding: var(--app-gap-sm);
+}
+
+.settings-button {
+  position: absolute;
+  top: var(--app-gap-sm);
+  right: var(--app-gap-sm);
+  z-index: 1;
+}
+
+.login-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--app-gap-sm);
+  padding: var(--app-gap-md) var(--app-gap-md) 0;
+  margin-bottom: var(--app-gap-md);
+}
+
+.login-logo {
+  height: clamp(80px, 14vh, 120px);
+  width: auto;
+}
+
+.login-title {
+  margin: 0;
+  font: var(--mat-sys-headline-small);
+  font-weight: 600;
+}
+
+.login-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-gap-sm);
+}
+
+.login-content mat-form-field {
   width: 100%;
 }
 
-.login-form mat-card-header {
-  margin-bottom: 10px;
-  align-items: center;
-  justify-content: space-between;
+.login-actions {
+  padding: var(--app-gap-sm) var(--app-gap-md) var(--app-gap-md);
+}
+
+.login-submit {
+  width: 100%;
+  height: 48px;
+  font-weight: 600;
 }

@@ -1,10 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  effect,
-  inject,
-  OnInit,
-} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AppService } from './app.service';
@@ -18,14 +12,13 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  showProgressBar: boolean = false;
+  /** Read straight from the service so the OnPush view re-checks on change. */
+  readonly showProgressBar;
   readonly licenseDialog: MatDialog;
   private licenseService: LicenseService = inject(LicenseService);
   constructor(private appService: AppService) {
     this.licenseDialog = inject(MatDialog);
-    effect(() => {
-      this.showProgressBar = appService.progressBarActive();
-    });
+    this.showProgressBar = appService.progressBarActive;
   }
 
   ngOnInit(): void {
@@ -39,6 +32,7 @@ export class AppComponent implements OnInit {
           this.appService.displayMessage(
             'Η επαλήθευση της άδειας απέτυχε. Παρακαλώ δηλώστε το προϊόν για να μπορέσετε να το χρησιμοποιήσετε.',
             5000,
+            'error',
           );
           console.error('License verification failed:', error);
         });

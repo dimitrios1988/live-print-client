@@ -1,3 +1,36 @@
+.liveprint-toolbar {
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  gap: var(--app-gap-sm);
+  box-shadow: var(--mat-sys-level1);
+}
+
+.brand-icon {
+  color: var(--mat-sys-on-primary);
+  width: var(--mat-toolbar-standard-height, 64px);
+}
+
+.brand-badge {
+  position: absolute;
+  top: clamp(0.5rem, 2vh, 1.25rem);
+  left: 50%;
+  transform: translateX(-50%);
+  height: clamp(1.75rem, 10vh, 6.5rem);
+  width: auto;
+}
+
+.app-name {
+  font: var(--mat-sys-title-large);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .spacer {
   flex: 1 1 auto;
+}
+
+.liveprint-toolbar .mat-mdc-icon-button {
+  color: var(--mat-sys-on-primary);
 }

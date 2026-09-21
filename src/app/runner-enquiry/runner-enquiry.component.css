@@ -1,9 +1,53 @@
-.field-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.enquiry-card {
+  display: block;
+  padding: var(--app-gap-lg);
+  background: var(--mat-sys-surface);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--app-radius);
+  box-shadow: var(--mat-sys-level1);
 }
 
-.field-container button {
-  margin-bottom: 20px;
+.enquiry-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--app-gap-md);
+}
+
+.race-number-field {
+  flex: 1 1 260px;
+  min-width: 220px;
+}
+
+.race-number-field input {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.enquiry-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--app-gap-sm);
+  /* Nudge down so the buttons align with the input row, not its hint text. */
+  padding-top: 6px;
+}
+
+.enquiry-actions span {
+  display: inline-flex;
+}
+
+.enquiry-actions button {
+  height: 56px;
+  padding: 0 var(--app-gap-md);
+}
+
+.action-search {
+  background: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+}
+
+/* Print is the emphasized primary action. */
+.action-print {
+  min-width: 160px;
+  font-weight: 600;
 }

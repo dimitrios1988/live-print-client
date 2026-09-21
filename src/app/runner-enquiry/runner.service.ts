@@ -25,7 +25,7 @@ export class RunnerService {
     });
   }
 
-  getRunner2(bib: number, eventids: number[]): Observable<IRunner | undefined> {
+  getRunner(bib: number, eventids: number[]): Observable<IRunner | undefined> {
     const obs = eventids.map((eventid) => {
       const data = { bib, event: eventid };
       return this.httpClient.get<IGetRunnerResponse[]>(
@@ -62,6 +62,7 @@ export class RunnerService {
                 ? response['0(runner)'].last_name_greek
                 : response['0(runner)'].last_name_latin || '',
             event_name: response['1(event)'].printed_text || '',
+            event_name_en: response['1(event)'].printed_text_en || '',
             event_id: response['1(event)'].id,
             allow_reprinting: response['1(event)'].allow_reprinting,
             tshirt_size: response['5(t_shirt_size)'].printed_text || '',
@@ -119,6 +120,7 @@ export class RunnerService {
                 ? runner['1(runner)'].last_name_greek
                 : runner['1(runner)'].last_name_latin || '',
             event_name: runner['2(event)'].printed_text || '',
+            event_name_en: runner['2(event)'].printed_text_en || '',
             event_id: runner['2(event)'].id,
             allow_reprinting: runner['2(event)'].allow_reprinting,
             tshirt_size: runner['6(t_shirt_size)'].printed_text,

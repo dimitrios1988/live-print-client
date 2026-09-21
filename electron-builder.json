@@ -1,18 +1,25 @@
 {
-  "appId": "gr.zefksisconsulting.liveprintclient",
+  "appId": "gr.weallrun.liveprintclient",
   "productName": "LivePrint Client",
-  "files": ["dist/", "electron/"],
+  "files": ["dist/live-print-client/**/*", "electron/**/*"],
   "asar": true,
   "directories": {
     "output": "dist/electron-build"
   },
   "win": {
-    "target": "portable",
+    "target": "nsis",
     "icon": "src/assets/icons/icon.ico",
     "signtoolOptions": {
       "signingHashAlgorithms": ["sha256"],
       "sign": false
     }
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "artifactName": "${productName} Setup ${version}.${ext}"
   },
   "mac": {
     "target": "dmg",

@@ -1,4 +1,36 @@
+.user-options-toolbar {
+  background: var(--mat-sys-surface-container-high);
+  color: var(--mat-sys-on-surface);
+  gap: var(--app-gap-md);
+  min-height: 60px;
+  height: auto;
+  padding: var(--app-gap-sm) var(--app-gap-md);
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.user-options-label {
+  font: var(--mat-sys-label-large);
+  color: var(--mat-sys-on-surface-variant);
+  white-space: nowrap;
+}
+
 .user-options-form {
   display: flex;
-  gap: 10px;
+  gap: var(--app-gap-sm);
+  flex-wrap: wrap;
+}
+
+.user-option-group .mdc-icon-button,
+.user-option-text {
+  white-space: nowrap;
+}
+
+/* Give each toggle a consistent, comfortable target for desk staff. */
+.user-option-group {
+  border-radius: var(--app-radius);
+}
+
+.user-option-group mat-icon {
+  margin-right: 6px;
 }

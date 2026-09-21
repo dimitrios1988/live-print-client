@@ -51,6 +51,7 @@ interface _1event {
   id: number;
   name: string;
   printed_text: string;
+  printed_text_en: string | null;
 }
 
 interface _0runner {

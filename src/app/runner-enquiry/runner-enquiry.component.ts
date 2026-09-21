@@ -1,4 +1,12 @@
-import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  Input,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -8,6 +16,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { IEvent } from '../events/interfaces/event.interface';
 import { RunnerService } from './runner.service';
 import { EventsService } from '../events/events.service';
@@ -19,6 +28,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MultiplePrintingDialogComponent } from './multiple-printing-dialog/multiple-printing-dialog.component';
 import { RunnerGroupDialogComponent } from './runner-group-dialog/runner-group-dialog.component';
 import { AppService } from '../app.service';
+import { DIALOG_SIZE } from '../shared/dialog.config';
 
 @Component({
   selector: 'app-runner-enquiry',
@@ -30,6 +40,7 @@ import { AppService } from '../app.service';
     MatButtonModule,
     MatInputModule,
     MatIconModule,
+    MatTooltipModule,
   ],
 })
 export class RunnerEnquiryComponent {
@@ -37,13 +48,53 @@ export class RunnerEnquiryComponent {
   events: IEvent[] = [];
 
   enquryForm: FormGroup;
-  private runnersToPrint: IRunner[] = [];
+
+  /** Written from subscribe/promise callbacks, so it has to be a signal. */
+  private readonly runnersToPrint = signal<IRunner[]>([]);
+
   private readonly multiplePrintingDialog: MatDialog;
   private readonly groupDialog: MatDialog;
   @ViewChild('raceNumber') raceNumberInput: ElementRef | undefined;
   @ViewChild('nextButton') nextButton: MatButton | undefined;
   @ViewChild('printButton') printButton: MatButton | undefined;
-  printingTimeout = false;
+
+  /** Written from a setTimeout, so it has to be a signal. */
+  readonly printingTimeout = signal(false);
+
+  /**
+   * Reads the user options signal, so the print button re-evaluates when the
+   * sibling UserOptionsComponent changes what gets printed.
+   */
+  readonly hasSelectToPrint = computed(() => {
+    const options = this.userOptionsService.userOptions();
+    return (
+      options.printNumbers?.[0] === true || options.printTickets?.[0] === true
+    );
+  });
+
+  readonly hasNextRunnerToPrint = computed(
+    () => this.runnersToPrint().length > 1,
+  );
+
+  readonly printTooltip = computed(() => {
+    const runner = this.runnerPrinterService.runnerForPrint();
+    if (runner === null || runner === undefined) {
+      return 'Δεν έχει φορτωθεί δρομέας';
+    }
+    if (runner.allow_reprinting === false && runner.is_printed === true) {
+      return 'Έχει ήδη εκτυπωθεί — δεν επιτρέπεται επανεκτύπωση';
+    }
+    if (!this.hasSelectToPrint()) {
+      return 'Επιλέξτε τι θα εκτυπωθεί (Αριθμός ή Ετικέτα)';
+    }
+    return 'Εκτύπωση δρομέα';
+  });
+
+  readonly nextTooltip = computed(() =>
+    this.hasNextRunnerToPrint()
+      ? 'Επόμενος δρομέας'
+      : 'Δεν υπάρχει επόμενος δρομέας',
+  );
 
   constructor(
     private runnerService: RunnerService,
@@ -62,7 +113,7 @@ export class RunnerEnquiryComponent {
 
   onSubmit(): void {
     this.runnerPrinterService.loadRunnerForPrint(null);
-    this.runnersToPrint = [];
+    this.runnersToPrint.set([]);
     this.eventService.getEvents();
     if (this.enquryForm.valid && this.events?.length > 0) {
       if (
@@ -86,7 +137,7 @@ export class RunnerEnquiryComponent {
                       result !== undefined &&
                       result.length > 0
                     ) {
-                      this.runnersToPrint = result;
+                      this.runnersToPrint.set(result);
                       this.runnerPrinterService.loadRunnerForPrint(result[0]);
                     }
                   });
@@ -94,20 +145,20 @@ export class RunnerEnquiryComponent {
           });
       } else {
         this.runnerService
-          .getRunner2(
+          .getRunner(
             Number(this.enquryForm.value.raceNumber),
             this.events.map((e) => e.id),
           )
           .subscribe({
             next: (response: IRunner | null | undefined) => {
               if (response !== null && response !== undefined) {
-                this.runnersToPrint = [response];
+                this.runnersToPrint.set([response]);
                 this.runnerPrinterService.loadRunnerForPrint(response);
               } else if (response === undefined) {
-                this.runnersToPrint = [];
+                this.runnersToPrint.set([]);
                 this.runnerPrinterService.loadRunnerForPrint(undefined);
               } else {
-                this.runnersToPrint = [];
+                this.runnersToPrint.set([]);
                 this.runnerPrinterService.loadRunnerForPrint(null);
               }
             },
@@ -119,9 +170,9 @@ export class RunnerEnquiryComponent {
   }
 
   onPrint(): void {
-    this.printingTimeout = true;
+    this.printingTimeout.set(true);
     setTimeout(() => {
-      this.printingTimeout = false;
+      this.printingTimeout.set(false);
     }, 800);
     if (this.runnerPrinterService.runnerForPrint()?.is_printed === true) {
       const dialog = this.displayMultiplePrintingDialog();
@@ -150,9 +201,9 @@ export class RunnerEnquiryComponent {
   }
 
   public loadNextRunner() {
-    const [currentRunner, ...remainingRunners] = this.runnersToPrint;
-    this.runnersToPrint = remainingRunners;
-    this.runnerPrinterService.loadRunnerForPrint(this.runnersToPrint[0]);
+    const [, ...remainingRunners] = this.runnersToPrint();
+    this.runnersToPrint.set(remainingRunners);
+    this.runnerPrinterService.loadRunnerForPrint(remainingRunners[0]);
   }
 
   private printRunner(): void {
@@ -195,8 +246,10 @@ export class RunnerEnquiryComponent {
           ) {
             const runner = this.runnerPrinterService.runnerForPrint();
             if (runner != null) {
-              runner.is_printed = true;
-              this.runnerPrinterService.updateRunnerForPrint(runner);
+              this.runnerPrinterService.updateRunnerForPrint({
+                ...runner,
+                is_printed: true,
+              });
             }
             if (
               this.userOptionsService.getUserOptions().continuousPrint[0] ===
@@ -209,7 +262,7 @@ export class RunnerEnquiryComponent {
                   undefined &&
                 this.userOptionsService.getUserOptions().turboPrint[0] ===
                   true &&
-                this.runnersToPrint.length >= 1
+                this.runnersToPrint().length >= 1
               ) {
                 setTimeout(() => {
                   this.printButton?._elementRef.nativeElement.click();
@@ -231,34 +284,17 @@ export class RunnerEnquiryComponent {
     }
   }
 
-  public hasNextRunnerToPrint(): boolean {
-    return this.runnersToPrint.length > 1;
-  }
-
   private displayMultiplePrintingDialog() {
-    return this.multiplePrintingDialog.open(MultiplePrintingDialogComponent, {
-      minWidth: '800px',
-      minHeight: '400px',
-    });
+    return this.multiplePrintingDialog.open(
+      MultiplePrintingDialogComponent,
+      DIALOG_SIZE.large,
+    );
   }
 
   private displayGroupDialog(data: IRunner[]) {
     return this.groupDialog.open(RunnerGroupDialogComponent, {
-      minWidth: '920px',
-      minHeight: '400px',
-      width: '95vw',
+      ...DIALOG_SIZE.wide,
       data,
     });
-  }
-
-  hasSelectToPrint(): boolean {
-    return (
-      (this.userOptionsService.getUserOptions().printNumbers
-        ? this.userOptionsService.getUserOptions().printNumbers[0] === true
-        : false) ||
-      (this.userOptionsService.getUserOptions().printTickets
-        ? this.userOptionsService.getUserOptions().printTickets[0] === true
-        : false)
-    );
   }
 }

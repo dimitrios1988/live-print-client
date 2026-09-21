@@ -1,7 +1,5 @@
-/* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { EventOptionsDialogComponent } from './event-options-dialog.component';
 
@@ -9,11 +7,14 @@ describe('EventOptionsDialogComponent', () => {
   let component: EventOptionsDialogComponent;
   let fixture: ComponentFixture<EventOptionsDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ EventOptionsDialogComponent ]
-    })
-    .compileComponents();
+      imports: [EventOptionsDialogComponent],
+      providers: [
+        { provide: MAT_DIALOG_DATA, useValue: { name: 'Test', enabled: false } },
+        { provide: MatDialogRef, useValue: { close: () => {} } },
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

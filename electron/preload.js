@@ -25,4 +25,20 @@ contextBridge.exposeInMainWorld("electronAPI", {
   onPrintStatus: (callback) => {
     ipcRenderer.on("print-status", (_event, result) => callback(result));
   },
+  openSecondWindow: () => ipcRenderer.invoke('open-second-window'),
+  sendToSecondWindow: (data) =>
+    ipcRenderer.send('send-to-second-window', data),
+  onReceiveData: (callback) => {
+    const listener = (_, data) => callback(data);
+    ipcRenderer.on('receive-data', listener);
+    // Return unsubscribe function
+    return () => ipcRenderer.removeListener('receive-data', listener);
+  },
+  onSecondaryWindowClosed: (callback) => {
+    const listener = () => callback();
+    ipcRenderer.on('secondary-window-closed', listener);
+    // Return unsubscribe function
+    return () => ipcRenderer.removeListener('secondary-window-closed', listener);
+  },
+  closeSecondWindow: () => ipcRenderer.invoke('close-second-window'),
 });

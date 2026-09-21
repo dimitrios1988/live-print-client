@@ -3,7 +3,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { UserOptions } from './interfaces/user-options.interface';
 import { UserOptionsService } from './user-options.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { EventsService } from '../events/events.service';
 
@@ -12,7 +13,8 @@ import { EventsService } from '../events/events.service';
   imports: [
     MatToolbarModule,
     MatButtonToggleModule,
-    MatCheckboxModule,
+    MatIconModule,
+    MatTooltipModule,
     ReactiveFormsModule,
   ],
   templateUrl: './user-options.component.html',
@@ -24,22 +26,30 @@ export class UserOptionsComponent {
   options = [
     {
       value: true,
-      label: 'Εκτύπωση Αριθμού',
+      label: 'Αριθμός',
+      icon: 'tag',
+      description: 'Εκτύπωση αριθμού δρομέα (bib)',
       formControlName: 'printNumbers',
     },
     {
       value: true,
-      label: 'Εκτύπωση Ετικέτας',
+      label: 'Ετικέτα',
+      icon: 'label',
+      description: 'Εκτύπωση ετικέτας',
       formControlName: 'printTickets',
     },
     {
       value: true,
-      label: 'Συνεχής Εκτύπωση',
+      label: 'Συνεχής',
+      icon: 'repeat',
+      description: 'Συνεχής εκτύπωση: αυτόματη μετάβαση στον επόμενο δρομέα',
       formControlName: 'continuousPrint',
     },
     {
       value: true,
-      label: 'Turbo Εκτύπωση',
+      label: 'Turbo',
+      icon: 'bolt',
+      description: 'Turbo: αυτόματη εκτύπωση χωρίς επιβεβαίωση',
       formControlName: 'turboPrint',
     },
   ];
