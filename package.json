@@ -1,6 +1,6 @@
 {
   "name": "live-print-client",
-  "version": "2026.09.02",
+  "version": "2026.09.19",
   "main": "electron/main.js",
   "type": "module",
   "author": "Dimitrios Chondrokoukis",
@@ -16,7 +16,6 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^22.1.7",
     "@angular/cdk": "^22.1.7",
     "@angular/common": "^22.1.7",
     "@angular/compiler": "^22.1.7",
@@ -24,7 +23,6 @@
     "@angular/forms": "^22.1.7",
     "@angular/material": "^22.1.7",
     "@angular/platform-browser": "^22.1.7",
-    "@angular/platform-browser-dynamic": "^22.1.7",
     "@angular/router": "^22.1.7",
     "@electron/remote": "^2.1.3",
     "@fontsource/roboto": "^5.3.0",

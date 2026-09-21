@@ -10,6 +10,7 @@ import { IEvent } from '../events/interfaces/event.interface';
 import { RunnerStatusComponent } from '../runner-status/runner-status.component';
 import { RunnerInfoComponent } from '../runner-info/runner-info.component';
 import { EventsService } from '../events/events.service';
+import { APP_VERSION } from '../app-version';
 @Component({
   selector: 'app-print-ui',
   imports: [
@@ -33,6 +34,7 @@ export class PrintUiComponent {
    * already mark an OnPush view dirty.
    */
   sidemenuOpen = true;
+  readonly appVersion = APP_VERSION;
   readonly selectedEvents: Signal<IEvent[]>;
 
   constructor(eventsService: EventsService) {

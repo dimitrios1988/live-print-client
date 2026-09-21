@@ -12,7 +12,10 @@
 </app-user-options>
 <mat-drawer-container [hasBackdrop]="false">
   <mat-drawer #sidenav mode="side" [(opened)]="sidemenuOpen">
-    <app-events></app-events>
+    <div class="drawer-panel">
+      <app-events></app-events>
+      <footer class="app-version">Build Number: {{ appVersion }}</footer>
+    </div>
   </mat-drawer>
   <mat-drawer-content>
     <div class="workspace">

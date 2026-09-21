@@ -22,6 +22,32 @@ mat-drawer-content {
   flex-direction: column;
 }
 
+/* Owns the drawer's vertical rhythm so the version footer can be pinned
+   without the events list pushing it past the inner container's 100%. */
+.drawer-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* min-height: 0 lets the events list's own overflow-y take the scroll
+   instead of the drawer growing past its container. */
+app-events {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.app-version {
+  flex: 0 0 auto;
+  padding: var(--app-gap-sm) var(--app-gap-md);
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-label-small);
+}
+
 /* Projected into the user-options toolbar so the drawer toggle rides an
    existing row instead of costing the workspace its own 64px band. Never
    shrinks, and hugs the left edge so it reads as a nav affordance. */
