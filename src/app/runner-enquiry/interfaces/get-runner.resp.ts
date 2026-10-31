@@ -57,7 +57,7 @@ interface _1event {
 interface _0runner {
   bib: number;
   birthdate: number;
-  block: number;
+  block: string | null;
   chip_2_go_data: string | null;
   club: string | null;
   fathers_name: string | null;

@@ -52,25 +52,31 @@ export class RunnerPrinterService {
         this.runnerForPrint()?.last_name?.toString() ?? ''
       }`.trim(),
       block: this.runnerForPrint()?.block
-        ? `Block ${this.runnerForPrint()?.block?.toString()}`
+        ? `${this.runnerForPrint()?.block?.toString()}`
         : '',
       club: this.runnerForPrint()?.club
-        ? `Σύλλογος:<br>${this.runnerForPrint()?.club?.toString()}`.trim()
+        ? `${this.runnerForPrint()?.club?.toString()}`.trim()
         : '',
       gender: this.runnerForPrint()?.gender
-        ? `Φύλο:<br>${this.runnerForPrint()?.gender?.toString()}`.trim()
+        ? `${this.runnerForPrint()?.gender?.toString()}`.trim()
         : '',
       tshirt_indicator: 'X',
       tshirt_size: '',
       qr: this.runnerForPrint()?.chip_2_go_qr_base64?.toString() ?? '',
 
       registration_level: this.runnerForPrint()?.registration_level
-        ? `Επίπεδο:<br>${this.runnerForPrint()?.registration_level?.toString()}`.trim()
+        ? `${this.runnerForPrint()?.registration_level?.toString()}`.trim()
         : '',
       frontside_background_url: event?.bib_frontside_background_url || '',
       backside_background_url: event?.bib_backside_background_url || '',
       age_group: this.runnerForPrint()?.age_group
         ? `${this.runnerForPrint()?.gender ?? ''}${this.runnerForPrint()?.age_group ?? ''}`
+        : '',
+      event_name_en: this.runnerForPrint()?.event_name_en
+        ? `${this.runnerForPrint()?.event_name_en?.toString()}`.trim()
+        : '',
+      event_name: this.runnerForPrint()?.event_name
+        ? `${this.runnerForPrint()?.event_name?.toString()}`.trim()
         : '',
     };
     if (
@@ -79,10 +85,13 @@ export class RunnerPrinterService {
       this.runnerForPrint()?.tshirt_size !== '' &&
       this._runnerForPrint()?.has_tshirt === true
     ) {
-      variables.tshirt_size = `T-Shirt Size:<br>${
-        this.runnerForPrint()?.tshirt_size
-      }`;
+      variables.tshirt_size = `${this.runnerForPrint()?.tshirt_size}`;
     }
+    const bibStyling = event?.bib_styling || '';
+    const appliedBibStyling =
+      this._runnerForPrint()?.has_tshirt === true
+        ? bibStyling
+        : `${bibStyling}${bibStyling.trim() ? ' ' : ''}.tshirt-size { display: none; }`;
     if (this._runnerForPrint()?.has_tshirt === true) {
       variables.tshirt_indicator = ' ';
     }
@@ -97,7 +106,7 @@ export class RunnerPrinterService {
       htmlBodyContent += `${event.bib_backside_template || ''}`;
       return this.printerService.printHTML(
         `<html><body><style>${this.replaceVariables(
-          event?.bib_styling || '',
+          appliedBibStyling,
           variables,
         )}</style>${this.replaceVariables(
           htmlBodyContent,
@@ -110,7 +119,7 @@ export class RunnerPrinterService {
     }
     return this.printerService.printHTML(
       `<html><body><style>${this.replaceVariables(
-        event?.bib_styling || '',
+        appliedBibStyling,
         variables,
       )}</style>${this.replaceVariables(
         htmlBodyContent,

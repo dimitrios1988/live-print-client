@@ -15,7 +15,7 @@ export interface IRunner {
   allow_reprinting: boolean;
   tshirt_size: string | null;
   gender: string;
-  block: number | null;
+  block: string | null;
   nationality: string | null;
   group_name: string | null;
   group_id: number | null;
