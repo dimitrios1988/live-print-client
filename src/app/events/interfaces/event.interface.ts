@@ -1,6 +1,7 @@
 export interface IEvent {
   name: string;
   name_for_printing: string | null;
+  name_for_printing_en: string | null;
   allow_reprinting: boolean;
   id: number;
   bib_frontside_background_url: string;
@@ -10,6 +11,7 @@ export interface IEvent {
   bib_frontside_printing: true;
   bib_frontside_template: string | null;
   bib_styling: string | null;
+  label_template: string | null;
   numberPrinter: any;
   ticketPrinter: any;
   enabled: boolean;

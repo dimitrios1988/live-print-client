@@ -2,11 +2,9 @@ import { app, BrowserWindow, Menu, ipcMain, nativeImage } from "electron";
 import * as path from "path";
 import { fileURLToPath } from "url";
 import store from "electron-store";
-import { createCanvas } from "canvas";
 import { rmSync, writeFileSync } from "fs";
 import { tmpdir } from "os";
-import { join } from "path";
-import { exec, execFile } from "child_process";
+import {  execFile } from "child_process";
 import { randomUUID } from "crypto";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -30,72 +28,6 @@ function createMainWindow() {
     // Load Angular dev server (only for `npm run electron:serve`)
     mainWindow.loadURL(`http://localhost:4200`);
     mainWindow.webContents.openDevTools();
-    const sampleHtml = `<!doctype html>
-<html>
-  <head>
-    <style>
-      * {
-        box-sizing: border-box;
-      }
-
-      html,
-      body {
-        margin: 0;
-        /* The sticker's printable area at 300 dpi, so 1px = 1 printer dot. */
-        width: 1110px;
-        height: 696px;
-        background: white;
-        font-family: Arial, sans-serif;
-      }
-
-      .contents {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-      }
-
-      .bib {
-        position: absolute;
-        top: 0;
-        font-size: 370px;
-        line-height: 1;
-        font-weight: bold;
-        color: #000;
-        left: 0;
-        width: 100%;
-        text-align: center;
-      }
-
-      .qr-code {
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        margin: 0 auto;
-        width: 326px;
-        height: 326px;
-        image-rendering: pixelated;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="contents">
-      <span class="bib">12345</span>
-      <div class="qr-container">
-        <img
-          class="qr-code"
-          alt="QR Code"
-          src="https://api.qrserver.com/v1/create-qr-code/?size=512x512&data=1037&ecc=H&bgcolor=fff&qzone=4"
-        />
-      </div>
-    </div>
-  </body>
-</html>
-`;
-    /* printBib(sampleHtml, 'Brother QL-800').then(result => {
-      console.log(result)
-    }).catch(error => { console.error(error) }); */
   } else {
     // Load the built Angular app (for packaged app)
     mainWindow.loadFile(
@@ -105,7 +37,11 @@ function createMainWindow() {
   // No application menu (see Menu.setApplicationMenu(null) above), so F11 has no
   // default accelerator — wire it up manually.
   mainWindow.webContents.on("before-input-event", (event, input) => {
-    if (input.type === "keyDown" && input.key === "F11" && !input.isAutoRepeat) {
+    if (
+      input.type === "keyDown" &&
+      input.key === "F11" &&
+      !input.isAutoRepeat
+    ) {
       event.preventDefault();
       mainWindow.setFullScreen(!mainWindow.isFullScreen());
     }
@@ -157,8 +93,8 @@ ipcMain.on(
   },
 );
 
-ipcMain.on("print-binary", async (event, { content, printerName }) => {
-  const result = await printBinaryContent(content, printerName);
+ipcMain.on("print-label", async (event, { content, printerName }) => {
+  const result = await printLabel(content, printerName);
   event.sender.send("print-status", result);
 });
 
@@ -234,7 +170,7 @@ async function printHTMLContent(htmlContent, printerName, landscape, duplex) {
   });
 }
 
-async function printBib(htmlContent, printerName) {
+async function printLabel(htmlContent, printerName) {
   let outputPath;
   try {
     outputPath = await htmlToPng(htmlContent, `bib-${randomUUID()}.png`);
@@ -316,7 +252,7 @@ function printLabelImage(imagePath, printerName) {
   });
 }
 
-async function htmlToPng(html, outputFileName = 'output.png') {
+async function htmlToPng(html, outputFileName = "output.png") {
   const OUTPUT_DIR = tmpdir();
   // Printable area of the 62 x 100mm sticker (landscape) at the QL-800's
   // 300 dpi. The printer always keeps ~3mm blank at each cut end and ~1.5mm
@@ -334,15 +270,15 @@ async function htmlToPng(html, outputFileName = 'output.png') {
       // Resized after measuring. Kept short so the viewport can't inflate the
       // measured document height.
       height: 1,
-      backgroundColor: '#ffffff',
+      backgroundColor: "#ffffff",
       webPreferences: {
         contextIsolation: true,
-        sandbox: true
-      }
+        sandbox: true,
+      },
     });
 
     await win.loadURL(
-      `data:text/html;charset=utf-8,${encodeURIComponent(html)}`
+      `data:text/html;charset=utf-8,${encodeURIComponent(html)}`,
     );
 
     // Wait for fonts, images and layout to finish rendering.
@@ -389,7 +325,7 @@ async function htmlToPng(html, outputFileName = 'output.png') {
         `);
 
     if (dimensions.width <= 0 || dimensions.height <= 0) {
-      throw new Error('HTML content has invalid dimensions.');
+      throw new Error("HTML content has invalid dimensions.");
     }
 
     // Scale uniformly to fit the sticker: a design with the sticker's aspect
@@ -425,13 +361,13 @@ async function htmlToPng(html, outputFileName = 'output.png') {
         `);
 
     // Allow Chromium to paint the scaled content.
-    await new Promise(resolve => setTimeout(resolve, 50));
+    await new Promise((resolve) => setTimeout(resolve, 50));
 
     const capture = await win.webContents.capturePage({
       x: 0,
       y: 0,
       width: captureWidth,
-      height: captureHeight
+      height: captureHeight,
     });
 
     // The capture is in device pixels; re-decode it at 1x so the sizes below
@@ -440,9 +376,10 @@ async function htmlToPng(html, outputFileName = 'output.png') {
     const actualSize = image.getSize();
 
     if (actualSize.width !== width || actualSize.height !== height) {
-      image = actualSize.width >= width && actualSize.height >= height
-        ? image.crop({ x: 0, y: 0, width, height })
-        : image.resize({ width, height, quality: 'best' });
+      image =
+        actualSize.width >= width && actualSize.height >= height
+          ? image.crop({ x: 0, y: 0, width, height })
+          : image.resize({ width, height, quality: "best" });
     }
 
     // Add 300 DPI metadata to the PNG without an external dependency.
@@ -454,7 +391,6 @@ async function htmlToPng(html, outputFileName = 'output.png') {
     writeFileSync(outputPath, pngBuffer);
 
     return outputPath;
-
   } finally {
     if (win && !win.isDestroyed()) {
       win.destroy();
@@ -465,13 +401,13 @@ async function htmlToPng(html, outputFileName = 'output.png') {
 function addPngDpiMetadata(png, dpi) {
   const signature = png.subarray(0, 8);
 
-  if (signature.toString('hex') !== '89504e470d0a1a0a') {
-    throw new Error('Invalid PNG image.');
+  if (signature.toString("hex") !== "89504e470d0a1a0a") {
+    throw new Error("Invalid PNG image.");
   }
 
   const pixelsPerMeter = Math.round(dpi / 0.0254);
 
-  const type = Buffer.from('pHYs');
+  const type = Buffer.from("pHYs");
   const data = Buffer.alloc(9);
 
   data.writeUInt32BE(pixelsPerMeter, 0);
@@ -494,18 +430,18 @@ function addPngDpiMetadata(png, dpi) {
   while (offset < png.length) {
     const length = png.readUInt32BE(offset);
     const end = offset + length + 12;
-    const chunkType = png.toString('ascii', offset + 4, offset + 8);
+    const chunkType = png.toString("ascii", offset + 4, offset + 8);
 
     if (end > png.length) {
-      throw new Error('PNG contains an invalid chunk.');
+      throw new Error("PNG contains an invalid chunk.");
     }
 
     // Replace any existing DPI metadata.
-    if (chunkType !== 'pHYs') {
+    if (chunkType !== "pHYs") {
       parts.push(png.subarray(offset, end));
     }
 
-    if (chunkType === 'IHDR') {
+    if (chunkType === "IHDR") {
       parts.push(chunk);
       inserted = true;
     }
@@ -514,7 +450,7 @@ function addPngDpiMetadata(png, dpi) {
   }
 
   if (!inserted) {
-    throw new Error('PNG is missing its IHDR chunk.');
+    throw new Error("PNG is missing its IHDR chunk.");
   }
 
   return Buffer.concat(parts);
@@ -527,75 +463,11 @@ function crc32(buffer) {
     crc ^= byte;
 
     for (let i = 0; i < 8; i++) {
-      crc = (crc >>> 1) ^ (
-        (crc & 1) ? 0xedb88320 : 0
-      );
+      crc = (crc >>> 1) ^ (crc & 1 ? 0xedb88320 : 0);
     }
   }
 
   return (crc ^ 0xffffffff) >>> 0;
-}
-
-async function printBinaryContent(number, printerName) {
-  return new Promise((resolve, reject) => {
-    try {
-      const tempFilePath = join(tmpdir(), "label.png");
-      writeFileSync(tempFilePath, createNumberRaster(number));
-
-      // Use Windows' built-in print command
-      const isWindows = process.platform === "win32";
-      let printCommand;
-      if (isWindows) {
-        printCommand = `powershell -Command "Add-Type -AssemblyName System.Drawing; $i=[System.Drawing.Image]::FromFile('${tempFilePath}'); $p=New-Object System.Drawing.Printing.PrintDocument; $p.PrinterSettings.PrinterName='${printerName}'; $p.DefaultPageSettings.Margins=[System.Drawing.Printing.Margins]::new(40,40,40,40); $p.add_PrintPage({param($s,$e); $e.Graphics.InterpolationMode='NearestNeighbor'; $e.Graphics.PixelOffsetMode='Half'; $r=$e.MarginBounds; $f=[Math]::Min($r.Width/$i.Width,$r.Height/$i.Height); $w=$i.Width*$f; $h=$i.Height*$f; $e.Graphics.DrawImage($i,[int]($r.X+($r.Width-$w)/2),[int]($r.Y+($r.Height-$h)/2),[int]$w,[int]$h)}); $p.Print(); $i.Dispose(); $p.Dispose()"`;
-      } else {
-        printCommand = `lp -d "${printerName}" "${tempFilePath}"`;
-      }
-
-      exec(printCommand, (error, stdout, stderr) => {
-        if (error) {
-          reject({ success: false, message: `Print failed: ${error.message}` });
-          return;
-        }
-        if (stderr) {
-          reject({ success: false, message: `Print failed: ${stderr}` });
-          return;
-        }
-        console.log(`Printed number: ${number}`);
-        resolve({ success: true, message: "Print successful" });
-      });
-    } catch (err) {
-      reject({ success: false, message: `Print failed: ${err}` });
-    }
-  });
-}
-
-function createNumberRaster(number) {
-  const DPI = 300;
-  const LABEL_HEIGHT = Math.round((62 / 25.4) * DPI); // mm → pixels
-  const LABEL_WIDTH = Math.round((100 / 25.4) * DPI); // mm → pixels
-  const PADDING = Math.round((0 / 2.54) * DPI); // 0 cm padding
-  const canvas = createCanvas(LABEL_WIDTH, LABEL_HEIGHT);
-  const ctx = canvas.getContext("2d");
-
-  // Background (white)
-  ctx.fillStyle = "white";
-  ctx.fillRect(0, 0, LABEL_WIDTH, LABEL_HEIGHT);
-
-  // Text (black)
-  ctx.fillStyle = "black";
-
-  // Auto-scale font size to fit
-  let fontSize = LABEL_WIDTH - 2 * PADDING;
-  do {
-    fontSize -= 5;
-    ctx.font = `bold ${fontSize}px Arial`;
-  } while (ctx.measureText(number).width > LABEL_WIDTH * 1.0);
-  // Center text
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillText(number, LABEL_WIDTH / 2, LABEL_HEIGHT / 2);
-
-  return canvas.toBuffer("image/png");
 }
 
 ipcMain.on("send-to-second-window", (_, data) => {
@@ -630,18 +502,22 @@ function createSecondWindow() {
     // Load Angular dev server (only for `npm run electron:serve`)
     secondWindow.loadURL("http://localhost:4200/#/secondary");
     secondWindow.webContents.openDevTools();
-  }
-  else {
+  } else {
     // Load the built Angular app (for packaged app)
     secondWindow.loadFile(
-      path.join(__dirname, "../dist/live-print-client/browser/index.html"), { hash: '/secondary' },
+      path.join(__dirname, "../dist/live-print-client/browser/index.html"),
+      { hash: "/secondary" },
     );
   }
 
   // No application menu (see Menu.setApplicationMenu(null) above), so F11 has no
   // default accelerator — wire it up manually for the customer-facing display.
   secondWindow.webContents.on("before-input-event", (event, input) => {
-    if (input.type === "keyDown" && input.key === "F11" && !input.isAutoRepeat) {
+    if (
+      input.type === "keyDown" &&
+      input.key === "F11" &&
+      !input.isAutoRepeat
+    ) {
       event.preventDefault();
       secondWindow.setFullScreen(!secondWindow.isFullScreen());
     }
@@ -655,12 +531,12 @@ function createSecondWindow() {
     secondWindow = null;
     secondWindowReady = false;
     if (mainWindow) {
-      mainWindow.webContents.send('secondary-window-closed');
+      mainWindow.webContents.send("secondary-window-closed");
     }
   });
 }
 
-ipcMain.handle('close-second-window', () => {
+ipcMain.handle("close-second-window", () => {
   if (secondWindow) {
     closeSecondWindow();
   }
@@ -672,7 +548,7 @@ function closeSecondWindow() {
     secondWindow = null;
     secondWindowReady = false;
     if (mainWindow) {
-      mainWindow.webContents.send('secondary-window-closed');
+      mainWindow.webContents.send("secondary-window-closed");
     }
   }
 }

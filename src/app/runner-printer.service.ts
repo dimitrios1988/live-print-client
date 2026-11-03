@@ -146,8 +146,17 @@ export class RunnerPrinterService {
     ) {
       return null;
     }
-    return this.printerService.printBinary(
-      this.runnerForPrint()?.bib?.toString() || '',
+    const variables = {
+      bib: this.runnerForPrint()?.bib?.toString() ?? '',
+      qr: this.runnerForPrint()?.chip_2_go_qr_base64?.toString() ?? '',
+    };
+    const labelTemplate = event?.label_template || '';
+    const appliedLabelTemplate = this.replaceVariables(
+      labelTemplate,
+      variables,
+    );
+    return this.printerService.printLabel(
+      appliedLabelTemplate,
       selectedPrinter,
     );
   }

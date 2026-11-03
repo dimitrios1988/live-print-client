@@ -19,8 +19,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
       duplex,
     });
   },
-  printBinary: (content, printerName) => {
-    ipcRenderer.send("print-binary", { content, printerName });
+  printLabel: (content, printerName) => {
+    ipcRenderer.send("print-label", { content, printerName });
   },
   onPrintStatus: (callback) => {
     ipcRenderer.on("print-status", (_event, result) => callback(result));

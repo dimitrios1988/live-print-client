@@ -14,7 +14,7 @@ export class PrinterService {
     htmlContent: string,
     printerName: string,
     landscape: boolean,
-    duplex: boolean
+    duplex: boolean,
   ): Promise<{ success: boolean; message: string }> {
     return new Promise((resolve, reject) => {
       if (!(window as any).electronAPI) {
@@ -31,16 +31,16 @@ export class PrinterService {
           } else {
             reject(response);
           }
-        }
+        },
       );
 
       electronAPI.printHTML(htmlContent, printerName, landscape, duplex);
     });
   }
 
-  printBinary(
+  printLabel(
     content: string,
-    printerName: string
+    printerName: string,
   ): Promise<{ success: boolean; message: string }> {
     return new Promise((resolve, reject) => {
       if (!(window as any).electronAPI) {
@@ -57,10 +57,10 @@ export class PrinterService {
           } else {
             reject(response);
           }
-        }
+        },
       );
 
-      electronAPI.printBinary(content, printerName);
+      electronAPI.printLabel(content, printerName);
     });
   }
 }
