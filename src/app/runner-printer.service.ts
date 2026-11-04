@@ -3,6 +3,7 @@ import { IRunner } from './runner-enquiry/interfaces/runner.interface';
 import { PrinterService } from './printer.service';
 import { EventsService } from './events/events.service';
 import { IEvent } from './events/interfaces/event.interface';
+import { PrintingTemplate } from './shared/printing-template.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -46,7 +47,7 @@ export class RunnerPrinterService {
     ) {
       return null;
     }
-    const variables = {
+    const printVariables: PrintingTemplate = {
       bib: this.runnerForPrint()?.bib?.toString() ?? '',
       full_name: `${this.runnerForPrint()?.first_name?.toString() ?? ''} ${
         this.runnerForPrint()?.last_name?.toString() ?? ''
@@ -85,7 +86,7 @@ export class RunnerPrinterService {
       this.runnerForPrint()?.tshirt_size !== '' &&
       this._runnerForPrint()?.has_tshirt === true
     ) {
-      variables.tshirt_size = `${this.runnerForPrint()?.tshirt_size}`;
+      printVariables.tshirt_size = `${this.runnerForPrint()?.tshirt_size}`;
     }
     const bibStyling = event?.bib_styling || '';
     const appliedBibStyling =
@@ -93,10 +94,10 @@ export class RunnerPrinterService {
         ? bibStyling
         : `${bibStyling}${bibStyling.trim() ? ' ' : ''}.tshirt-size { display: none; }`;
     if (this._runnerForPrint()?.has_tshirt === true) {
-      variables.tshirt_indicator = ' ';
+      printVariables.tshirt_indicator = ' ';
     }
     if (this._runnerForPrint()?.receives_as_a_group === true) {
-      variables.tshirt_indicator = 'X';
+      printVariables.tshirt_indicator = 'X';
     }
     let htmlBodyContent = '';
     if (event?.bib_frontside_printing === true) {
@@ -107,10 +108,10 @@ export class RunnerPrinterService {
       return this.printerService.printHTML(
         `<html><body><style>${this.replaceVariables(
           appliedBibStyling,
-          variables,
+          printVariables,
         )}</style>${this.replaceVariables(
           htmlBodyContent,
-          variables,
+          printVariables,
         )}</body></html>`,
         selectedPrinter,
         true,
@@ -120,10 +121,10 @@ export class RunnerPrinterService {
     return this.printerService.printHTML(
       `<html><body><style>${this.replaceVariables(
         appliedBibStyling,
-        variables,
+        printVariables,
       )}</style>${this.replaceVariables(
         htmlBodyContent,
-        variables,
+        printVariables,
       )}</body></html>`,
       selectedPrinter,
       true,
@@ -146,7 +147,7 @@ export class RunnerPrinterService {
     ) {
       return null;
     }
-    const variables = {
+    const variables: PrintingTemplate = {
       bib: this.runnerForPrint()?.bib?.toString() ?? '',
       qr: this.runnerForPrint()?.chip_2_go_qr_base64?.toString() ?? '',
     };
@@ -163,11 +164,11 @@ export class RunnerPrinterService {
 
   private replaceVariables(
     template: string,
-    variables: { [key: string]: string },
+    variables: PrintingTemplate,
   ): string {
     return template.replace(
       /{{\s*(\w+)\s*}}/g,
-      (_, key) => variables[key] || '',
+      (_, key: keyof PrintingTemplate) => variables[key] || '',
     );
   }
 }
