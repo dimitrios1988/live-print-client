@@ -29,7 +29,7 @@ export class EventsService {
   constructor(
     settingsService: SettingsService,
     private httpClient: HttpClient,
-    private loginService: LoginService,
+    loginService: LoginService,
   ) {
     effect(() => {
       this.appName = settingsService.settings()?.appName || '';
@@ -60,21 +60,8 @@ export class EventsService {
                 name_for_printing_en: e['0(event)'].printed_text_en,
                 allow_reprinting: e['0(event)'].allow_reprinting,
                 id: e['0(event)'].id,
-                bib_frontside_background_url: e['2(bib_template)']
-                  .bib_frontside_background?.[0]
-                  ? `${this.apiAddress}/data/download/${this.appName}/${e['2(bib_template)'].bib_frontside_background?.[0]?.name}?attribute_id=3222b69d-09e4-405b-a7ee-19458d0a971a&file_id=${e['2(bib_template)'].bib_frontside_background?.[0]?.id}&version=${e['2(bib_template)'].bib_frontside_background?.[0]?.version}&token=${this.loginService.getToken()}`
-                  : null,
-                bib_backside_background_url: e['2(bib_template)']
-                  .bib_backside_background?.[0]
-                  ? `${this.apiAddress}/data/download/${this.appName}/${e['2(bib_template)'].bib_backside_background?.[0]?.name}?attribute_id=1086e345-9f61-4fdf-ab82-6058dddf6b73&file_id=${e['2(bib_template)'].bib_backside_background?.[0]?.id}&version=${e['2(bib_template)'].bib_backside_background?.[0]?.version}&token=${this.loginService.getToken()}`
-                  : null,
                 bib_backside_printing: e['0(event)'].bib_backside_printing,
                 bib_frontside_printing: e['0(event)'].bib_frontside_printing,
-                bib_backside_template:
-                  e['2(bib_template)'].bib_backside_template || null,
-                bib_frontside_template:
-                  e['2(bib_template)'].bib_frontside_template || null,
-                bib_styling: e['2(bib_template)'].bib_styling || null,
                 label_template: e['3(label_template)']?.label_template || null,
                 enabled: this.selectedEvents().some(
                   (se) => se.id === e['0(event)'].id,

@@ -24,4 +24,14 @@ export interface IRunner {
   has_tshirt: boolean;
   receives_as_a_group: boolean;
   age_group: string | null;
+  assigned_bib_template: _assigned_bib_template | null;
+}
+
+interface _assigned_bib_template {
+  id: number;
+  bib_frontside_background_url: string | null;
+  bib_backside_background_url: string | null;
+  bib_backside_template: string | null;
+  bib_frontside_template: string | null;
+  bib_styling: string | null;
 }

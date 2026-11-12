@@ -68,8 +68,12 @@ export class RunnerPrinterService {
       registration_level: this.runnerForPrint()?.registration_level
         ? `${this.runnerForPrint()?.registration_level?.toString()}`.trim()
         : '',
-      frontside_background_url: event?.bib_frontside_background_url || '',
-      backside_background_url: event?.bib_backside_background_url || '',
+      frontside_background_url:
+        this.runnerForPrint()?.assigned_bib_template
+          ?.bib_frontside_background_url || '',
+      backside_background_url:
+        this.runnerForPrint()?.assigned_bib_template
+          ?.bib_backside_background_url || '',
       age_group: this.runnerForPrint()?.age_group
         ? `${this.runnerForPrint()?.gender ?? ''}${this.runnerForPrint()?.age_group ?? ''}`
         : '',
@@ -88,7 +92,8 @@ export class RunnerPrinterService {
     ) {
       printVariables.tshirt_size = `${this.runnerForPrint()?.tshirt_size}`;
     }
-    const bibStyling = event?.bib_styling || '';
+    const bibStyling =
+      this._runnerForPrint()?.assigned_bib_template?.bib_styling || '';
     const appliedBibStyling =
       this._runnerForPrint()?.has_tshirt === true
         ? bibStyling
@@ -101,10 +106,10 @@ export class RunnerPrinterService {
     }
     let htmlBodyContent = '';
     if (event?.bib_frontside_printing === true) {
-      htmlBodyContent += `${event.bib_frontside_template || ''}`;
+      htmlBodyContent += `${this._runnerForPrint()?.assigned_bib_template?.bib_frontside_template || ''}`;
     }
     if (event?.bib_backside_printing === true) {
-      htmlBodyContent += `${event.bib_backside_template || ''}`;
+      htmlBodyContent += `${this._runnerForPrint()?.assigned_bib_template?.bib_backside_template || ''}`;
       return this.printerService.printHTML(
         `<html><body><style>${this.replaceVariables(
           appliedBibStyling,

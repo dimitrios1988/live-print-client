@@ -4,13 +4,8 @@ export interface IEvent {
   name_for_printing_en: string | null;
   allow_reprinting: boolean;
   id: number;
-  bib_frontside_background_url: string;
-  bib_backside_background_url: string;
   bib_backside_printing: boolean;
-  bib_backside_template: string | null;
-  bib_frontside_printing: true;
-  bib_frontside_template: string | null;
-  bib_styling: string | null;
+  bib_frontside_printing: boolean;
   label_template: string | null;
   numberPrinter: any;
   ticketPrinter: any;

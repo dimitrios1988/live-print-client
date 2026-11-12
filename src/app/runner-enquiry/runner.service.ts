@@ -7,6 +7,7 @@ import { SetRunnerPrintedCmd } from './interfaces/set-runner-printed.cmd';
 import { SetRunnerPrintedResp } from './interfaces/set-runner-printed.resp';
 import { IGetGroupResponse } from './interfaces/get-group.resp';
 import { IGetRunnerResponse } from './interfaces/get-runner.resp';
+import { LoginService } from '../login/login.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,7 @@ export class RunnerService {
   constructor(
     private httpClient: HttpClient,
     settingsService: SettingsService,
+    private loginService: LoginService,
   ) {
     effect(() => {
       this.appName = settingsService.settings()?.appName || '';
@@ -79,6 +81,24 @@ export class RunnerService {
             has_tshirt: response['6(registration_level)'].has_tshirt,
             receives_as_a_group: response['0(runner)'].receives_as_a_group,
             age_group: response['8(age_group)']?.printed_text || null,
+            assigned_bib_template: response['9(bib_template)']
+              ? {
+                  id: response['9(bib_template)'].id,
+                  bib_frontside_background_url: response['9(bib_template)']
+                    .bib_frontside_background?.[0]
+                    ? `${this.apiAddress}/data/download/${this.appName}/${encodeURIComponent(response['9(bib_template)'].bib_frontside_background[0].name)}?attribute_id=3222b69d-09e4-405b-a7ee-19458d0a971a&file_id=${response['9(bib_template)'].bib_frontside_background?.[0]?.id}&version=${response['9(bib_template)'].bib_frontside_background?.[0]?.version}&token=${this.loginService.getToken()}`
+                    : null,
+                  bib_backside_background_url: response['9(bib_template)']
+                    .bib_backside_background?.[0]
+                    ? `${this.apiAddress}/data/download/${this.appName}/${encodeURIComponent(response['9(bib_template)'].bib_backside_background[0].name)}?attribute_id=1086e345-9f61-4fdf-ab82-6058dddf6b73&file_id=${response['9(bib_template)'].bib_backside_background?.[0]?.id}&version=${response['9(bib_template)'].bib_backside_background?.[0]?.version}&token=${this.loginService.getToken()}`
+                    : null,
+                  bib_backside_template:
+                    response['9(bib_template)'].bib_backside_template || null,
+                  bib_frontside_template:
+                    response['9(bib_template)'].bib_frontside_template || null,
+                  bib_styling: response['9(bib_template)'].bib_styling,
+                }
+              : null,
           };
           return runner;
         }
@@ -136,6 +156,24 @@ export class RunnerService {
             has_tshirt: runner['8(registration_level)'].has_tshirt,
             receives_as_a_group: runner['1(runner)'].receives_as_a_group,
             age_group: runner['10(age_group)']?.printed_text || null,
+            assigned_bib_template: runner['11(bib_template)']
+              ? {
+                  id: runner['11(bib_template)'].id,
+                  bib_frontside_background_url: runner['11(bib_template)']
+                    .bib_frontside_background?.[0]
+                    ? `${this.apiAddress}/data/download/${this.appName}/${encodeURIComponent(runner['11(bib_template)'].bib_frontside_background[0].name)}?attribute_id=3222b69d-09e4-405b-a7ee-19458d0a971a&file_id=${runner['11(bib_template)'].bib_frontside_background?.[0]?.id}&version=${runner['11(bib_template)'].bib_frontside_background?.[0]?.version}&token=${this.loginService.getToken()}`
+                    : null,
+                  bib_backside_background_url: runner['11(bib_template)']
+                    .bib_backside_background?.[0]
+                    ? `${this.apiAddress}/data/download/${this.appName}/${encodeURIComponent(runner['11(bib_template)'].bib_backside_background[0].name)}?attribute_id=1086e345-9f61-4fdf-ab82-6058dddf6b73&file_id=${runner['11(bib_template)'].bib_backside_background?.[0]?.id}&version=${runner['11(bib_template)'].bib_backside_background?.[0]?.version}&token=${this.loginService.getToken()}`
+                    : null,
+                  bib_backside_template:
+                    runner['11(bib_template)'].bib_backside_template || null,
+                  bib_frontside_template:
+                    runner['11(bib_template)'].bib_frontside_template || null,
+                  bib_styling: runner['11(bib_template)'].bib_styling || null,
+                }
+              : null,
           }));
           const uniqueData = data.reduce((acc: IRunner[], current: IRunner) => {
             const existing = acc.find((item) => item.id === current.id);

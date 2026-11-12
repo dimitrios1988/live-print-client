@@ -8,6 +8,25 @@ export interface IGetGroupResponse {
   '8(registration_level)': _8registrationlevel;
   '9(nationality)': _9nationality;
   '10(age_group)': _10agegroup;
+  '11(bib_template)': _11bib_template;
+}
+
+interface _11bib_template {
+  id: number;
+  bib_styling: string | null;
+  bib_frontside_template: string | null;
+  bib_frontside_background: _file[];
+  bib_backside_template: string | null;
+  bib_backside_background: _file[];
+}
+
+interface _file {
+  changed: number;
+  hash: string;
+  id: string;
+  name: string;
+  size: number;
+  version: number;
 }
 
 interface _10agegroup {

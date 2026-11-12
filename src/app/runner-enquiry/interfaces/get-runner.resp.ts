@@ -8,6 +8,25 @@ export interface IGetRunnerResponse {
   '6(registration_level)': _6registrationlevel;
   '7(nationality)': _7nationality;
   '8(age_group)': _8agegroup;
+  '9(bib_template)': _9bib_template;
+}
+
+interface _9bib_template {
+  id: number;
+  bib_styling: string | null;
+  bib_frontside_template: string | null;
+  bib_frontside_background: _file[];
+  bib_backside_template: string | null;
+  bib_backside_background: _file[];
+}
+
+interface _file {
+  changed: number;
+  hash: string;
+  id: string;
+  name: string;
+  size: number;
+  version: number;
 }
 
 interface _8agegroup {
